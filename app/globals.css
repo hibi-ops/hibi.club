@@ -364,3 +364,33 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
 /* keep daytime "indoor" panels opaque so content stays legible */
 .hibi-3d .home-3d .roles,
 .hibi-3d .home-3d .stat{position:relative;z-index:1;}
+
+/* ===== interaction: cursor tilt + magnetic + iOS26 liquid glass ===== */
+.tilt{transition:transform .35s var(--ease);transform-style:preserve-3d;will-change:transform;}
+.magnetic{display:inline-flex;transition:transform .25s var(--ease);will-change:transform;}
+
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid var(--line-glass);
+  box-shadow:var(--sh-2), inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+/* hero product card becomes liquid glass when it floats over the 3D world */
+.hibi-3d .phone{
+  background:rgba(255,255,255,.6);
+  -webkit-backdrop-filter:blur(22px) saturate(1.6);
+  backdrop-filter:blur(22px) saturate(1.6);
+  border-color:var(--line-glass);
+  box-shadow:var(--sh-3), inset 0 1px 0 rgba(255,255,255,.7);
+}
+/* role tabs read as glass over the world */
+.hibi-3d .tab{
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);
+  backdrop-filter:blur(14px) saturate(1.4);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .tilt,.magnetic{transition:none;transform:none !important;}
+}
