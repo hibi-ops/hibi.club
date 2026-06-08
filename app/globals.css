@@ -404,3 +404,18 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
 @media (prefers-reduced-motion: reduce){
   .tilt,.magnetic{transition:none;transform:none !important;}
 }
+
+/* ===== pinned chapters (scroll-scrubbed crossfade over the 3D world) ===== */
+.pin-track{position:relative;height:300vh;}
+.pin-stage{position:sticky;top:0;height:100vh;}
+.pin-item{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--s8) var(--s3);will-change:opacity,transform;}
+.pin-item .eyebrow{margin-bottom:var(--s4);}
+.pin-item .ch-seal{margin-bottom:var(--s4);}
+.pin-item .display{font-size:clamp(72px,17vw,184px);}
+.pin-item .subtitle{max-width:480px;margin-top:var(--s4);font-size:clamp(18px,2vw,22px);}
+@media (prefers-reduced-motion: reduce){
+  /* no scrub: lay the chapters out in normal flow, all visible */
+  .pin-track{height:auto;}
+  .pin-stage{position:static;height:auto;}
+  .pin-item{position:relative;inset:auto;opacity:1 !important;transform:none !important;min-height:100vh;}
+}

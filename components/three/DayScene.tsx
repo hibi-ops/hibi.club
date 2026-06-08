@@ -87,10 +87,10 @@ export default function DayScene() {
       const swayX = 0.1 + Math.sin(t * 0.2) * 0.1 - py * 0.3;
       markRef.current.rotation.y += (swayY - markRef.current.rotation.y) * 0.04;
       markRef.current.rotation.x += (swayX - markRef.current.rotation.x) * 0.04;
-      markRef.current.position.x = 1.9 + px * 0.15; // sit to the right of left-aligned type
+      markRef.current.position.x = 1.9 + p * 1.3 + px * 0.15; // drifts right, clears the giant words
       markRef.current.position.y = py * 0.12 + Math.sin(t * 0.5) * 0.05;
-      markRef.current.scale.setScalar(1.3 - p * 0.4);
-      markRef.current.position.z = -0.5 - p * 1.5;
+      markRef.current.scale.setScalar(1.3 - p * 0.7);
+      markRef.current.position.z = -0.5 - p * 1.8;
     }
 
     const cam = state.camera;
