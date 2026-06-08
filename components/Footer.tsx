@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="hibi-footer">
@@ -5,27 +7,33 @@ export default function Footer() {
         <div className="foot-top">
           <div className="foot-cta">
             <h3 className="title">
-              Become someone&apos;s <span style={{ fontStyle: "italic" }}>hibi</span>.
+              Become someone&apos;s{" "}
+              <span style={{ fontStyle: "italic" }}>hibi</span>.
             </h3>
             <div className="row">
-              <a className="btn btn-primary" href="#">Start for free</a>
-              <a className="btn btn-glass" href="#">Book a demo</a>
+              <Link className="btn btn-primary" href="#">
+                Start for free
+              </Link>
+              <Link className="btn btn-glass" href="#">
+                Book a demo
+              </Link>
             </div>
           </div>
           <div className="foot-links">
             <div className="foot-col">
               <h4>Product</h4>
-              <a href="#">For creators</a>
-              <a href="#">For merchants</a>
-              <a href="#">For customers</a>
-              <a href="#">Pricing</a>
+              <Link href="/features">Features</Link>
+              <Link href="/solutions#creator">For creators</Link>
+              <Link href="/solutions#merchant">For merchants</Link>
+              <Link href="/solutions#customer">For customers</Link>
+              <Link href="/pricing">Pricing</Link>
             </div>
             <div className="foot-col">
               <h4>Company</h4>
-              <a href="#">About</a>
-              <a href="#">Careers</a>
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
+              <Link href="/about">About</Link>
+              <Link href="#">Careers</Link>
+              <Link href="#">Privacy</Link>
+              <Link href="#">Terms</Link>
             </div>
           </div>
         </div>

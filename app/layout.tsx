@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
 import MarkDefs from "@/components/MarkDefs";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Hibi — Where regulars belong",
+  title: {
+    default: "Hibi — Where regulars belong",
+    template: "%s · Hibi",
+  },
   description:
     "The verified-visit membership layer for local commerce. Creator posts, customer scans at the register, merchant pays per verified store visit.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
         <MarkDefs />
+        <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );

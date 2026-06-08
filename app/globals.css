@@ -163,3 +163,79 @@ footer.hibi-footer{background:var(--snow);border-top:1px solid var(--line);paddi
 .foot-dots{display:flex;gap:7px;margin-bottom:6%;}
 .foot-dots span{width:12px;height:12px;border-radius:50%;}
 .foot-base{border-top:1px solid var(--line);margin-top:var(--s4);padding-top:var(--s4);display:flex;justify-content:space-between;font-size:14px;color:var(--gray-s);flex-wrap:wrap;gap:var(--s1);}
+
+/* ============================================================
+   Shared multi-page patterns (v13, token-driven)
+   ============================================================ */
+/* nav active link */
+nav.hibi-nav .left a[data-active="true"]{color:var(--ink);}
+
+/* section tone */
+.tone-paper{background:var(--paper);}
+
+/* highlighter swash colour modifiers (default green lives on .hl) */
+.hl.sky::before{background:var(--sky);}
+.hl.pink::before{background:var(--pink);}
+.hl.green::before{background:var(--green);}
+.hl.orange::before{background:var(--orange);}
+
+/* CTA pair */
+.cta-pair{display:flex;gap:var(--s2);flex-wrap:wrap;}
+.cta-center{justify-content:center;}
+
+/* sub-page hero — centered, clears the fixed 64px nav */
+.page-hero{padding-top:calc(64px + var(--s8));text-align:center;}
+.page-hero .eyebrow{margin-bottom:var(--s4);}
+.page-hero .title{font-size:clamp(40px,5.4vw,76px);margin-bottom:var(--s3);}
+.page-hero .subtitle{font-size:clamp(20px,2.2vw,26px);max-width:600px;margin:0 auto;}
+.page-hero .lead{max-width:560px;margin:var(--s4) auto 0;}
+.page-hero .cta-pair{margin-top:var(--s5);}
+@media(max-width:768px){.page-hero{padding-top:calc(64px + var(--s6));}}
+
+/* centered section head (eyebrow + title + subtitle) */
+.section-head{text-align:center;max-width:680px;margin:0 auto var(--s6);}
+.section-head .eyebrow{margin-bottom:var(--s3);}
+.section-head .title{font-size:clamp(32px,4vw,52px);margin-bottom:var(--s2);}
+.section-head .subtitle{font-size:clamp(19px,2vw,24px);}
+
+/* generic grids + card */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s4);}
+@media(max-width:860px){.grid-3{grid-template-columns:1fr;}.grid-2{grid-template-columns:1fr;}}
+.card{background:var(--snow);border:1px solid var(--line);border-radius:var(--r-xl);padding:var(--s6);box-shadow:var(--sh-1);}
+@media(max-width:768px){.card{padding:var(--s4);}}
+
+/* closing CTA band */
+.cta-band{text-align:center;}
+.cta-band .title{font-size:clamp(30px,3.6vw,52px);max-width:620px;margin:0 auto var(--s5);}
+.cta-band .cta-pair{justify-content:center;}
+
+/* ============================================================
+   PRICING
+   ============================================================ */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);align-items:stretch;}
+@media(max-width:860px){.price-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}}
+.price-card{background:var(--snow);border:1px solid var(--line);border-radius:var(--r-xl);padding:var(--s5);display:flex;flex-direction:column;box-shadow:var(--sh-1);}
+.price-card.featured{border-color:var(--ink);box-shadow:var(--sh-2);}
+.price-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s2);min-height:24px;}
+.price-name{font-family:'Magvix',serif;font-weight:400;font-size:26px;letter-spacing:-.015em;color:var(--ink);line-height:1;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:'General Sans',sans-serif;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);}
+.price-who{font-size:14px;color:var(--gray-s);margin-top:10px;}
+.price-amt{display:flex;align-items:baseline;gap:6px;margin:var(--s4) 0 4px;}
+.price-amt .n{font-family:'General Sans',sans-serif;font-weight:600;font-size:clamp(40px,5vw,56px);letter-spacing:-.03em;color:var(--ink);line-height:1;}
+.price-amt .u{font-size:15px;color:var(--gray-s);}
+.price-sub{font-size:13px;color:var(--gray-s);min-height:18px;margin-bottom:var(--s4);}
+.price-todo{color:var(--orange);font-weight:600;} /* visible TODO flag for jiaming */
+.price-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin:0 0 var(--s5);flex:1;}
+.price-list li{display:flex;gap:var(--s2);font-size:15px;color:var(--ink-2);line-height:1.5;}
+.price-list li svg{flex:none;margin-top:3px;color:var(--ink);}
+.price-card .btn{width:100%;}
+.price-foot-note{text-align:center;color:var(--gray-s);font-size:15px;margin-top:var(--s5);}
+
+/* "how billing works" steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+@media(max-width:860px){.steps{grid-template-columns:1fr;}}
+.step{padding:var(--s4);border:1px solid var(--line);border-radius:var(--r-l);background:var(--snow);}
+.step .k{font-family:'General Sans',sans-serif;font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-s);}
+.step h4{font-family:'Magvix',serif;font-weight:400;font-size:22px;letter-spacing:-.015em;margin:var(--s2) 0 var(--s1);}
+.step p{font-size:15px;color:var(--ink-2);line-height:1.55;}

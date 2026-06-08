@@ -1,17 +1,41 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const LINKS = [
+  { href: "/features", label: "Features" },
+  { href: "/solutions", label: "Solutions" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
+];
+
 export default function Nav() {
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
+
   return (
     <nav className="hibi-nav">
       <div className="left">
-        <a href="#">Features</a>
-        <a href="#">Solutions</a>
-        <a href="#">Pricing</a>
-        <a href="#">About</a>
+        {LINKS.map((l) => (
+          <Link key={l.href} href={l.href} data-active={isActive(l.href)}>
+            {l.label}
+          </Link>
+        ))}
       </div>
-      <div className="wm">Hibi</div>
+      <Link className="wm" href="/">
+        Hibi
+      </Link>
       <div className="right">
-        <a className="login" href="#">Login</a>
-        <a className="btn btn-primary btn-sm" href="#">Start for free</a>
-        <a className="btn btn-glass btn-sm" href="#">Book a demo</a>
+        <Link className="login" href="#">
+          Login
+        </Link>
+        <Link className="btn btn-primary btn-sm" href="#">
+          Start for free
+        </Link>
+        <Link className="btn btn-glass btn-sm" href="#">
+          Book a demo
+        </Link>
       </div>
     </nav>
   );
