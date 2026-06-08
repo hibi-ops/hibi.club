@@ -362,6 +362,9 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
 .day-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .day-canvas canvas{display:block;}
 .home-3d{position:relative;z-index:1;}
+/* nav + footer must sit ABOVE the fixed canvas (else they hide behind it) */
+.hibi-3d nav.hibi-nav{z-index:60;}
+.hibi-3d footer.hibi-footer{position:relative;z-index:2;}
 
 /* when the 3D world is live, open windows onto it */
 .hibi-3d .home-3d .hero{background:transparent;}
