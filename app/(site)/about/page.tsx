@@ -18,7 +18,7 @@ const PILLARS = [
   {
     k: "Quiet",
     h: "Anti-spam by design.",
-    p: "No points to farm, no push, no spin-to-win. The membership stays in the background until it matters. Kinfolk, not Groupon.",
+    p: "No points to farm, no spam, no spin-to-win. The membership stays in the background until it matters. Kinfolk, not Groupon.",
   },
   {
     k: "Real",
