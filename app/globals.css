@@ -76,15 +76,22 @@ nav.hibi-nav .login{font-size:15px;font-weight:500;color:var(--ink-2);text-decor
   nav.hibi-nav .login,nav.hibi-nav .right .btn-glass{display:none;}
 }
 
-/* ===== HERO ===== */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:152px var(--s3) var(--s7);}
+/* ===== HERO — clean left-aligned premium ===== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:152px var(--s6) var(--s7);}
+@media(max-width:768px){.hero{padding:140px var(--s3) var(--s6);}}
+.hero-copy{max-width:680px;width:100%;}
 .hero .eyebrow{margin-bottom:var(--s4);}
-.hero .title{font-size:clamp(48px,7.4vw,108px);margin-bottom:var(--s3);}
+.hero .title{font-size:clamp(46px,6.6vw,104px);margin-bottom:var(--s3);}
 .hl{position:relative;display:inline-block;font-family:'Magvix',serif;font-style:italic;font-weight:400;z-index:1;}
 .hl::before{content:'';position:absolute;left:-.04em;right:-.04em;top:42%;bottom:9%;background:var(--green);z-index:-1;transform:rotate(-1.2deg);border-radius:4px;}
-.hero .subtitle{font-size:clamp(20px,2.3vw,28px);max-width:600px;margin:0 auto;}
-.hero .lead{max-width:520px;margin:var(--s4) auto 0;}
-.hero-cta{display:flex;gap:var(--s2);justify-content:center;margin-top:var(--s5);}
+.hero .subtitle{font-size:clamp(20px,2.3vw,28px);max-width:600px;}
+.hero .lead{max-width:540px;margin:var(--s4) 0 0;}
+.hero-cta{display:flex;gap:var(--s2);justify-content:flex-start;margin-top:var(--s5);}
+.float{margin-top:var(--s6);width:340px;max-width:100%;}
+.hero-scroll{position:absolute;left:var(--s6);bottom:var(--s5);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-s);}
+@media(max-width:768px){.hero-scroll{left:var(--s3);}}
+/* scroll fill-text words inherit ink; opacity is driven by ScrollFillText */
+.fill-text span[data-w]{transition:opacity .15s linear;}
 
 /* floating product card */
 .float{margin-top:var(--s7);width:340px;}
