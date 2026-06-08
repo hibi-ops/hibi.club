@@ -346,3 +346,21 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
   .dash-nav{flex-direction:row;}
   .dash-side .spacer,.dash-merchant{display:none;}
 }
+
+/* ============================================================
+   HOMEPAGE — cinematic "a block's day" 3D layer
+   Fixed WebGL world behind the content; transparent sections let
+   it show through ONLY when the world is live (.hibi-3d on <html>).
+   Without 3D (reduced-motion / no WebGL) the calm static page stands.
+   ============================================================ */
+.day-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.day-canvas canvas{display:block;}
+.home-3d{position:relative;z-index:1;}
+
+/* when the 3D world is live, open windows onto it */
+.hibi-3d .home-3d .hero{background:transparent;}
+.hibi-3d .home-3d .chapter{background:transparent;}
+.hibi-3d .home-3d .divider{background:transparent;}
+/* keep daytime "indoor" panels opaque so content stays legible */
+.hibi-3d .home-3d .roles,
+.hibi-3d .home-3d .stat{position:relative;z-index:1;}
