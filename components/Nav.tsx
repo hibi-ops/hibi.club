@@ -27,7 +27,7 @@ export default function Nav() {
         Hibi
       </Link>
       <div className="right">
-        <Link className="login" href="#">
+        <Link className="login" href="/dashboard">
           Login
         </Link>
         <Link className="btn btn-primary btn-sm" href="#">
