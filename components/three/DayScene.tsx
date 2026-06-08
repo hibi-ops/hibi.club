@@ -1,183 +1,113 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import {
-  Environment,
-  Lightformer,
-  MeshTransmissionMaterial,
-} from "@react-three/drei";
-import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { scrollState } from "@/lib/scroll";
 
-// dawn -> noon -> dusk sky gradient (clean, light, white-first)
-const TOP = [
-  new THREE.Color("#a9ccee"),
-  new THREE.Color("#e9f0f4"),
-  new THREE.Color("#bcd8c6"),
-];
-const BOT = [
-  new THREE.Color("#f4ece1"),
-  new THREE.Color("#ffffff"),
-  new THREE.Color("#eef1e6"),
-];
+/**
+ * Premium flowing-gradient hero (the cutting-edge WebGL look): a full-screen
+ * simplex-noise color field, slow and organic, with fine grain to kill banding.
+ * No literal 3D object. Palette is warm/editorial and easy to swap.
+ */
 
-function dayLerp(p: number, stops: THREE.Color[], out: THREE.Color) {
-  if (p < 0.5) out.copy(stops[0]).lerp(stops[1], p / 0.5);
-  else out.copy(stops[1]).lerp(stops[2], (p - 0.5) / 0.5);
-  return out;
-}
+// warm editorial palette (low saturation, premium)
+const PALETTE = ["#f6efe6", "#ecdcca", "#e3e7e1", "#f1dfe0"].map(
+  (h) => new THREE.Color(h),
+);
+// a faint cool drift the gradient eases toward as you scroll (dusk)
+const DRIFT = new THREE.Color("#dfe4ea");
 
-const skyVert = /* glsl */ `
-  varying vec3 vPos;
-  void main(){ vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+const vert = /* glsl */ `
+  varying vec2 vUv;
+  void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
 `;
-const skyFrag = /* glsl */ `
-  varying vec3 vPos;
-  uniform vec3 topColor;
-  uniform vec3 bottomColor;
+
+const frag = /* glsl */ `
+  precision highp float;
+  varying vec2 vUv;
+  uniform float uTime;
+  uniform float uAspect;
+  uniform float uDrift;
+  uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4; uniform vec3 cd;
+
+  // Ashima simplex noise 2D
+  vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
+  float snoise(vec2 v){
+    const vec4 C = vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);
+    vec2 i = floor(v + dot(v, C.yy));
+    vec2 x0 = v - i + dot(i, C.xx);
+    vec2 i1 = (x0.x > x0.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);
+    vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+    i = mod(i, 289.0);
+    vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+    m = m*m; m = m*m;
+    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+    vec3 h = abs(x) - 0.5; vec3 ox = floor(x + 0.5); vec3 a0 = x - ox;
+    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+    vec3 g; g.x = a0.x * x0.x + h.x * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+    return 130.0 * dot(m, g);
+  }
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }
+
   void main(){
-    float h = normalize(vPos).y * 0.5 + 0.5;
-    float t = smoothstep(0.0, 1.0, h);
-    gl_FragColor = vec4(mix(bottomColor, topColor, t), 1.0);
+    vec2 uv = vUv; uv.x *= uAspect;
+    float t = uTime * 0.045;
+    float n1 = snoise(uv * 1.15 + vec2(t, t*0.6));
+    float n2 = snoise(uv * 1.9 - vec2(t*0.8, t*0.4) + n1*0.4);
+    float n3 = snoise(uv * 0.8 + vec2(-t*0.5, t*0.3));
+
+    vec3 col = mix(c1, c2, smoothstep(-0.7, 0.7, n1));
+    col = mix(col, c3, smoothstep(-0.4, 0.8, n2) * 0.7);
+    col = mix(col, c4, smoothstep(0.25, 1.0, n3) * 0.6);
+    // ease toward a cool drift as you scroll (a quiet "day -> dusk")
+    col = mix(col, cd, uDrift * 0.35);
+
+    // fine grain to avoid banding (premium gradients always have it)
+    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.025;
+    col += g;
+
+    gl_FragColor = vec4(col, 1.0);
   }
 `;
 
 export default function DayScene() {
-  const skyRef = useRef<THREE.ShaderMaterial>(null!);
-  const markRef = useRef<THREE.Group>(null!);
+  const matRef = useRef<THREE.ShaderMaterial>(null!);
+  const { size } = useThree();
 
-  // the Hibi mark as one merged glass solid: ring (last stroke of 日) + H strokes
-  const markGeo = useMemo(() => {
-    const parts: THREE.BufferGeometry[] = [];
-    parts.push(new THREE.TorusGeometry(1, 0.088, 28, 140));
-    const sl = new THREE.BoxGeometry(0.15, 1.46, 0.15);
-    sl.translate(-0.4, 0, 0);
-    parts.push(sl);
-    const sr = new THREE.BoxGeometry(0.15, 1.46, 0.15);
-    sr.translate(0.4, 0, 0);
-    parts.push(sr);
-    const bar = new THREE.BoxGeometry(0.8, 0.13, 0.15);
-    bar.translate(0, 0.03, 0);
-    parts.push(bar);
-    return mergeGeometries(parts, false)!;
-  }, []);
-
-  const skyUniforms = useMemo(
+  const uniforms = useMemo(
     () => ({
-      topColor: { value: new THREE.Color("#a9ccee") },
-      bottomColor: { value: new THREE.Color("#f4ece1") },
+      uTime: { value: 0 },
+      uAspect: { value: 1 },
+      uDrift: { value: 0 },
+      c1: { value: PALETTE[0].clone() },
+      c2: { value: PALETTE[1].clone() },
+      c3: { value: PALETTE[2].clone() },
+      c4: { value: PALETTE[3].clone() },
+      cd: { value: DRIFT.clone() },
     }),
     [],
   );
 
-  useFrame((state, dt) => {
-    const p = THREE.MathUtils.clamp(scrollState.progress, 0, 1);
-    const px = state.pointer.x;
-    const py = state.pointer.y;
-
-    if (skyRef.current) {
-      dayLerp(p, TOP, skyRef.current.uniforms.topColor.value);
-      dayLerp(p, BOT, skyRef.current.uniforms.bottomColor.value);
-    }
-
-    if (markRef.current) {
-      const t = state.clock.elapsedTime;
-      const swayY = Math.sin(t * 0.28) * 0.5 + px * 0.4;
-      const swayX = 0.1 + Math.sin(t * 0.2) * 0.1 - py * 0.3;
-      markRef.current.rotation.y += (swayY - markRef.current.rotation.y) * 0.04;
-      markRef.current.rotation.x += (swayX - markRef.current.rotation.x) * 0.04;
-      markRef.current.position.x = 1.9 + p * 1.3 + px * 0.15; // drifts right, clears the giant words
-      markRef.current.position.y = py * 0.12 + Math.sin(t * 0.5) * 0.05;
-      markRef.current.scale.setScalar(1.3 - p * 0.7);
-      markRef.current.position.z = -0.5 - p * 1.8;
-    }
-
-    const cam = state.camera;
-    cam.position.x += (px * 0.5 - cam.position.x) * 0.04;
-    cam.position.y += (py * 0.4 - cam.position.y) * 0.04;
-    cam.position.z += (6 - p * 1.0 - cam.position.z) * 0.04;
-    cam.lookAt(0, 0, 0);
+  useFrame((_, dt) => {
+    if (!matRef.current) return;
+    const u = matRef.current.uniforms;
+    u.uTime.value += dt;
+    u.uAspect.value = size.width / size.height;
+    u.uDrift.value +=
+      (THREE.MathUtils.clamp(scrollState.progress, 0, 1) - u.uDrift.value) *
+      0.05;
   });
 
   return (
-    <>
-      {/* gradient sky dome */}
-      <mesh scale={[1, 1, 1]}>
-        <sphereGeometry args={[40, 32, 32]} />
-        <shaderMaterial
-          ref={skyRef}
-          args={[
-            {
-              uniforms: skyUniforms,
-              vertexShader: skyVert,
-              fragmentShader: skyFrag,
-            },
-          ]}
-          side={THREE.BackSide}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </mesh>
-
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[4, 6, 5]} intensity={1.2} />
-
-      {/* procedural environment for the glass to refract/reflect (no HDR download) */}
-      <Environment resolution={256} frames={1}>
-        <Lightformer
-          intensity={2.2}
-          position={[0, 3, 3]}
-          scale={[7, 3, 1]}
-          color="#fff4e6"
-        />
-        <Lightformer
-          intensity={1.1}
-          position={[-5, 1, -1]}
-          scale={[5, 5, 1]}
-          color="#cfe6f7"
-        />
-        <Lightformer
-          intensity={1.3}
-          position={[5, -2, 1]}
-          scale={[4, 4, 1]}
-          color="#dff0e4"
-        />
-      </Environment>
-
-      {/* the glass Hibi mark */}
-      <group ref={markRef} rotation={[0.1, 0, 0]}>
-        <mesh geometry={markGeo}>
-          <MeshTransmissionMaterial
-            transmission={1}
-            thickness={0.6}
-            roughness={0.05}
-            ior={1.45}
-            chromaticAberration={0.06}
-            anisotropy={0.1}
-            distortion={0.1}
-            distortionScale={0.3}
-            temporalDistortion={0.05}
-            color="#ffffff"
-            attenuationColor="#eaf2fb"
-            attenuationDistance={3}
-            backside
-            samples={8}
-            resolution={512}
-          />
-        </mesh>
-      </group>
-
-      {/* clean grade: subtle highlight bloom + vignette */}
-      <EffectComposer enableNormalPass={false}>
-        <Bloom
-          luminanceThreshold={0.82}
-          intensity={0.5}
-          radius={0.7}
-          mipmapBlur
-        />
-        <Vignette offset={0.3} darkness={0.42} />
-      </EffectComposer>
-    </>
+    <mesh frustumCulled={false}>
+      <planeGeometry args={[2, 2]} />
+      <shaderMaterial
+        ref={matRef}
+        args={[{ uniforms, vertexShader: vert, fragmentShader: frag }]}
+        depthWrite={false}
+        depthTest={false}
+        toneMapped={false}
+      />
+    </mesh>
   );
 }

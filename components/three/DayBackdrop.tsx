@@ -18,10 +18,6 @@ export default function DayBackdrop() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    // desktop, fine-pointer only — phones get the calm static page (perf + clarity)
-    const isDesktop = window.matchMedia(
-      "(min-width: 860px) and (pointer: fine)",
-    ).matches;
     let webgl = false;
     try {
       const c = document.createElement("canvas");
@@ -29,7 +25,8 @@ export default function DayBackdrop() {
     } catch {
       webgl = false;
     }
-    if (!reduce && isDesktop && webgl) {
+    // the flowing gradient is cheap — run it everywhere (only gate on reduced-motion / no WebGL)
+    if (!reduce && webgl) {
       document.documentElement.classList.add("hibi-3d");
       setEnabled(true);
     }
