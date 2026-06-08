@@ -9,12 +9,12 @@ import { scrollState } from "@/lib/scroll";
  * No literal 3D object. Palette is warm/editorial and easy to swap.
  */
 
-// warm editorial palette (low saturation, premium)
-const PALETTE = ["#f6efe6", "#ecdcca", "#e3e7e1", "#f1dfe0"].map(
+// monochrome ink/white palette — zero colour, premium by texture not hue
+const PALETTE = ["#ffffff", "#f3f3f1", "#e7e7e3", "#f7f7f5"].map(
   (h) => new THREE.Color(h),
 );
-// a faint cool drift the gradient eases toward as you scroll (dusk)
-const DRIFT = new THREE.Color("#dfe4ea");
+// eases to a touch deeper grey as you scroll (quiet "day -> dusk")
+const DRIFT = new THREE.Color("#dcdcd8");
 
 const vert = /* glsl */ `
   varying vec2 vUv;
