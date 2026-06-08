@@ -9,12 +9,11 @@ import { scrollState } from "@/lib/scroll";
  * No literal 3D object. Palette is warm/editorial and easy to swap.
  */
 
-// monochrome ink/white palette — zero colour, premium by texture not hue
-const PALETTE = ["#ffffff", "#f3f3f1", "#e7e7e3", "#f7f7f5"].map(
+// near-white filmic base — type is the star; grain gives it life
+const PALETTE = ["#ffffff", "#fbfbfa", "#f4f4f2", "#fdfdfc"].map(
   (h) => new THREE.Color(h),
 );
-// eases to a touch deeper grey as you scroll (quiet "day -> dusk")
-const DRIFT = new THREE.Color("#dcdcd8");
+const DRIFT = new THREE.Color("#eeeeec");
 
 const vert = /* glsl */ `
   varying vec2 vUv;
@@ -62,8 +61,8 @@ const frag = /* glsl */ `
     // ease toward a cool drift as you scroll (a quiet "day -> dusk")
     col = mix(col, cd, uDrift * 0.35);
 
-    // fine grain to avoid banding (premium gradients always have it)
-    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.025;
+    // film grain — filmic texture on the near-white base
+    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.045;
     col += g;
 
     gl_FragColor = vec4(col, 1.0);

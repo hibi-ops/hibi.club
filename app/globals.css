@@ -418,3 +418,37 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
   .pin-stage{position:static;height:auto;}
   .pin-item{position:relative;inset:auto;opacity:1 !important;transform:none !important;min-height:100vh;}
 }
+
+/* ============================================================
+   KINETIC TYPOGRAPHY (SOTY route) — type + motion is the art
+   ============================================================ */
+/* hero title: staggered word rise-in */
+@keyframes kin-rise{0%{opacity:0;transform:translateY(.5em) rotate(2deg);}100%{opacity:1;transform:none;}}
+.kin{ } /* container */
+.kin .w{display:inline-block;opacity:0;animation:kin-rise .9s var(--ease) forwards;}
+.kin .w:nth-child(1){animation-delay:.06s;}
+.kin .w:nth-child(2){animation-delay:.17s;}
+.kin .w:nth-child(3){animation-delay:.28s;}
+.kin .w:nth-child(4){animation-delay:.39s;}
+.kin .w:nth-child(5){animation-delay:.50s;}
+
+/* marquee — big italic running text */
+.marquee{overflow:hidden;padding:var(--s6) 0;}
+.marquee-track{display:flex;width:max-content;will-change:transform;animation-name:marq;animation-timing-function:linear;animation-iteration-count:infinite;}
+.marquee-seg{font-family:'Magvix',serif;font-style:italic;font-size:clamp(30px,6vw,84px);line-height:1;color:var(--ink);white-space:nowrap;padding-right:.2em;}
+.marquee-accent{color:var(--green);}
+@keyframes marq{to{transform:translateX(-50%);}}
+
+/* kinetic pinned chapters — bigger word, per-letter reveal */
+.pin-item .display{font-size:clamp(80px,19vw,240px);letter-spacing:-.03em;}
+.kin-word{display:inline-flex;}
+.kin-word .pin-l{display:inline-block;will-change:transform,opacity;}
+.kin-word .pin-l:empty{width:.28em;}
+.pin-item .eyebrow,.pin-item .ch-seal,.pin-item .subtitle{opacity:var(--vis,0);}
+
+@media (prefers-reduced-motion: reduce){
+  .kin .w{opacity:1;animation:none;}
+  .marquee-track{animation:none;}
+  .kin-word .pin-l{opacity:1 !important;transform:none !important;}
+  .pin-item .eyebrow,.pin-item .ch-seal,.pin-item .subtitle{opacity:1;}
+}

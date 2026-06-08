@@ -11,8 +11,12 @@ export default function Hero() {
         <div className="eyebrow">
           The quiet membership your block already runs
         </div>
-        <h1 className="title">
-          Become someone&apos;s <span className="hl">hibi.</span>
+        <h1 className="title kin">
+          <span className="w">Become</span>{" "}
+          <span className="w">someone&apos;s</span>{" "}
+          <span className="w">
+            <span className="hl">hibi.</span>
+          </span>
         </h1>
         <p className="subtitle">Where regulars belong.</p>
         <ScrollFillText
