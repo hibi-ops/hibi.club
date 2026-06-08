@@ -1,10 +1,52 @@
 import Link from "next/link";
 
+const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Solutions", href: "/solutions" },
+      { label: "Merchant dashboard", href: "/dashboard" },
+      { label: "Changelog", href: "#" },
+    ],
+  },
+  {
+    title: "Who it's for",
+    links: [
+      { label: "For creators", href: "/solutions#creator" },
+      { label: "For customers", href: "/solutions#customer" },
+      { label: "For merchants", href: "/solutions#merchant" },
+      { label: "Gift a membership", href: "#" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Careers", href: "#" },
+      { label: "Journal", href: "#" },
+      { label: "Contact", href: "#" },
+      { label: "Press", href: "#" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Help center", href: "#" },
+      { label: "Community guidelines", href: "#" },
+      { label: "Cities we serve", href: "#" },
+      { label: "Status", href: "#" },
+    ],
+  },
+];
+
 export default function Footer() {
   return (
     <footer className="hibi-footer">
       <div className="wrap">
-        <div className="foot-top">
+        {/* closing CTA + newsletter */}
+        <div className="foot-cta-band">
           <div className="foot-cta">
             <h3 className="title">
               Become someone&apos;s{" "}
@@ -19,26 +61,47 @@ export default function Footer() {
               </Link>
             </div>
           </div>
-          <div className="foot-links">
-            <div className="foot-col">
-              <h4>Product</h4>
-              <Link href="/features">Features</Link>
-              <Link href="/solutions#creator">For creators</Link>
-              <Link href="/solutions#merchant">For merchants</Link>
-              <Link href="/solutions#customer">For customers</Link>
-              <Link href="/pricing">Pricing</Link>
+          <div className="foot-news">
+            <span className="foot-news-label">
+              The quiet newsletter — once a season
+            </span>
+            <div className="foot-news-row">
+              <input
+                type="email"
+                placeholder="you@yourblock.com"
+                aria-label="Email address"
+                className="foot-news-input"
+              />
+              <button
+                type="button"
+                className="foot-news-btn"
+                aria-label="Subscribe"
+              >
+                →
+              </button>
             </div>
-            <div className="foot-col">
-              <h4>Company</h4>
-              <Link href="/about">About</Link>
-              <Link href="#">Careers</Link>
-              <Link href="#">Privacy</Link>
-              <Link href="#">Terms</Link>
-            </div>
+            <span className="foot-news-note">
+              No spam. Unsubscribe anytime.
+            </span>
           </div>
         </div>
 
-        <div className="foot-word">
+        {/* sitemap */}
+        <div className="foot-grid">
+          {COLUMNS.map((col) => (
+            <div className="foot-col" key={col.title}>
+              <h4>{col.title}</h4>
+              {col.links.map((l) => (
+                <Link key={l.label} href={l.href}>
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* giant chrome wordmark */}
+        <div className="foot-word chrome">
           Hibi
           <span className="foot-dots">
             <span style={{ background: "var(--sky)" }} />
@@ -48,9 +111,35 @@ export default function Footer() {
           </span>
         </div>
 
+        {/* legal / utility row */}
         <div className="foot-base">
-          <span>Hibi — Where regulars belong.</span>
-          <span>Built block by block · NYC · 2026</span>
+          <div className="foot-legal">
+            <Link href="#">Privacy</Link>
+            <Link href="#">Terms</Link>
+            <Link href="#">Cookies</Link>
+            <Link href="#">Accessibility</Link>
+          </div>
+          <div className="foot-meta">
+            <span className="foot-status">
+              <span className="dot" /> All systems normal
+            </span>
+            <span>NYC · EN</span>
+            <span>© 2026 Hibi</span>
+          </div>
+          <div className="foot-social">
+            <Link href="#" aria-label="Instagram">
+              IG
+            </Link>
+            <Link href="#" aria-label="TikTok">
+              TikTok
+            </Link>
+            <Link href="#" aria-label="X">
+              X
+            </Link>
+            <Link href="#" aria-label="LinkedIn">
+              LinkedIn
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

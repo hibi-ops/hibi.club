@@ -24,39 +24,43 @@ const CH = [
 ];
 
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const smooth = (t: number) => t * t * (3 - 2 * t);
 
-/** Pinned stage with kinetic per-letter reveal scrubbed by scroll. */
+/**
+ * Pinned stage. Each chapter word reveals with a diagonal clip-path wipe while
+ * filling from outline to ink (award-grade, not a per-letter stagger), scrubbed
+ * by scroll. A mild velocity skew adds kinetic energy.
+ */
 export default function PinnedChapters() {
   const trackRef = useRef<HTMLDivElement>(null);
   const items = useRef<(HTMLDivElement | null)[]>([]);
+  const words = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const letterSets = items.current.map((el) =>
-      el ? Array.from(el.querySelectorAll<HTMLElement>(".pin-l")) : [],
-    );
     let raf = 0;
+    let lastY = window.scrollY;
+    let vel = 0;
     const loop = () => {
       const r = track.getBoundingClientRect();
       const vh = window.innerHeight;
       const total = Math.max(1, track.offsetHeight - vh);
       const p = clamp(-r.top / total);
+      vel = clamp((window.scrollY - lastY) / 36, -1, 1);
+      lastY = window.scrollY;
       const n = CH.length;
       for (let i = 0; i < n; i++) {
         const el = items.current[i];
+        const w = words.current[i];
         if (!el) continue;
         const center = (i + 0.5) / n;
-        const vis = clamp(1 - Math.abs(p - center) * n * 1.7);
-        el.style.setProperty("--vis", String(vis));
-        const letters = letterSets[i];
-        const L = letters.length || 1;
-        for (let li = 0; li < letters.length; li++) {
-          const stagger = (li / L) * 0.55;
-          const lv = clamp((vis - stagger) / (1 - stagger || 1));
-          const e = letters[li];
-          e.style.opacity = String(lv);
-          e.style.transform = `translateY(${((1 - lv) * 0.5).toFixed(3)}em) rotate(${((1 - lv) * 6).toFixed(2)}deg)`;
+        const vis = clamp(1 - Math.abs(p - center) * n * 1.55);
+        const rv = smooth(vis);
+        el.style.setProperty("--vis", String(rv));
+        if (w) {
+          w.style.setProperty("--p", String(rv));
+          w.style.setProperty("--skew", String(vel * (1 - rv) * 6));
         }
       }
       raf = requestAnimationFrame(loop);
@@ -78,14 +82,16 @@ export default function PinnedChapters() {
           >
             <div className="eyebrow">{c.eyebrow}</div>
             <div className="ch-seal">
-              <Mark size={56} color={c.color} />
+              <Mark size={52} color={c.color} />
             </div>
-            <div className="display kin-word">
-              {Array.from(c.word).map((ch, ci) => (
-                <span key={ci} className="pin-l">
-                  {ch}
-                </span>
-              ))}
+            <div
+              ref={(el) => {
+                words.current[i] = el;
+              }}
+              className="display kw"
+              data-text={c.word}
+            >
+              {c.word}
             </div>
             <p className="subtitle">{c.sub}</p>
           </div>
