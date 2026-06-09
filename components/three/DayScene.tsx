@@ -53,31 +53,32 @@ const frag = /* glsl */ `
     float infl = smoothstep(0.62, 0.0, md);
     uv += normalize(uv - mo + 1e-4) * infl * infl * 0.14;   // refraction toward cursor
 
-    float t = uTime * 0.04;
-    float n1 = snoise(uv * 1.10 + vec2(t, t*0.6));
-    float n2 = snoise(uv * 1.70 - vec2(t*0.8, t*0.4) + n1*0.4);
-    float n3 = snoise(uv * 0.70 + vec2(-t*0.5, t*0.3));
-    float n4 = snoise(uv * 2.30 + vec2(t*0.3, -t*0.5));
+    float t = uTime * 0.035;
 
-    vec3 base = vec3(0.035, 0.035, 0.052);
-    vec3 ir = vec3(0.0);
-    ir += c1 * smoothstep(-0.2, 1.0, n1);
-    ir += c2 * smoothstep( 0.0, 1.0, n2);
-    ir += c3 * smoothstep( 0.1, 1.0, n3);
-    ir += c4 * smoothstep( 0.3, 1.0, n4);
+    // liquid-chrome fbm field (clean monochrome metal — no muddy colour mixing)
+    float n = 0.0, amp = 0.55, frq = 1.0;
+    for (int i = 0; i < 4; i++) {
+      n += amp * snoise(uv * frq + vec2(t * (0.6 + float(i) * 0.2), -t * 0.45));
+      frq *= 1.95; amp *= 0.5;
+    }
+    n = n * 0.5 + 0.5;
 
-    // dark by default; the cursor reveals the iridescence
-    vec3 col = base + ir * (0.11 + infl * 0.55);
+    // mercury ramp: near-black -> graphite -> silver, with a crisp specular
+    vec3 deep   = vec3(0.045, 0.05, 0.066);
+    vec3 mid    = vec3(0.15, 0.17, 0.21);
+    vec3 silver = vec3(0.80, 0.84, 0.90);
+    vec3 col = mix(deep, mid, smoothstep(0.22, 0.55, n));
+    col = mix(col, silver, smoothstep(0.66, 0.90, n));
+    col += smoothstep(0.88, 0.99, n) * 0.35;            // chrome highlight ribbons
 
-    // chrome sheen ribbon
-    float sheen = smoothstep(0.47, 0.5, fract(n1*0.5 + uv.y*0.35 + t));
-    col += sheen * 0.06;
+    // a whisper of cool tint for richness (kept tiny so it never reads "colourful")
+    col += vec3(-0.012, 0.0, 0.022) * smoothstep(0.3, 0.85, n);
 
-    // cursor spotlight lift + a touch deeper toward dusk on scroll
-    col += infl * 0.10;
-    col *= 1.0 - uDrift * 0.12;
+    // cursor reveals/brightens the chrome (interactive), deepen slightly on scroll
+    col += infl * 0.14;
+    col *= 1.0 - uDrift * 0.10;
 
-    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.04;
+    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.035;
     col += g;
 
     gl_FragColor = vec4(col, 1.0);
