@@ -569,8 +569,3 @@ nav.hibi-nav .left a[data-active="true"]{color:var(--ink);}
 .mega-card-title{font-size:22px;color:var(--ink);}
 .mega-card-body{font-size:14px;color:var(--ink-2);line-height:1.5;}
 @media(max-width:860px){.mega{display:none;}}
-
-/* hero title — subtle water-ripple displacement on hover */
-.hero .title{transition:filter .35s ease;}
-@media (hover:hover){ .hero .title:hover{filter:url(#ripple);} }
-@media (prefers-reduced-motion:reduce){ .hero .title:hover{filter:none;} }
