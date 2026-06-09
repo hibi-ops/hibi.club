@@ -4,16 +4,13 @@ import * as THREE from "three";
 import { scrollState } from "@/lib/scroll";
 
 /**
- * Premium flowing-gradient hero (the cutting-edge WebGL look): a full-screen
- * simplex-noise color field, slow and organic, with fine grain to kill banding.
- * No literal 3D object. Palette is warm/editorial and easy to swap.
+ * Dark Y2K/Y3K iridescent flow field. A near-black base with an oil-slick
+ * nebula (the four brand neons) that the cursor REVEALS and brightens — a
+ * mouse-interactive, chrome-adjacent background. Full-screen GLSL, fine grain.
  */
-
-// near-white filmic base — type is the star; grain gives it life
-const PALETTE = ["#ffffff", "#fbfbfa", "#f4f4f2", "#fdfdfc"].map(
+const NEONS = ["#52b6dd", "#f079a6", "#4bc78f", "#f5854a"].map(
   (h) => new THREE.Color(h),
 );
-const DRIFT = new THREE.Color("#eeeeec");
 
 const vert = /* glsl */ `
   varying vec2 vUv;
@@ -27,9 +24,8 @@ const frag = /* glsl */ `
   uniform float uAspect;
   uniform float uDrift;
   uniform vec2 uMouse;
-  uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4; uniform vec3 cd;
+  uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
-  // Ashima simplex noise 2D
   vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
   float snoise(vec2 v){
     const vec4 C = vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);
@@ -51,28 +47,37 @@ const frag = /* glsl */ `
 
   void main(){
     vec2 uv = vUv; uv.x *= uAspect;
-    vec2 m = uMouse; m.x *= uAspect;
+    vec2 mo = uMouse; mo.x *= uAspect;
 
-    // mouse lens: warp the field toward/around the cursor + a soft light
-    float md = distance(uv, m);
-    float infl = smoothstep(0.55, 0.0, md);          // 1 near cursor -> 0 far
-    uv += normalize(uv - m + 1e-4) * infl * infl * 0.12;   // refraction-style push
+    float md = distance(uv, mo);
+    float infl = smoothstep(0.62, 0.0, md);
+    uv += normalize(uv - mo + 1e-4) * infl * infl * 0.14;   // refraction toward cursor
 
-    float t = uTime * 0.045;
-    float n1 = snoise(uv * 1.15 + vec2(t, t*0.6));
-    float n2 = snoise(uv * 1.9 - vec2(t*0.8, t*0.4) + n1*0.4);
-    float n3 = snoise(uv * 0.8 + vec2(-t*0.5, t*0.3));
+    float t = uTime * 0.04;
+    float n1 = snoise(uv * 1.10 + vec2(t, t*0.6));
+    float n2 = snoise(uv * 1.70 - vec2(t*0.8, t*0.4) + n1*0.4);
+    float n3 = snoise(uv * 0.70 + vec2(-t*0.5, t*0.3));
+    float n4 = snoise(uv * 2.30 + vec2(t*0.3, -t*0.5));
 
-    vec3 col = mix(c1, c2, smoothstep(-0.7, 0.7, n1));
-    col = mix(col, c3, smoothstep(-0.4, 0.8, n2) * 0.7);
-    col = mix(col, c4, smoothstep(0.25, 1.0, n3) * 0.6);
-    col = mix(col, cd, uDrift * 0.35);
+    vec3 base = vec3(0.035, 0.035, 0.052);
+    vec3 ir = vec3(0.0);
+    ir += c1 * smoothstep(-0.2, 1.0, n1);
+    ir += c2 * smoothstep( 0.0, 1.0, n2);
+    ir += c3 * smoothstep( 0.1, 1.0, n3);
+    ir += c4 * smoothstep( 0.3, 1.0, n4);
 
-    // soft specular bloom following the cursor (design-y, interactive)
-    col += infl * 0.05;
+    // dark by default; the cursor reveals the iridescence
+    vec3 col = base + ir * (0.11 + infl * 0.55);
 
-    // film grain
-    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.045;
+    // chrome sheen ribbon
+    float sheen = smoothstep(0.47, 0.5, fract(n1*0.5 + uv.y*0.35 + t));
+    col += sheen * 0.06;
+
+    // cursor spotlight lift + a touch deeper toward dusk on scroll
+    col += infl * 0.10;
+    col *= 1.0 - uDrift * 0.12;
+
+    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.04;
     col += g;
 
     gl_FragColor = vec4(col, 1.0);
@@ -89,11 +94,10 @@ export default function DayScene() {
       uAspect: { value: 1 },
       uDrift: { value: 0 },
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      c1: { value: PALETTE[0].clone() },
-      c2: { value: PALETTE[1].clone() },
-      c3: { value: PALETTE[2].clone() },
-      c4: { value: PALETTE[3].clone() },
-      cd: { value: DRIFT.clone() },
+      c1: { value: NEONS[0].clone() },
+      c2: { value: NEONS[1].clone() },
+      c3: { value: NEONS[2].clone() },
+      c4: { value: NEONS[3].clone() },
     }),
     [],
   );
@@ -106,7 +110,6 @@ export default function DayScene() {
     u.uDrift.value +=
       (THREE.MathUtils.clamp(scrollState.progress, 0, 1) - u.uDrift.value) *
       0.05;
-    // mouse -> uv (0..1), eased for a smooth lens follow
     const mx = state.pointer.x * 0.5 + 0.5;
     const my = state.pointer.y * 0.5 + 0.5;
     u.uMouse.value.x += (mx - u.uMouse.value.x) * 0.08;
