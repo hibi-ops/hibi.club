@@ -101,7 +101,7 @@ export default function Footer() {
         </div>
 
         {/* giant chrome wordmark */}
-        <div className="foot-word chrome">
+        <div className="foot-word">
           Hibi
           <span className="foot-dots">
             <span style={{ background: "var(--sky)" }} />

@@ -3,9 +3,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /**
- * Mouse-interactive polished-metal background (Apple-ish): a crisp fbm chrome
- * with colourful iridescent reflections (a harmonious cool spectrum) woven into
- * the metal; the cursor lenses + reveals richer colour. Brighter, not muddy.
+ * Bright near-white flowing gradient — soft, premium, white-first. A gentle
+ * cursor lens lightens the surface where the pointer is. No metal, no dark.
  */
 
 const vert = /* glsl */ `
@@ -42,43 +41,29 @@ const frag = /* glsl */ `
   void main(){
     vec2 uv = vUv; uv.x *= uAspect;
 
-    // INTERACTIVE: a lens that follows the cursor
+    // subtle cursor lens (kept very light on the bright surface)
     vec2 mo = uMouse; mo.x *= uAspect;
     float md = distance(uv, mo);
-    float infl = smoothstep(0.65, 0.0, md);
-    uv += normalize(uv - mo + 1e-4) * infl * infl * 0.12;
+    float infl = smoothstep(0.6, 0.0, md);
+    uv += normalize(uv - mo + 1e-4) * infl * infl * 0.05;
 
-    float t = uTime * 0.03;
+    float t = uTime * 0.025;
+    float n1 = snoise(uv * 1.10 + vec2(t, t * 0.6));
+    float n2 = snoise(uv * 1.80 - vec2(t * 0.7, t * 0.4) + n1 * 0.4);
+    float n3 = snoise(uv * 0.80 + vec2(-t * 0.5, t * 0.3));
 
-    // crisper polished-metal fbm (more octaves, higher base frequency)
-    float n = 0.0, amp = 0.55, frq = 1.35;
-    for (int i = 0; i < 5; i++) {
-      n += amp * snoise(uv * frq + vec2(t * (0.5 + float(i) * 0.18), -t * 0.4));
-      frq *= 2.0; amp *= 0.5;
-    }
-    n = n * 0.5 + 0.5;
+    // BRIGHT near-white flowing gradient
+    vec3 c1 = vec3(1.000, 1.000, 1.000);
+    vec3 c2 = vec3(0.968, 0.968, 0.962);
+    vec3 c3 = vec3(0.930, 0.932, 0.926);
+    vec3 c4 = vec3(0.992, 0.988, 0.998);
+    vec3 col = mix(c1, c2, smoothstep(-0.6, 0.7, n1));
+    col = mix(col, c3, smoothstep(-0.4, 0.8, n2) * 0.6);
+    col = mix(col, c4, smoothstep(0.2, 1.0, n3) * 0.5);
 
-    // cool steel ramp — dark enough for text, lighter than before (not "too dark")
-    vec3 deep   = vec3(0.06, 0.07, 0.10);
-    vec3 mid    = vec3(0.20, 0.22, 0.29);
-    vec3 silver = vec3(0.88, 0.91, 0.99);
-    vec3 col = mix(deep, mid, smoothstep(0.16, 0.52, n));
-    col = mix(col, silver, smoothstep(0.62, 0.92, n));
-    float spec = smoothstep(0.80, 0.99, n);
-    col += spec * 0.40;
+    col += infl * 0.02; // a whisper brighter under the cursor
 
-    // COOL premium iridescence (blue -> violet -> cyan only) — reflections, not a wash
-    float ph = fract(n * 0.9 + uv.x * 0.12 + t * 0.35);
-    vec3 cblue = vec3(0.20, 0.45, 0.95);
-    vec3 cviolet = vec3(0.55, 0.30, 0.96);
-    vec3 ccyan = vec3(0.18, 0.85, 0.96);
-    vec3 irid = ph < 0.5 ? mix(cblue, cviolet, smoothstep(0.0, 0.5, ph))
-                         : mix(cviolet, ccyan, smoothstep(0.5, 1.0, ph));
-    col = mix(col, irid, spec * 0.5);               // colour rides the highlights
-    col += irid * infl * 0.32;                       // cursor reveals a vivid colour pool
-    col += infl * 0.05;
-
-    float g = (hash(vUv * floor(uTime * 12.0)) - 0.5) * 0.022;
+    float g = (hash(vUv * floor(uTime * 12.0)) - 0.5) * 0.018;
     col += g;
 
     gl_FragColor = vec4(col, 1.0);
