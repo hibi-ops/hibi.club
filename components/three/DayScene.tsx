@@ -1,16 +1,12 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { scrollState } from "@/lib/scroll";
 
 /**
- * Dark Y2K/Y3K iridescent flow field. A near-black base with an oil-slick
- * nebula (the four brand neons) that the cursor REVEALS and brightens — a
- * mouse-interactive, chrome-adjacent background. Full-screen GLSL, fine grain.
+ * Static liquid-chrome / mercury background (no mouse or scroll interaction):
+ * a near-black -> platinum fbm metal with crisp specular ribbons and a subtle
+ * oil-slick iridescence on the highlights only. Premium, not muddy.
  */
-const NEONS = ["#52b6dd", "#f079a6", "#4bc78f", "#f5854a"].map(
-  (h) => new THREE.Color(h),
-);
 
 const vert = /* glsl */ `
   varying vec2 vUv;
@@ -22,9 +18,6 @@ const frag = /* glsl */ `
   varying vec2 vUv;
   uniform float uTime;
   uniform float uAspect;
-  uniform float uDrift;
-  uniform vec2 uMouse;
-  uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4;
 
   vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
   float snoise(vec2 v){
@@ -47,15 +40,11 @@ const frag = /* glsl */ `
 
   void main(){
     vec2 uv = vUv; uv.x *= uAspect;
-    vec2 mo = uMouse; mo.x *= uAspect;
 
-    float md = distance(uv, mo);
-    float infl = smoothstep(0.62, 0.0, md);
-    uv += normalize(uv - mo + 1e-4) * infl * infl * 0.14;   // refraction toward cursor
+    // STATIC — no mouse / scroll interaction; only a slow autonomous drift
+    float t = uTime * 0.022;
 
-    float t = uTime * 0.035;
-
-    // liquid-chrome fbm field (clean monochrome metal — no muddy colour mixing)
+    // liquid-chrome fbm field (clean monochrome metal)
     float n = 0.0, amp = 0.55, frq = 1.0;
     for (int i = 0; i < 4; i++) {
       n += amp * snoise(uv * frq + vec2(t * (0.6 + float(i) * 0.2), -t * 0.45));
@@ -63,22 +52,23 @@ const frag = /* glsl */ `
     }
     n = n * 0.5 + 0.5;
 
-    // mercury ramp: near-black -> graphite -> silver, with a crisp specular
+    // mercury ramp: near-black -> graphite -> platinum
     vec3 deep   = vec3(0.045, 0.05, 0.066);
     vec3 mid    = vec3(0.15, 0.17, 0.21);
-    vec3 silver = vec3(0.80, 0.84, 0.90);
+    vec3 silver = vec3(0.82, 0.86, 0.92);
     vec3 col = mix(deep, mid, smoothstep(0.22, 0.55, n));
     col = mix(col, silver, smoothstep(0.66, 0.90, n));
-    col += smoothstep(0.88, 0.99, n) * 0.35;            // chrome highlight ribbons
+    float spec = smoothstep(0.87, 0.99, n);
+    col += spec * 0.30;                                  // crisp highlight ribbons
 
-    // a whisper of cool tint for richness (kept tiny so it never reads "colourful")
-    col += vec3(-0.012, 0.0, 0.022) * smoothstep(0.3, 0.85, n);
+    // SUBTLE iridescence — a faint oil-slick, only on the highlights (premium hint)
+    vec3 irid = 0.5 + 0.5 * cos(6.2831853 * (n * 1.4 + uv.x * 0.25 + vec3(0.0, 0.33, 0.67)));
+    col += irid * spec * 0.14;
 
-    // cursor reveals/brightens the chrome (interactive), deepen slightly on scroll
-    col += infl * 0.14;
-    col *= 1.0 - uDrift * 0.10;
+    // a whisper of platinum-cool tint for richness (never "colourful")
+    col += vec3(-0.010, 0.0, 0.020) * smoothstep(0.3, 0.85, n);
 
-    float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.035;
+    float g = (hash(vUv * floor(uTime * 12.0)) - 0.5) * 0.03;
     col += g;
 
     gl_FragColor = vec4(col, 1.0);
@@ -93,28 +83,15 @@ export default function DayScene() {
     () => ({
       uTime: { value: 0 },
       uAspect: { value: 1 },
-      uDrift: { value: 0 },
-      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      c1: { value: NEONS[0].clone() },
-      c2: { value: NEONS[1].clone() },
-      c3: { value: NEONS[2].clone() },
-      c4: { value: NEONS[3].clone() },
     }),
     [],
   );
 
-  useFrame((state, dt) => {
+  useFrame((_, dt) => {
     if (!matRef.current) return;
     const u = matRef.current.uniforms;
     u.uTime.value += dt;
     u.uAspect.value = size.width / size.height;
-    u.uDrift.value +=
-      (THREE.MathUtils.clamp(scrollState.progress, 0, 1) - u.uDrift.value) *
-      0.05;
-    const mx = state.pointer.x * 0.5 + 0.5;
-    const my = state.pointer.y * 0.5 + 0.5;
-    u.uMouse.value.x += (mx - u.uMouse.value.x) * 0.08;
-    u.uMouse.value.y += (my - u.uMouse.value.y) * 0.08;
   });
 
   return (

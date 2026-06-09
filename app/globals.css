@@ -476,18 +476,20 @@ table.dash-tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:560p
 }
 .pin-item .eyebrow,.pin-item .ch-seal,.pin-item .subtitle{opacity:var(--vis,0);}
 
-/* ===== Y2K chrome / metallic display text ===== */
-.chrome{
-  font-weight:600; letter-spacing:-.02em;
-  background:linear-gradient(180deg,#b8c0cc 0%,#eef2f7 18%,#9aa6b5 34%,#ffffff 50%,#c7cfda 62%,#7d8794 78%,#e9eef5 100%);
+/* ===== high-end chrome / polished-metal display text =====
+   classic chrome: sky reflection (top) -> sharp horizon highlight (50%)
+   -> dark ground reflection -> base. Static = premium (no cheap sheen). */
+.chrome, .title-chrome .w{
+  background:linear-gradient(177deg,
+    #e6edf6 0%, #aab7c8 26%, #7b8a9d 46%,
+    #ffffff 50%, #20242e 51%, #59657a 60%, #aeb9c9 82%, #e9eef6 100%);
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent; color:transparent;
-  -webkit-text-stroke:1px rgba(120,132,150,.5);
-  background-size:100% 200%;
-  animation:sheen 7s ease-in-out infinite;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.6)) drop-shadow(0 2px 6px rgba(40,50,70,.16));
+  -webkit-text-stroke:0.5px rgba(196,206,220,.45);
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.45)) drop-shadow(0 4px 14px rgba(0,0,0,.45));
 }
-@keyframes sheen{0%,100%{background-position:50% 0%}50%{background-position:50% 100%}}
+/* iridescent kiss on the chrome (very subtle, premium — not garish) */
+.chrome{position:relative;}
 
 @media (prefers-reduced-motion: reduce){
   .kin .w{opacity:1;animation:none;}
@@ -609,7 +611,35 @@ html.hibi-3d .mega::after{
 
 /* chapter words reveal as CHROME on dark */
 html.hibi-3d .kw{
-  background-image:linear-gradient(180deg,#cdd4de,#ffffff,#9aa6b5,#ffffff,#c7cfda,#7d8794,#eef2f7);
-  -webkit-text-stroke-color:rgba(205,214,226,.55);
+  background-image:linear-gradient(177deg,#e6edf6,#aab7c8,#7b8a9d,#ffffff,#20242e,#59657a,#aeb9c9,#e9eef6);
+  -webkit-text-stroke-color:rgba(205,214,226,.5);
 }
-/* the seal dots + neon accents already pop on dark */
+
+/* ===== UNIFIED liquid glass: every button / tab / card on the dark home ===== */
+html.hibi-3d .btn{
+  border:1px solid var(--line-glass);
+  -webkit-backdrop-filter:blur(16px) saturate(1.7); backdrop-filter:blur(16px) saturate(1.7);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 1px rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.45);
+}
+html.hibi-3d .btn-primary{background:rgba(255,255,255,.18);color:#fff;}
+html.hibi-3d .btn-primary:hover{background:rgba(255,255,255,.26);transform:translateY(-1px);}
+html.hibi-3d .btn-glass{background:rgba(255,255,255,.06);color:var(--ink);}
+html.hibi-3d .btn-glass:hover{background:rgba(255,255,255,.12);}
+html.hibi-3d .ph-cta{background:rgba(255,255,255,.18);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line-glass);}
+
+/* tabs + role panel as glass */
+html.hibi-3d .tab{
+  background:rgba(255,255,255,.06);border-color:var(--line-glass);color:var(--ink-2);
+  -webkit-backdrop-filter:blur(14px) saturate(1.5); backdrop-filter:blur(14px) saturate(1.5);
+}
+html.hibi-3d .panel{
+  background:rgba(255,255,255,.05);border:1px solid var(--line-glass);
+  -webkit-backdrop-filter:blur(20px) saturate(1.6); backdrop-filter:blur(20px) saturate(1.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 20px 50px rgba(0,0,0,.45);
+}
+html.hibi-3d .dock-cta{
+  background:rgba(255,255,255,.2);color:#fff;border:1px solid var(--line-glass);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+}
+html.hibi-3d .foot-news-row{background:rgba(255,255,255,.05);border-color:var(--line-glass);}
+html.hibi-3d .foot-news-btn{background:rgba(255,255,255,.2);color:#fff;}

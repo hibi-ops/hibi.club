@@ -1,7 +1,6 @@
 import Mark from "./Mark";
 import Magnetic from "./Magnetic";
 import TiltCard from "./TiltCard";
-import ScrollFillText from "./ScrollFillText";
 import LiquidGlass from "./LiquidGlass";
 
 export default function Hero() {
@@ -11,20 +10,18 @@ export default function Hero() {
         <div className="eyebrow">
           The quiet membership your block already runs
         </div>
-        <h1 className="title kin">
+        <h1 className="title kin title-chrome">
           <span className="w">Become</span>{" "}
           <span className="w">someone&apos;s</span>{" "}
-          <span className="w">
-            <span className="hl">hibi.</span>
+          <span className="w" style={{ fontStyle: "italic" }}>
+            hibi.
           </span>
         </h1>
         <p className="subtitle">Where regulars belong.</p>
-        <ScrollFillText
-          className="lead"
-          from={0}
-          to={0.1}
-          text="Creator posts. Customer scans at the register. You pay only for verified store visits — never impressions."
-        />
+        <p className="lead">
+          Creator posts. Customer scans at the register. You pay only for
+          verified store visits — never impressions.
+        </p>
         <div className="hero-cta">
           <Magnetic>
             <a className="btn btn-primary" href="#">
