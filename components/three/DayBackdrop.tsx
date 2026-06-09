@@ -15,9 +15,6 @@ export default function DayBackdrop() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
     let webgl = false;
     try {
       const c = document.createElement("canvas");
@@ -25,8 +22,9 @@ export default function DayBackdrop() {
     } catch {
       webgl = false;
     }
-    // the flowing gradient is cheap — run it everywhere (only gate on reduced-motion / no WebGL)
-    if (!reduce && webgl) {
+    // gentle pastel gradient — show it whenever WebGL exists (don't gate on
+    // reduced-motion; the motion is slow). The component itself eases motion.
+    if (webgl) {
       document.documentElement.classList.add("hibi-3d");
       setEnabled(true);
     }
