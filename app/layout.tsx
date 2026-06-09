@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 import MarkDefs from "@/components/MarkDefs";
-import Cursor from "@/components/Cursor";
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +18,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {/* mark registered once for every route (marketing + product) */}
         <MarkDefs />
-        <Cursor />
         {children}
       </body>
     </html>

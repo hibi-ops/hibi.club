@@ -26,6 +26,7 @@ const frag = /* glsl */ `
   uniform float uTime;
   uniform float uAspect;
   uniform float uDrift;
+  uniform vec2 uMouse;
   uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 c4; uniform vec3 cd;
 
   // Ashima simplex noise 2D
@@ -50,6 +51,13 @@ const frag = /* glsl */ `
 
   void main(){
     vec2 uv = vUv; uv.x *= uAspect;
+    vec2 m = uMouse; m.x *= uAspect;
+
+    // mouse lens: warp the field toward/around the cursor + a soft light
+    float md = distance(uv, m);
+    float infl = smoothstep(0.55, 0.0, md);          // 1 near cursor -> 0 far
+    uv += normalize(uv - m + 1e-4) * infl * infl * 0.12;   // refraction-style push
+
     float t = uTime * 0.045;
     float n1 = snoise(uv * 1.15 + vec2(t, t*0.6));
     float n2 = snoise(uv * 1.9 - vec2(t*0.8, t*0.4) + n1*0.4);
@@ -58,10 +66,12 @@ const frag = /* glsl */ `
     vec3 col = mix(c1, c2, smoothstep(-0.7, 0.7, n1));
     col = mix(col, c3, smoothstep(-0.4, 0.8, n2) * 0.7);
     col = mix(col, c4, smoothstep(0.25, 1.0, n3) * 0.6);
-    // ease toward a cool drift as you scroll (a quiet "day -> dusk")
     col = mix(col, cd, uDrift * 0.35);
 
-    // film grain — filmic texture on the near-white base
+    // soft specular bloom following the cursor (design-y, interactive)
+    col += infl * 0.05;
+
+    // film grain
     float g = (hash(vUv * (uTime + 1.0)) - 0.5) * 0.045;
     col += g;
 
@@ -78,6 +88,7 @@ export default function DayScene() {
       uTime: { value: 0 },
       uAspect: { value: 1 },
       uDrift: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
       c1: { value: PALETTE[0].clone() },
       c2: { value: PALETTE[1].clone() },
       c3: { value: PALETTE[2].clone() },
@@ -87,7 +98,7 @@ export default function DayScene() {
     [],
   );
 
-  useFrame((_, dt) => {
+  useFrame((state, dt) => {
     if (!matRef.current) return;
     const u = matRef.current.uniforms;
     u.uTime.value += dt;
@@ -95,6 +106,11 @@ export default function DayScene() {
     u.uDrift.value +=
       (THREE.MathUtils.clamp(scrollState.progress, 0, 1) - u.uDrift.value) *
       0.05;
+    // mouse -> uv (0..1), eased for a smooth lens follow
+    const mx = state.pointer.x * 0.5 + 0.5;
+    const my = state.pointer.y * 0.5 + 0.5;
+    u.uMouse.value.x += (mx - u.uMouse.value.x) * 0.08;
+    u.uMouse.value.y += (my - u.uMouse.value.y) * 0.08;
   });
 
   return (
