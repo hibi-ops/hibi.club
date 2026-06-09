@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import FlowParticles from "./FlowParticles";
 
 /**
  * Bright near-white flowing gradient — soft, premium, white-first. A gentle
@@ -95,15 +96,18 @@ export default function DayScene() {
   });
 
   return (
-    <mesh frustumCulled={false}>
-      <planeGeometry args={[2, 2]} />
-      <shaderMaterial
-        ref={matRef}
-        args={[{ uniforms, vertexShader: vert, fragmentShader: frag }]}
-        depthWrite={false}
-        depthTest={false}
-        toneMapped={false}
-      />
-    </mesh>
+    <>
+      <mesh frustumCulled={false}>
+        <planeGeometry args={[2, 2]} />
+        <shaderMaterial
+          ref={matRef}
+          args={[{ uniforms, vertexShader: vert, fragmentShader: frag }]}
+          depthWrite={false}
+          depthTest={false}
+          toneMapped={false}
+        />
+      </mesh>
+      <FlowParticles />
+    </>
   );
 }
