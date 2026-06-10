@@ -5,10 +5,10 @@ import * as THREE from "three";
 import { mouseState } from "@/lib/mouse";
 
 /**
- * The city, as particles. 80k surface-sampled points baked offline from the
- * city GLB (public/city-points.bin — Int16, ~470 KB; no GLTF/textures at
- * runtime, fast on any laptop/phone). Monochrome ink — the city is drawn by
- * density, not colour.
+ * The city, as particles. ~800k surface+edge points baked offline from the
+ * downtown GLB (public/city-points.bin — Int16 xyz + Uint8 light; no
+ * GLTF/textures at runtime, fast on any laptop/phone). Monochrome ink — the
+ * city is drawn by density, not colour.
  *
  * - Sits in the lower band of the viewport.
  * - Scroll: the view eases from bird's-eye (rooftops) to eye-level skyline.
@@ -61,7 +61,7 @@ const vert = /* glsl */ `
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
     float shade = 1.15 - 0.45 * aLight;
     float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.52 + 0.34 * aSeed) * shade * shimmer * (1.0 + rep * 0.25) * uReveal;
+    vA = (0.62 + 0.30 * aSeed) * shade * shimmer * (1.0 + rep * 0.25) * uReveal;
     vL = aLight;
   }
 `;
@@ -72,10 +72,11 @@ const frag = /* glsl */ `
   varying float vL;
   void main(){
     float d = length(gl_PointCoord - 0.5);
-    float alpha = smoothstep(0.5, 0.30, d) * vA;
+    // crisp dot edge: tight falloff so dense clouds read as form, not fog
+    float alpha = smoothstep(0.5, 0.40, d) * vA;
     if (alpha < 1e-3) discard;
     // ink, a stop lighter than v1 (luminance only — still no colour)
-    vec3 ink = mix(vec3(0.30, 0.31, 0.36), vec3(0.56, 0.57, 0.62), vL * 0.55);
+    vec3 ink = mix(vec3(0.26, 0.27, 0.32), vec3(0.56, 0.57, 0.62), vL * 0.55);
     gl_FragColor = vec4(ink, alpha);
   }
 `;
@@ -226,8 +227,8 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.03 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    // the descent also drifts a touch CLOSER (forward) for immersion
-    g.position.z += (0.3 + t2 * 0.7 - g.position.z) * k;
+    // the descent keeps dollying CLOSER (forward) — land inside the streets
+    g.position.z += (0.3 + t2 * 1.5 - g.position.z) * k;
     g.scale.setScalar(2.35 * (0.45 + 0.55 * t1) * c.zoom); // pulled-back full view -> close-up
   });
 
