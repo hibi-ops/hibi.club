@@ -870,3 +870,32 @@ footer.hibi-footer{padding:var(--s8) 0 var(--s5);}
 /* fix: the unified-material block also stole the dock's position:fixed —
    it fell into the document flow after the footer (the mystery gap) */
 .dock{position:fixed;}
+
+/* ============================================================
+   PAGE INTERACTION KIT — FAQ accordion, staggered entrances
+   ============================================================ */
+.faq{display:flex;flex-direction:column;gap:var(--s2);max-width:760px;margin:0 auto;}
+.faq-item{border:1px solid var(--line);border-radius:var(--r-l);background:var(--snow);overflow:hidden;transition:box-shadow .25s var(--ease);}
+.faq-item[data-open="true"]{box-shadow:var(--sh-2);}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);width:100%;
+  font-family:'General Sans',sans-serif;font-weight:600;font-size:17px;color:var(--ink);text-align:left;
+  background:none;border:none;cursor:pointer;padding:var(--s3) var(--s4);}
+.faq-x{font-weight:400;font-size:22px;color:var(--gray-s);transition:transform .35s var(--ease);line-height:1;}
+.faq-item[data-open="true"] .faq-x{transform:rotate(45deg);}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease);}
+.faq-item[data-open="true"] .faq-a{grid-template-rows:1fr;}
+.faq-a-inner{overflow:hidden;padding:0 var(--s4);}
+.faq-item[data-open="true"] .faq-a-inner{padding-bottom:var(--s3);}
+
+/* staggered children: wrap a grid/list in <Reveal><div className="stagger">… */
+.reveal .stagger > *{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal[data-in="true"] .stagger > *{opacity:1;transform:none;}
+.reveal[data-in="true"] .stagger > *:nth-child(1){transition-delay:.06s;}
+.reveal[data-in="true"] .stagger > *:nth-child(2){transition-delay:.14s;}
+.reveal[data-in="true"] .stagger > *:nth-child(3){transition-delay:.22s;}
+.reveal[data-in="true"] .stagger > *:nth-child(4){transition-delay:.30s;}
+.reveal[data-in="true"] .stagger > *:nth-child(5){transition-delay:.38s;}
+.reveal[data-in="true"] .stagger > *:nth-child(6){transition-delay:.46s;}
+@media (prefers-reduced-motion:reduce){
+  .reveal .stagger > *{opacity:1;transform:none;transition:none;}
+}
