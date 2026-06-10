@@ -1,6 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { mouseState } from "@/lib/mouse";
 
 // Canvas is client-only — three.js can't server-render.
 const DayCanvas = dynamic(() => import("./DayCanvas"), { ssr: false });
@@ -22,13 +23,22 @@ export default function DayBackdrop() {
     } catch {
       webgl = false;
     }
-    // gentle pastel gradient — show it whenever WebGL exists (don't gate on
-    // reduced-motion; the motion is slow). The component itself eases motion.
+    // show whenever WebGL exists (motion is slow and gentle)
     if (webgl) {
       document.documentElement.classList.add("hibi-3d");
       setEnabled(true);
     }
-    return () => document.documentElement.classList.remove("hibi-3d");
+    // the canvas is pointer-events:none, so r3f never sees the pointer —
+    // feed a window-level listener into the shared mouseState instead
+    const onMove = (e: PointerEvent) => {
+      mouseState.nx = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseState.ny = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.classList.remove("hibi-3d");
+    };
   }, []);
 
   if (!enabled) return null;
