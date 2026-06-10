@@ -615,3 +615,79 @@ nav.hibi-nav .left a[data-active="true"]{color:var(--ink);}
   border:1px solid var(--line-glass);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85), 0 20px 50px rgba(21,20,26,.10);
 }
+
+/* ============================================================
+   UNIFIED APPLE LIQUID GLASS — one material everywhere.
+   Same transparency, same brightness, specular edge, iridescent
+   rim halo, soft scattering, and a slow "watery" sheen.
+   (Placed last so it overrides earlier per-surface values.)
+   ============================================================ */
+.phone-glass,
+.hibi-3d .home-3d .panel,
+.mega,
+.dock,
+nav.hibi-nav,
+.stat-panel{
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,255,255,.55);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  backdrop-filter:blur(28px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    inset 0 -1px 1px rgba(255,255,255,.25),
+    0 16px 40px rgba(21,20,26,.10),
+    0 0 60px rgba(255,255,255,.45); /* soft halo / light scattering */
+}
+/* iridescent rim — hairline rainbow halo, Apple-subtle */
+.phone-glass::after,
+.hibi-3d .home-3d .panel::after,
+.mega::after,
+.dock::after,
+.stat-panel::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from 210deg,
+    rgba(82,182,221,.45), rgba(240,121,166,.35), rgba(245,133,74,.3),
+    rgba(75,199,143,.35), rgba(82,182,221,.45));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:.45;
+}
+/* living water: a slow light sheen drifting across the panels */
+.phone-glass::before,
+.hibi-3d .home-3d .panel::before,
+.mega::before,
+.stat-panel::before{
+  content:"";position:absolute;inset:-40%;pointer-events:none;
+  background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.45) 50%, transparent 58%);
+  animation:glassSheen 10s var(--ease) infinite;
+}
+@keyframes glassSheen{0%{transform:translateX(-38%);}60%{transform:translateX(38%);}100%{transform:translateX(38%);}}
+@media (prefers-reduced-motion:reduce){
+  .phone-glass::before,.hibi-3d .home-3d .panel::before,.mega::before,.stat-panel::before{animation:none;}
+}
+/* content above the pseudo layers */
+.phone-glass > *, .mega > *, .dock > *, .stat-panel > *,
+.hibi-3d .home-3d .panel > *{position:relative;z-index:1;}
+.mega{overflow:hidden;}
+
+/* ===== STAT — copy lives inside a panel cluster (air layout) ===== */
+.stat-panels{display:grid;grid-template-columns:1fr 1.45fr;gap:var(--s3);align-items:stretch;}
+@media(max-width:860px){.stat-panels{grid-template-columns:1fr;}}
+.stat-panel{border-radius:var(--r-xl);padding:var(--s6);}
+.stat-num{display:flex;flex-direction:column;justify-content:center;}
+.stat-num .display{font-size:clamp(110px,15vw,230px);}
+.stat-cap{font-size:14px;color:var(--gray-s);margin-top:var(--s2);}
+.stat-chip{grid-column:1 / -1;padding:var(--s3) var(--s6);text-align:center;}
+.stat-chip .say{font-size:19px;color:var(--ink-2);}
+/* panels carry the frost now — drop the old halo/text-glow on stat copy */
+.hibi-3d .home-3d .stat .title,
+.hibi-3d .home-3d .stat .body,
+.hibi-3d .home-3d .stat .say{text-shadow:none;}
+
+/* ===== BOLD typography — huge, abstract, avant-garde ===== */
+.hero .title{font-size:clamp(64px,11vw,200px);}
+.marquee{padding:var(--s7) 0;}
+.marquee-seg{font-size:clamp(64px,12vw,170px);}
+.pin-item .display{font-size:clamp(90px,21vw,280px);}
