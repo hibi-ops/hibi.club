@@ -5,14 +5,13 @@ import {
   EffectComposer,
 } from "@react-three/postprocessing";
 import * as THREE from "three";
-import ParticleMark from "./ParticleMark";
 import CityParticles from "./CityParticles";
 
 /**
  * Clean near-white canvas with a whisper of slowly-shifting cool tint
- * (no pink), behind the particle journey (ParticleMark). Chromatic
- * aberration is applied full-screen in the composer so it is actually
- * visible on the particle edges (per-sprite CA was sub-pixel).
+ * (no pink), behind THE CITY — the only 3D element. A restrained
+ * full-screen chromatic aberration keeps a premium lens feel without
+ * smearing the dust.
  */
 
 const vert = /* glsl */ `
@@ -100,7 +99,6 @@ export default function DayScene() {
           toneMapped={false}
         />
       </mesh>
-      <ParticleMark />
       <CityParticles />
 
       {/* full-screen, actually-visible chromatic aberration (canvas only —
@@ -116,4 +114,5 @@ export default function DayScene() {
   );
 }
 
-const caOffset = new THREE.Vector2(0.0022, 0.0014);
+// restrained: enough for a lens feel at the frame edges, no smearing
+const caOffset = new THREE.Vector2(0.0008, 0.0005);

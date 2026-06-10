@@ -90,8 +90,15 @@ function pickTri() {
   return tris[lo];
 }
 
-// area-weighted surface sampling
+// area-weighted surface sampling + baked directional light (from the
+// triangle's geometric normal -> real shading on the dust = "光感")
+const SUN = (() => {
+  const v = [0.55, 0.65, 0.52];
+  const l = Math.hypot(...v);
+  return v.map((x) => x / l);
+})();
 const pts = new Float64Array(COUNT * 3);
+const light = new Uint8Array(COUNT);
 for (let i = 0; i < COUNT; i++) {
   const { a, b, c } = pickTri();
   let u = Math.random();
@@ -103,6 +110,16 @@ for (let i = 0; i < COUNT; i++) {
   pts[i * 3] = a[0] + (b[0] - a[0]) * u + (c[0] - a[0]) * v;
   pts[i * 3 + 1] = a[1] + (b[1] - a[1]) * u + (c[1] - a[1]) * v;
   pts[i * 3 + 2] = a[2] + (b[2] - a[2]) * u + (c[2] - a[2]) * v;
+  // geometric normal (abs dot — winding-agnostic), 0.30 ambient floor
+  const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+  const ac = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+  let nx = ab[1] * ac[2] - ab[2] * ac[1];
+  let ny = ab[2] * ac[0] - ab[0] * ac[2];
+  let nz = ab[0] * ac[1] - ab[1] * ac[0];
+  const nl = Math.hypot(nx, ny, nz) || 1;
+  nx /= nl; ny /= nl; nz /= nl;
+  const d = Math.abs(nx * SUN[0] + ny * SUN[1] + nz * SUN[2]);
+  light[i] = Math.round(Math.min(1, 0.3 + 0.7 * d) * 255);
 }
 
 // normalise: centre xz, ground y=0, footprint max(width, depth) = 4.6
@@ -124,10 +141,14 @@ for (let i = 0; i < COUNT; i++) {
 }
 console.log(`normalised: footprint 4.6, height ${((maxY - minY) * s).toFixed(2)}, maxAbs ${maxAbs.toFixed(3)}`);
 
-// quantise Int16
+// quantise Int16; bin layout = Int16 xyz triplets, then Uint8 light bytes
 const q = new Int16Array(COUNT * 3);
 for (let i = 0; i < COUNT * 3; i++) q[i] = Math.round((pts[i] / maxAbs) * 32767);
 
-writeFileSync("public/city-points.bin", Buffer.from(q.buffer));
-writeFileSync("public/city-points.json", JSON.stringify({ count: COUNT, maxAbs }));
-console.log(`wrote public/city-points.bin (${((COUNT * 6) / 1024).toFixed(0)} KB) + city-points.json`);
+const out = Buffer.concat([Buffer.from(q.buffer), Buffer.from(light.buffer)]);
+writeFileSync("public/city-points.bin", out);
+writeFileSync(
+  "public/city-points.json",
+  JSON.stringify({ count: COUNT, maxAbs, light: true })
+);
+console.log(`wrote public/city-points.bin (${(out.length / 1024).toFixed(0)} KB) + city-points.json`);

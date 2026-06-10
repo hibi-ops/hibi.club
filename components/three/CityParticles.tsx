@@ -25,13 +25,15 @@ const vert = /* glsl */ `
   uniform float uPx;
   uniform float uReveal;
   attribute float aSeed;
+  attribute float aLight;
   varying float vA;
+  varying float vL;
 
   void main(){
     vec3 p = position;
 
-    // faint breathing so the city dust feels alive
-    p += 0.012 * vec3(
+    // whisper breathing (tiny — the city must stay CRISP)
+    p += 0.005 * vec3(
       sin(uTime * 0.8 + aSeed * 6.2831853 + p.y * 5.0),
       cos(uTime * 0.7 + aSeed * 4.0),
       sin(uTime * 0.6 + aSeed * 5.0 + p.x * 4.0)
@@ -39,32 +41,38 @@ const vert = /* glsl */ `
 
     vec4 world = modelMatrix * vec4(p, 1.0);
 
-    // organic stir near the cursor (same language as the mark)
+    // organic stir near the cursor (tight, so the form holds)
     vec2 d = world.xy - uMouse;
     float md = length(d);
-    float fall = smoothstep(1.8, 0.15, md);
+    float fall = smoothstep(1.3, 0.12, md);
     float organic = 0.55 + 0.45 * sin(aSeed * 12.7 + uTime * 1.3);
     float rep = fall * organic;
     vec2 dir = normalize(d + 1e-4);
-    world.xy += (dir * 0.06 + vec2(-dir.y, dir.x) * 0.12) * rep;
+    world.xy += (dir * 0.04 + vec2(-dir.y, dir.x) * 0.08) * rep;
 
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = (0.9 + 1.8 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3);
+    gl_PointSize = (1.05 + 1.9 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3);
 
-    float shimmer = 0.84 + 0.16 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.30 + 0.34 * aSeed) * shimmer * (1.0 + rep * 0.5) * uReveal;
+    // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
+    float shade = 1.18 - 0.55 * aLight;
+    float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
+    vA = (0.40 + 0.36 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
+    vL = aLight;
   }
 `;
 
 const frag = /* glsl */ `
   precision mediump float;
   varying float vA;
+  varying float vL;
   void main(){
     float d = length(gl_PointCoord - 0.5);
-    float alpha = smoothstep(0.5, 0.14, d) * vA;
+    float alpha = smoothstep(0.5, 0.16, d) * vA;
     if (alpha < 1e-3) discard;
-    gl_FragColor = vec4(0.12, 0.13, 0.17, alpha); // pure ink — no colour
+    // ink, warmed a breath on lit faces (luminance only — still no colour)
+    vec3 ink = mix(vec3(0.10, 0.11, 0.15), vec3(0.34, 0.35, 0.40), vL * 0.55);
+    gl_FragColor = vec4(ink, alpha);
   }
 `;
 
@@ -91,16 +99,25 @@ export default function CityParticles() {
           fetch("/city-points.bin").then((r) => r.arrayBuffer()),
         ]);
         if (!alive) return;
-        const q = new Int16Array(bin);
         const n = meta.count as number;
+        const q = new Int16Array(bin, 0, n * 3);
         const scale = (meta.maxAbs as number) / 32767;
         const pos = new Float32Array(n * 3);
         for (let i = 0; i < n * 3; i++) pos[i] = q[i] * scale;
         const seeds = new Float32Array(n);
         for (let i = 0; i < n; i++) seeds[i] = Math.random();
+        // baked per-point directional light (uint8 tail of the bin)
+        const lights = new Float32Array(n);
+        if (meta.light) {
+          const lb = new Uint8Array(bin, n * 6, n);
+          for (let i = 0; i < n; i++) lights[i] = lb[i] / 255;
+        } else {
+          lights.fill(0.5);
+        }
         const g = new THREE.BufferGeometry();
         g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
         g.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 1));
+        g.setAttribute("aLight", new THREE.BufferAttribute(lights, 1));
         g.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 6);
         setGeometry(g);
       } catch {
@@ -151,7 +168,7 @@ export default function CityParticles() {
       // pinch gesture (trackpads report ctrlKey) over the city zone only
       if (!e.ctrlKey || e.clientY < window.innerHeight * ZONE) return;
       e.preventDefault();
-      c.zoomT = THREE.MathUtils.clamp(c.zoomT - e.deltaY * 0.0035, 0.8, 1.45);
+      c.zoomT = THREE.MathUtils.clamp(c.zoomT - e.deltaY * 0.0035, 0.8, 1.6);
     };
     window.addEventListener("pointerdown", down, { passive: true });
     window.addEventListener("pointermove", move, { passive: true });
@@ -189,7 +206,7 @@ export default function CityParticles() {
         : 0;
     const t = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const pitch = THREE.MathUtils.lerp(1.12, 0.06, t);
-    const y = THREE.MathUtils.lerp(-2.05, -1.8, t);
+    const y = THREE.MathUtils.lerp(-2.3, -1.95, t);
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
@@ -198,7 +215,7 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    g.scale.setScalar(0.62 * c.zoom); // compact: the city lives in the lower band
+    g.scale.setScalar(0.85 * c.zoom); // larger presence, still the lower band
   });
 
   if (!geometry) return null;
@@ -208,7 +225,7 @@ export default function CityParticles() {
       ref={group}
       position={[0, -2.05, 0.3]}
       rotation={[1.12, 0, 0]}
-      scale={0.62}
+      scale={0.85}
     >
       <points geometry={geometry} frustumCulled={false}>
         {/* args-constructed so uniforms actually bind */}
