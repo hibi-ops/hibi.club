@@ -21,7 +21,7 @@ import { writeFileSync } from "node:fs";
 
 const GLB =
   process.argv[2] ??
-  "/Users/jiamingw/Documents/3D Assests/Hibi:web/hibi:web:home:city.glb";
+  "/Users/jiamingw/Documents/3D Assests/Hibi:web/hibi:web:home:downtown.glb";
 const SURFACE = Number(process.argv[3] ?? 430000);
 const EDGE = Number(process.argv[4] ?? 90000);
 

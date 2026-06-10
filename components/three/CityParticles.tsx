@@ -41,27 +41,27 @@ const vert = /* glsl */ `
 
     vec4 world = modelMatrix * vec4(p, 1.0);
 
-    // organic stir near the cursor (tight, so the form holds)
+    // organic stir near the cursor (quieter: smaller radius, half drift)
     vec2 d = world.xy - uMouse;
     float md = length(d);
-    float fall = smoothstep(1.3, 0.12, md);
+    float fall = smoothstep(1.0, 0.1, md);
     float organic = 0.55 + 0.45 * sin(aSeed * 12.7 + uTime * 1.3);
     float rep = fall * organic;
     vec2 dir = normalize(d + 1e-4);
-    world.xy += (dir * 0.04 + vec2(-dir.y, dir.x) * 0.08) * rep;
+    world.xy += (dir * 0.02 + vec2(-dir.y, dir.x) * 0.04) * rep;
 
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
     // cap sprite size so near-camera dust stays fine-grained, never blobs
     gl_PointSize = min(
-      (0.7 + 1.0 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
+      (0.7 + 1.0 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.15),
       3.0 * uPx
     );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
     float shade = 1.15 - 0.45 * aLight;
     float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.60 + 0.38 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
+    vA = (0.52 + 0.34 * aSeed) * shade * shimmer * (1.0 + rep * 0.25) * uReveal;
     vL = aLight;
   }
 `;
@@ -74,8 +74,8 @@ const frag = /* glsl */ `
     float d = length(gl_PointCoord - 0.5);
     float alpha = smoothstep(0.5, 0.30, d) * vA;
     if (alpha < 1e-3) discard;
-    // ink, warmed a breath on lit faces (luminance only — still no colour)
-    vec3 ink = mix(vec3(0.10, 0.11, 0.15), vec3(0.34, 0.35, 0.40), vL * 0.55);
+    // ink, a stop lighter than v1 (luminance only — still no colour)
+    vec3 ink = mix(vec3(0.30, 0.31, 0.36), vec3(0.56, 0.57, 0.62), vL * 0.55);
     gl_FragColor = vec4(ink, alpha);
   }
 `;
@@ -207,8 +207,11 @@ export default function CityParticles() {
     //      towers (city rises on screen) until street level at the bottom
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
-    const sp =
-      maxScroll > 0
+    // dev hook: #sp=0.45 pins the scroll pose (deterministic captures)
+    const spHash = /[#&]sp=([\d.]+)/.exec(window.location.hash);
+    const sp = spHash
+      ? THREE.MathUtils.clamp(parseFloat(spHash[1]), 0, 1)
+      : maxScroll > 0
         ? THREE.MathUtils.clamp(window.scrollY / maxScroll, 0, 1)
         : 0;
     const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
@@ -221,7 +224,7 @@ export default function CityParticles() {
     c.zoom += (c.zoomT - c.zoom) * k;
 
     g.rotation.x += (pitch - g.rotation.x) * k;
-    g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
+    g.rotation.y += (c.yaw + mouseState.nx * 0.03 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
     // the descent also drifts a touch CLOSER (forward) for immersion
     g.position.z += (0.3 + t2 * 0.7 - g.position.z) * k;
