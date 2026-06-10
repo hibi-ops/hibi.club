@@ -43,7 +43,7 @@ export default function Hero() {
               radius={32}
               bezel={10}
               scale={14}
-              blur={6}
+              blur={8}
               className="phone-glass"
             >
               <div className="phone">
