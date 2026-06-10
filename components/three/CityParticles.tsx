@@ -54,8 +54,8 @@ const vert = /* glsl */ `
     gl_Position = projectionMatrix * mv;
     // cap sprite size so near-camera dust stays fine-grained, never blobs
     gl_PointSize = min(
-      (1.5 + 2.3 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
-      7.0 * uPx
+      (1.0 + 1.6 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
+      5.0 * uPx
     );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
@@ -201,16 +201,20 @@ export default function CityParticles() {
     if (!g) return;
     const k = 1 - Math.exp(-6 * dt);
 
-    // scroll: bird's-eye -> eye-level over the first half of the page
+    // three-phase camera ride:
+    //   1) 0 -> 0.5    oblique 60° aerial eases down to eye-level
+    //   2) 0.55 -> 0.95 the "elevator": viewpoint sinks vertically past the
+    //      towers (city rises on screen) until street level at the bottom
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     const sp =
       maxScroll > 0
         ? THREE.MathUtils.clamp(window.scrollY / maxScroll, 0, 1)
         : 0;
-    const t = THREE.MathUtils.smoothstep(sp, 0, 0.5);
-    const pitch = THREE.MathUtils.lerp(1.12, 0.06, t);
-    const y = THREE.MathUtils.lerp(-4.2, -2.3, t);
+    const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
+    const t2 = THREE.MathUtils.smoothstep(sp, 0.55, 0.95);
+    const pitch = THREE.MathUtils.lerp(1.05, 0.04, t1); // 60° max, never top-down
+    const y = THREE.MathUtils.lerp(-4.2, -2.3, t1) + t2 * 2.5; // descend to the street
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
