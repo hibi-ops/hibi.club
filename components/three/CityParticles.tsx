@@ -249,8 +249,8 @@ export default function CityParticles() {
       <points
         geometry={geometry}
         frustumCulled={false}
-        // static city orientation: rotated +60° from the original -30° pose
-        rotation={[0, 0.524, 0]}
+        // static city orientation: +60° yaw (rotated in two 30° steps from -30°)
+        rotation={[0, 1.047, 0]}
       >
         {/* args-constructed so uniforms actually bind */}
         <shaderMaterial
