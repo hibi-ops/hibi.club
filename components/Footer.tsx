@@ -9,7 +9,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Pricing", href: "/pricing" },
       { label: "Solutions", href: "/solutions" },
       { label: "Merchant dashboard", href: "/dashboard" },
-      { label: "Changelog", href: "#" },
+      { label: "How it works", href: "/how-it-works" },
     ],
   },
   {
@@ -25,19 +25,19 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Careers", href: "#" },
-      { label: "Journal", href: "#" },
-      { label: "Contact", href: "#" },
-      { label: "Press", href: "#" },
+      { label: "Careers", href: "/careers" },
+      { label: "Journal", href: "/journal" },
+      { label: "Contact", href: "/contact" },
+      { label: "Press", href: "/press" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Help center", href: "#" },
-      { label: "Community guidelines", href: "#" },
-      { label: "Cities we serve", href: "#" },
-      { label: "Status", href: "#" },
+      { label: "Help center", href: "/help" },
+      { label: "Trust report", href: "/trust" },
+      { label: "Cities we serve", href: "/explore" },
+      { label: "Security", href: "/security" },
     ],
   },
 ];
@@ -54,10 +54,10 @@ export default function Footer() {
               <span style={{ fontStyle: "italic" }}>hibi</span>.
             </h3>
             <div className="row">
-              <Link className="btn btn-primary" href="#">
+              <Link className="btn btn-primary" href="/signup">
                 Start for free
               </Link>
-              <Link className="btn btn-glass" href="#">
+              <Link className="btn btn-glass" href="/contact">
                 Book a demo
               </Link>
             </div>
@@ -115,8 +115,8 @@ export default function Footer() {
         {/* legal / utility row */}
         <div className="foot-base">
           <div className="foot-legal">
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
             <Link href="#">Cookies</Link>
             <Link href="#">Accessibility</Link>
           </div>

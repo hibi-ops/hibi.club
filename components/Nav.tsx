@@ -118,10 +118,10 @@ export default function Nav() {
           <Link className="login" href="/dashboard">
             Login
           </Link>
-          <Link className="btn btn-primary btn-sm" href="#">
+          <Link className="btn btn-primary btn-sm" href="/signup">
             Start for free
           </Link>
-          <Link className="btn btn-glass btn-sm" href="#">
+          <Link className="btn btn-glass btn-sm" href="/contact">
             Book a demo
           </Link>
         </div>

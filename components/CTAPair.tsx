@@ -19,8 +19,8 @@ type Props = {
  * are sentence case, General Sans (handled by .btn).
  */
 export default function CTAPair({
-  primary = { label: "Start for free", href: "#" },
-  secondary = { label: "Book a demo", href: "#" },
+  primary = { label: "Start for free", href: "/signup" },
+  secondary = { label: "Book a demo", href: "/contact" },
   center = false,
   size = "md",
   className = "",

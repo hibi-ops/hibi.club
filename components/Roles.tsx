@@ -85,9 +85,7 @@ export default function Roles() {
             <div className="say" style={{ borderLeft: `2px solid ${d.color}` }}>
               {d.say}
             </div>
-            <a className="btn btn-primary" href="#">
-              {d.cta}
-            </a>
+            <a className="btn btn-primary" href="/signup">{d.cta}</a>
           </div>
           <div className="pv" style={{ background: d.tint }}>
             <Mark size={116} color={d.color} />

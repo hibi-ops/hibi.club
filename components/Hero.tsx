@@ -24,14 +24,10 @@ export default function Hero() {
         </p>
         <div className="hero-cta">
           <Magnetic>
-            <a className="btn btn-primary" href="#">
-              Start for free
-            </a>
+            <a className="btn btn-primary" href="/signup">Start for free</a>
           </Magnetic>
           <Magnetic>
-            <a className="btn btn-glass" href="#">
-              Book a demo
-            </a>
+            <a className="btn btn-glass" href="/contact">Book a demo</a>
           </Magnetic>
         </div>
 

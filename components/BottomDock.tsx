@@ -48,7 +48,7 @@ export default function BottomDock() {
           {l.label}
         </Link>
       ))}
-      <Link href="#" className="dock-cta">
+      <Link href="/signup" className="dock-cta">
         Start for free
       </Link>
     </nav>
