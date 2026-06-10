@@ -52,12 +52,16 @@ const vert = /* glsl */ `
 
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = (1.05 + 1.9 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3);
+    // cap sprite size so near-camera dust stays fine-grained, never blobs
+    gl_PointSize = min(
+      (1.5 + 2.3 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
+      7.0 * uPx
+    );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
-    float shade = 1.18 - 0.55 * aLight;
+    float shade = 1.15 - 0.45 * aLight;
     float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.40 + 0.36 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
+    vA = (0.50 + 0.40 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
     vL = aLight;
   }
 `;
@@ -206,7 +210,7 @@ export default function CityParticles() {
         : 0;
     const t = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const pitch = THREE.MathUtils.lerp(1.12, 0.06, t);
-    const y = THREE.MathUtils.lerp(-2.3, -1.95, t);
+    const y = THREE.MathUtils.lerp(-4.2, -2.3, t);
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
@@ -215,7 +219,7 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    g.scale.setScalar(0.85 * c.zoom); // larger presence, still the lower band
+    g.scale.setScalar(2.13 * c.zoom); // 2.5x: the city is a protagonist now
   });
 
   if (!geometry) return null;
@@ -223,9 +227,9 @@ export default function CityParticles() {
   return (
     <group
       ref={group}
-      position={[0, -2.05, 0.3]}
+      position={[0, -4.6, 0.3]}
       rotation={[1.12, 0, 0]}
-      scale={0.85}
+      scale={2.13}
     >
       <points geometry={geometry} frustumCulled={false}>
         {/* args-constructed so uniforms actually bind */}
