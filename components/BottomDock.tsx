@@ -14,15 +14,18 @@ const LINKS = [
  *  reveals on scroll-up; complements the top nav. */
 export default function BottomDock() {
   const pathname = usePathname();
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(true); // hidden in the hero by default
 
   useEffect(() => {
     let last = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setHidden(y > last && y > 120);
+      // never alongside the top nav in the hero (one menu at a time);
+      // past the hero it appears on scroll-up, hides on scroll-down
+      setHidden(y < window.innerHeight * 0.85 || y > last);
       last = y;
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
