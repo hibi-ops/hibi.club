@@ -253,6 +253,8 @@ export default function ParticleMark() {
   // drag anywhere on the page background to spin the cloud (with inertia)
   useEffect(() => {
     const down = (e: PointerEvent) => {
+      // lower band belongs to the city's drag-rotate (CityParticles)
+      if (e.clientY > window.innerHeight * 0.6) return;
       const t = e.target as Element | null;
       if (
         t?.closest?.(

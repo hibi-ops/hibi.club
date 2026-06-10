@@ -6,6 +6,7 @@ import {
 } from "@react-three/postprocessing";
 import * as THREE from "three";
 import ParticleMark from "./ParticleMark";
+import CityParticles from "./CityParticles";
 
 /**
  * Clean near-white canvas with a whisper of slowly-shifting cool tint
@@ -100,6 +101,7 @@ export default function DayScene() {
         />
       </mesh>
       <ParticleMark />
+      <CityParticles />
 
       {/* full-screen, actually-visible chromatic aberration (canvas only —
           HTML type above is untouched); stronger toward the edges */}
