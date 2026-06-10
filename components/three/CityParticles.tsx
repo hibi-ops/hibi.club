@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { mouseState } from "@/lib/mouse";
 
 /**
- * The city, as particles. ~800k surface+edge points baked offline from the
+ * The city, as particles. ~1.2M surface+edge points baked offline from the
  * downtown GLB (public/city-points.bin — Int16 xyz + Uint8 light; no
  * GLTF/textures at runtime, fast on any laptop/phone). Monochrome ink — the
  * city is drawn by density, not colour.
@@ -53,9 +53,10 @@ const vert = /* glsl */ `
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
     // cap sprite size so near-camera dust stays fine-grained, never blobs
+    // (finer grain than v2 — density carries the form, not dot size)
     gl_PointSize = min(
-      (0.7 + 1.0 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.15),
-      3.0 * uPx
+      (0.6 + 0.9 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.15),
+      2.6 * uPx
     );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
@@ -75,8 +76,9 @@ const frag = /* glsl */ `
     // crisp dot edge: tight falloff so dense clouds read as form, not fog
     float alpha = smoothstep(0.5, 0.40, d) * vA;
     if (alpha < 1e-3) discard;
-    // ink, a stop lighter than v1 (luminance only — still no colour)
-    vec3 ink = mix(vec3(0.26, 0.27, 0.32), vec3(0.56, 0.57, 0.62), vL * 0.55);
+    // pale ink (luminance only — still no colour): edges hold the deepest
+    // grey, lit faces almost dissolve into the paper
+    vec3 ink = mix(vec3(0.38, 0.39, 0.44), vec3(0.64, 0.65, 0.70), vL * 0.55);
     gl_FragColor = vec4(ink, alpha);
   }
 `;
