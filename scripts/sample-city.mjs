@@ -22,8 +22,8 @@ import { writeFileSync } from "node:fs";
 const GLB =
   process.argv[2] ??
   "/Users/jiamingw/Documents/3D Assests/Hibi:web/hibi:web:home:downtown.glb";
-const SURFACE = Number(process.argv[3] ?? 1000000);
-const EDGE = Number(process.argv[4] ?? 200000);
+const SURFACE = Number(process.argv[3] ?? 5000000);
+const EDGE = Number(process.argv[4] ?? 1000000);
 
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 const doc = await io.read(GLB);

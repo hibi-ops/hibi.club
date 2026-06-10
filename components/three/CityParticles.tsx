@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { mouseState } from "@/lib/mouse";
 
 /**
- * The city, as particles. ~1.2M surface+edge points baked offline from the
+ * The city, as particles. ~6M surface+edge points baked offline from the
  * downtown GLB (public/city-points.bin — Int16 xyz + Uint8 light; no
  * GLTF/textures at runtime, fast on any laptop/phone). Monochrome ink — the
  * city is drawn by density, not colour.
@@ -53,16 +53,18 @@ const vert = /* glsl */ `
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
     // cap sprite size so near-camera dust stays fine-grained, never blobs
-    // (finer grain than v2 — density carries the form, not dot size)
+    // (at 6M points the grain is almost mist — tiny sprites, low weight)
     gl_PointSize = min(
-      (0.6 + 0.9 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.15),
-      2.6 * uPx
+      (0.5 + 0.7 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.15),
+      2.2 * uPx
     );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
     float shade = 1.15 - 0.45 * aLight;
     float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.62 + 0.30 * aSeed) * shade * shimmer * (1.0 + rep * 0.25) * uReveal;
+    // 5x density piles up coverage — each particle carries far less ink so
+    // the accumulated tone stays pale instead of compounding to black
+    vA = (0.32 + 0.20 * aSeed) * shade * shimmer * (1.0 + rep * 0.25) * uReveal;
     vL = aLight;
   }
 `;
@@ -78,7 +80,7 @@ const frag = /* glsl */ `
     if (alpha < 1e-3) discard;
     // pale ink (luminance only — still no colour): edges hold the deepest
     // grey, lit faces almost dissolve into the paper
-    vec3 ink = mix(vec3(0.38, 0.39, 0.44), vec3(0.64, 0.65, 0.70), vL * 0.55);
+    vec3 ink = mix(vec3(0.48, 0.49, 0.54), vec3(0.72, 0.73, 0.78), vL * 0.55);
     gl_FragColor = vec4(ink, alpha);
   }
 `;
