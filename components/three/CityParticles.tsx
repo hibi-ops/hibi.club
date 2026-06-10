@@ -33,7 +33,7 @@ const vert = /* glsl */ `
     vec3 p = position;
 
     // whisper breathing (tiny — the city must stay CRISP)
-    p += 0.005 * vec3(
+    p += 0.003 * vec3(
       sin(uTime * 0.8 + aSeed * 6.2831853 + p.y * 5.0),
       cos(uTime * 0.7 + aSeed * 4.0),
       sin(uTime * 0.6 + aSeed * 5.0 + p.x * 4.0)
@@ -61,7 +61,7 @@ const vert = /* glsl */ `
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
     float shade = 1.15 - 0.45 * aLight;
     float shimmer = 0.88 + 0.12 * sin(uTime * 2.0 + aSeed * 6.2831853);
-    vA = (0.50 + 0.40 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
+    vA = (0.60 + 0.38 * aSeed) * shade * shimmer * (1.0 + rep * 0.5) * uReveal;
     vL = aLight;
   }
 `;
@@ -214,7 +214,7 @@ export default function CityParticles() {
     const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const t2 = THREE.MathUtils.smoothstep(sp, 0.55, 0.95);
     const pitch = THREE.MathUtils.lerp(1.05, 0.04, t1); // 60° max, never top-down
-    const y = THREE.MathUtils.lerp(-4.2, -2.3, t1) + t2 * 2.5; // descend to the street
+    const y = THREE.MathUtils.lerp(-5.0, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
@@ -223,7 +223,7 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    g.scale.setScalar(2.13 * c.zoom); // 2.5x: the city is a protagonist now
+    g.scale.setScalar(2.13 * (0.85 + 0.15 * t1) * c.zoom); // starts farther, arrives at full 2.5x
   });
 
   if (!geometry) return null;
