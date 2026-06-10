@@ -1,12 +1,17 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
+import {
+  ChromaticAberration,
+  EffectComposer,
+} from "@react-three/postprocessing";
 import * as THREE from "three";
 import ParticleMark from "./ParticleMark";
 
 /**
  * Clean near-white canvas with a whisper of slowly-shifting cool tint
- * (no pink), behind a coherent 3D particle model (ParticleRing) that
- * carries the motion, colour and mouse interaction.
+ * (no pink), behind the particle journey (ParticleMark). Chromatic
+ * aberration is applied full-screen in the composer so it is actually
+ * visible on the particle edges (per-sprite CA was sub-pixel).
  */
 
 const vert = /* glsl */ `
@@ -95,6 +100,18 @@ export default function DayScene() {
         />
       </mesh>
       <ParticleMark />
+
+      {/* full-screen, actually-visible chromatic aberration (canvas only —
+          HTML type above is untouched); stronger toward the edges */}
+      <EffectComposer>
+        <ChromaticAberration
+          offset={caOffset}
+          radialModulation
+          modulationOffset={0.15}
+        />
+      </EffectComposer>
     </>
   );
 }
+
+const caOffset = new THREE.Vector2(0.0022, 0.0014);
