@@ -37,10 +37,13 @@ export default function Hero() {
 
         <div className="float">
           <TiltCard max={9}>
+            {/* natural macOS/iOS material: mostly frost, a whisper of edge
+                lensing — never a magnifier */}
             <LiquidGlass
               radius={32}
-              bezel={22}
-              scale={64}
+              bezel={10}
+              scale={14}
+              blur={6}
               className="phone-glass"
             >
               <div className="phone">
