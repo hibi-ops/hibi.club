@@ -214,7 +214,7 @@ export default function CityParticles() {
     const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const t2 = THREE.MathUtils.smoothstep(sp, 0.55, 0.95);
     const pitch = THREE.MathUtils.lerp(1.05, 0.04, t1); // 60° max, never top-down
-    const y = THREE.MathUtils.lerp(-2.6, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
+    const y = THREE.MathUtils.lerp(-2.0, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
@@ -223,7 +223,9 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    g.scale.setScalar(2.13 * (0.52 + 0.48 * t1) * c.zoom); // distant full city -> full 2.5x
+    // the descent also drifts a touch CLOSER (forward) for immersion
+    g.position.z += (0.3 + t2 * 0.7 - g.position.z) * k;
+    g.scale.setScalar(2.35 * (0.45 + 0.55 * t1) * c.zoom); // pulled-back full view -> close-up
   });
 
   if (!geometry) return null;
@@ -235,7 +237,11 @@ export default function CityParticles() {
       rotation={[1.12, 0, 0]}
       scale={2.13}
     >
-      <points geometry={geometry} frustumCulled={false}>
+      <points
+        geometry={geometry}
+        frustumCulled={false}
+        rotation={[0, -0.524, 0]}
+      >
         {/* args-constructed so uniforms actually bind */}
         <shaderMaterial
           args={[
