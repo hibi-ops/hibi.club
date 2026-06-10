@@ -24,6 +24,7 @@ const frag = /* glsl */ `
   varying vec2 vUv;
   uniform float uTime;
   uniform float uAspect;
+  uniform float uScroll;
 
   vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
   float snoise(vec2 v){
@@ -51,15 +52,20 @@ const frag = /* glsl */ `
     float n1 = snoise(uv * 0.9 + vec2(t, t * 0.6));
     float n2 = snoise(uv * 1.4 - vec2(t * 0.7, t * 0.4));
 
-    // near-white paper with a 4-5% cool tint whose hue drifts very slowly
-    // (variable colour, restricted to the cool half — no pink)
-    float hue = 0.55 + 0.10 * sin(uTime * 0.01);
-    vec3 tintA = mix(vec3(1.0), 0.5 + 0.5 * cos(6.2831853 * (hue + vec3(0.0, 0.33, 0.67))), 0.05);
-    vec3 tintB = mix(vec3(1.0), 0.5 + 0.5 * cos(6.2831853 * (hue + 0.12 + vec3(0.0, 0.33, 0.67))), 0.04);
+    // the day arc (air.inc atmosphere, Hibi's 日々 story): a clean vertical
+    // sky gradient that warms as you ride down — dawn at the hero, golden
+    // dusk at the street. Kept very light so ink type always reads.
+    vec3 dawnTop = vec3(0.870, 0.915, 0.960);
+    vec3 dawnBot = vec3(0.990, 0.975, 0.940);
+    vec3 duskTop = vec3(0.905, 0.890, 0.950);
+    vec3 duskBot = vec3(0.985, 0.915, 0.815);
+    vec3 top = mix(dawnTop, duskTop, uScroll);
+    vec3 bot = mix(dawnBot, duskBot, uScroll);
+    float band = smoothstep(0.0, 1.0, vUv.y) + n1 * 0.06; // organic horizon
+    vec3 col = mix(bot, top, clamp(band, 0.0, 1.0));
 
-    vec3 col = vec3(0.992);
-    col = mix(col, tintA, smoothstep(-0.3, 0.9, n1) * 0.8);
-    col = mix(col, tintB, smoothstep(-0.2, 0.95, n2) * 0.6);
+    // whisper of drifting light so the sky feels alive
+    col = mix(col, vec3(1.0), smoothstep(-0.2, 0.95, n2) * 0.10);
 
     float g = (hash(vUv * floor(uTime * 12.0)) - 0.5) * 0.012;
     col += g;
@@ -76,6 +82,7 @@ export default function DayScene() {
     () => ({
       uTime: { value: 0 },
       uAspect: { value: 1 },
+      uScroll: { value: 0 },
     }),
     [],
   );
@@ -85,6 +92,12 @@ export default function DayScene() {
     const u = matRef.current.uniforms;
     u.uTime.value += dt;
     u.uAspect.value = size.width / size.height;
+    // day arc follows the ride (frame-rate-independent easing)
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const sp =
+      maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+    u.uScroll.value += (sp - u.uScroll.value) * (1 - Math.exp(-6 * dt));
   });
 
   return (
