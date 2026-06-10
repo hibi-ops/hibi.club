@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import ParticleRing from "./ParticleRing";
+import ParticleMark from "./ParticleMark";
 
 /**
  * Clean near-white canvas with a whisper of slowly-shifting cool tint
@@ -94,7 +94,7 @@ export default function DayScene() {
           toneMapped={false}
         />
       </mesh>
-      <ParticleRing />
+      <ParticleMark />
     </>
   );
 }
