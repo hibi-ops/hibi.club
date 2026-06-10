@@ -115,4 +115,4 @@ export default function DayScene() {
 }
 
 // restrained: enough for a lens feel at the frame edges, no smearing
-const caOffset = new THREE.Vector2(0.0008, 0.0005);
+const caOffset = new THREE.Vector2(0.0005, 0.0003);

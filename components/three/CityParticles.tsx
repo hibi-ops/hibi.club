@@ -33,7 +33,7 @@ const vert = /* glsl */ `
     vec3 p = position;
 
     // whisper breathing (tiny — the city must stay CRISP)
-    p += 0.003 * vec3(
+    p += 0.0015 * vec3(
       sin(uTime * 0.8 + aSeed * 6.2831853 + p.y * 5.0),
       cos(uTime * 0.7 + aSeed * 4.0),
       sin(uTime * 0.6 + aSeed * 5.0 + p.x * 4.0)
@@ -54,8 +54,8 @@ const vert = /* glsl */ `
     gl_Position = projectionMatrix * mv;
     // cap sprite size so near-camera dust stays fine-grained, never blobs
     gl_PointSize = min(
-      (1.0 + 1.6 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
-      5.0 * uPx
+      (0.7 + 1.0 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.3),
+      3.0 * uPx
     );
 
     // etching light: sun-lit faces breathe lighter, shaded faces hold the ink
@@ -72,7 +72,7 @@ const frag = /* glsl */ `
   varying float vL;
   void main(){
     float d = length(gl_PointCoord - 0.5);
-    float alpha = smoothstep(0.5, 0.16, d) * vA;
+    float alpha = smoothstep(0.5, 0.30, d) * vA;
     if (alpha < 1e-3) discard;
     // ink, warmed a breath on lit faces (luminance only — still no colour)
     vec3 ink = mix(vec3(0.10, 0.11, 0.15), vec3(0.34, 0.35, 0.40), vL * 0.55);
@@ -214,7 +214,7 @@ export default function CityParticles() {
     const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const t2 = THREE.MathUtils.smoothstep(sp, 0.55, 0.95);
     const pitch = THREE.MathUtils.lerp(1.05, 0.04, t1); // 60° max, never top-down
-    const y = THREE.MathUtils.lerp(-5.0, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
+    const y = THREE.MathUtils.lerp(-2.6, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
 
     const c = ctl.current;
     c.yaw += (c.yawT - c.yaw) * k;
@@ -223,7 +223,7 @@ export default function CityParticles() {
     g.rotation.x += (pitch - g.rotation.x) * k;
     g.rotation.y += (c.yaw + mouseState.nx * 0.06 - g.rotation.y) * k;
     g.position.y += (y - g.position.y) * k;
-    g.scale.setScalar(2.13 * (0.85 + 0.15 * t1) * c.zoom); // starts farther, arrives at full 2.5x
+    g.scale.setScalar(2.13 * (0.52 + 0.48 * t1) * c.zoom); // distant full city -> full 2.5x
   });
 
   if (!geometry) return null;

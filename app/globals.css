@@ -569,3 +569,7 @@ nav.hibi-nav .left a[data-active="true"]{color:var(--ink);}
 .mega-card-title{font-size:22px;color:var(--ink);}
 .mega-card-body{font-size:14px;color:var(--ink-2);line-height:1.5;}
 @media(max-width:860px){.mega{display:none;}}
+
+/* open the white section bands onto the city (footer stays opaque) */
+.hibi-3d .home-3d .roles{background:transparent;}
+.hibi-3d .home-3d .stat{background:transparent;}

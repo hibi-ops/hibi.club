@@ -5,7 +5,7 @@ import DayScene from "./DayScene";
 export default function DayCanvas() {
   return (
     <Canvas
-      dpr={[1, 1.75]}
+      dpr={[1, 2]}
       camera={{ position: [0, 0, 6], fov: 38 }}
       gl={{
         antialias: true,
