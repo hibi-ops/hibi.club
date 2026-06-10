@@ -207,9 +207,10 @@ export default function CityParticles() {
     const k = 1 - Math.exp(-6 * dt);
 
     // three-phase camera ride:
-    //   1) 0 -> 0.5    oblique 60° aerial eases down to eye-level
-    //   2) 0.55 -> 0.95 the "elevator": viewpoint sinks vertically past the
-    //      towers (city rises on screen) until street level at the bottom
+    //   1) 0 -> 0.5    oblique 60° aerial eases to a 30° overlook
+    //   2) 0.55 -> 0.95 the "elevator": holding the 30° downward gaze, the
+    //      viewpoint sinks vertically past the towers (city rises on
+    //      screen) until street level at the bottom
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     // dev hook: #sp=0.45 pins the scroll pose (deterministic captures)
@@ -221,7 +222,7 @@ export default function CityParticles() {
         : 0;
     const t1 = THREE.MathUtils.smoothstep(sp, 0, 0.5);
     const t2 = THREE.MathUtils.smoothstep(sp, 0.55, 0.95);
-    const pitch = THREE.MathUtils.lerp(1.05, 0.04, t1); // 60° max, never top-down
+    const pitch = THREE.MathUtils.lerp(1.05, 0.524, t1); // 60° aerial -> 30° overlook, held through the descent
     const y = THREE.MathUtils.lerp(-2.0, -2.3, t1) + t2 * 1.9; // far strip -> street (gentler landing)
 
     const c = ctl.current;
