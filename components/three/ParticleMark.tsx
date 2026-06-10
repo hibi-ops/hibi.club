@@ -18,7 +18,7 @@ import { mouseState } from "@/lib/mouse";
  * - Pointer (window-tracked): the stamp leans; particles scatter from the
  *   cursor like water and re-join the current.
  */
-const COUNT = 12000;
+const COUNT = 26000;
 
 // region areas (ring band, two bars, crossbar) for proportional sampling
 const REGIONS = [
@@ -39,6 +39,7 @@ const vert = /* glsl */ `
   attribute float aSeed;
   varying float vA;
   varying vec3 vCol;
+  varying float vFr;
 
   vec3 strokePos(out float edgeFade){
     float t = uTime;
@@ -69,9 +70,9 @@ const vert = /* glsl */ `
     float edgeFade;
     vec3 p = strokePos(edgeFade);
 
-    // dreamy drift: most particles hold the glyph, a fraction sprays off
-    float dreamer = step(0.86, aSeed);
-    float amp = mix(0.028, 0.16, dreamer);
+    // dreamy drift: dense coherent glyph, a small mist fraction
+    float dreamer = step(0.93, aSeed);
+    float amp = mix(0.018, 0.10, dreamer);
     float t2 = uTime * 0.5;
     p += amp * vec3(
       sin(t2 * 0.9 + aSeed * 6.2831853 + p.y * 4.0),
@@ -81,24 +82,32 @@ const vert = /* glsl */ `
 
     vec4 world = modelMatrix * vec4(p, 1.0);
 
-    // pointer scatter (water): push aside, brighten, then the current re-collects
+    // pointer: a SUBTLE organic stir (wide falloff + per-particle phase so it
+    // never reads as a circle) — mostly tangential, like brushing water
     vec2 d = world.xy - uMouse;
     float md = length(d);
-    float rep = smoothstep(1.5, 0.0, md);
-    world.xy += normalize(d + 1e-4) * rep * rep * 0.8;
+    float fall = smoothstep(2.4, 0.2, md);
+    float organic = 0.55 + 0.45 * sin(aSeed * 12.7 + uTime * 1.3);
+    float rep = fall * organic;
+    vec2 dir = normalize(d + 1e-4);
+    vec2 tang = vec2(-dir.y, dir.x);
+    world.xy += (dir * 0.10 + tang * 0.22) * rep;
 
     vec4 mv = viewMatrix * world;
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = (1.0 + 2.1 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 1.2);
+    gl_PointSize = (1.3 + 2.6 * aSeed) * uPx * (6.0 / -mv.z) * (1.0 + rep * 0.25);
 
     // ink-slate body with a quiet per-particle cool variance
     vec3 ink = vec3(0.15, 0.17, 0.25);
     vec3 cool = vec3(0.24, 0.34, 0.52);
     vCol = mix(ink, cool, fract(aSeed * 7.13) * 0.6);
 
-    // water-glint shimmer
-    float shimmer = 0.78 + 0.22 * sin(uTime * 2.2 + aSeed * 6.2831853);
-    vA = (0.42 + 0.44 * aSeed) * edgeFade * shimmer * (1.0 + rep * 1.1) * mix(1.0, 0.55, dreamer);
+    // water-glint shimmer; dense body, soft mist
+    float shimmer = 0.82 + 0.18 * sin(uTime * 2.2 + aSeed * 6.2831853);
+    vA = (0.26 + 0.30 * aSeed) * edgeFade * shimmer * (1.0 + rep * 0.5) * mix(1.0, 0.45, dreamer);
+
+    // chromatic aberration strength: always visible, swells with motion
+    vFr = 0.9 + rep * 1.4 + dreamer * 0.9;
   }
 `;
 
@@ -106,20 +115,21 @@ const frag = /* glsl */ `
   precision mediump float;
   varying float vA;
   varying vec3 vCol;
+  varying float vFr;
 
   void main(){
     vec2 c = gl_PointCoord - 0.5;
-    vec2 ofs = vec2(0.085, 0.0);
-    // chromatic aberration: core + cyan/magenta fringes
-    float aK = smoothstep(0.5, 0.10, length(c));
-    float aC = smoothstep(0.5, 0.10, length(c - ofs));
-    float aM = smoothstep(0.5, 0.10, length(c + ofs));
+    // visible chromatic aberration: offset scales with motion (vFr)
+    vec2 ofs = vec2(0.16, 0.04) * vFr;
+    float aK = smoothstep(0.5, 0.12, length(c));
+    float aC = smoothstep(0.5, 0.12, length(c - ofs));
+    float aM = smoothstep(0.5, 0.12, length(c + ofs));
     float cFr = max(aC - aK, 0.0);
     float mFr = max(aM - aK, 0.0);
     float w = aK + cFr + mFr;
     if (w < 1e-3) discard;
-    vec3 cyan = vec3(0.25, 0.72, 0.95);
-    vec3 magenta = vec3(0.88, 0.38, 0.72);
+    vec3 cyan = vec3(0.10, 0.65, 0.95);
+    vec3 magenta = vec3(0.95, 0.25, 0.62);
     vec3 col = (vCol * aK + cyan * cFr + magenta * mFr) / w;
     gl_FragColor = vec4(col, max(aK, max(aC, aM)) * vA);
   }
@@ -149,7 +159,8 @@ export default function ParticleMark() {
       }
       aRegion[i] = region;
       aP[i] = Math.random();
-      aQ[i] = Math.random();
+      // triangular distribution across the stroke: dense core, soft edges
+      aQ[i] = (Math.random() + Math.random()) / 2;
       aSeed[i] = Math.random();
     }
     g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
