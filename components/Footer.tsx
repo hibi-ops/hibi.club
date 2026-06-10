@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Reveal from "./Reveal";
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -46,7 +47,7 @@ export default function Footer() {
     <footer className="hibi-footer">
       <div className="wrap">
         {/* closing CTA + newsletter */}
-        <div className="foot-cta-band">
+        <Reveal className="foot-cta-band">
           <div className="foot-cta">
             <h3 className="title">
               Become someone&apos;s{" "}
@@ -84,10 +85,10 @@ export default function Footer() {
               No spam. Unsubscribe anytime.
             </span>
           </div>
-        </div>
+        </Reveal>
 
         {/* sitemap */}
-        <div className="foot-grid">
+        <Reveal className="foot-grid">
           {COLUMNS.map((col) => (
             <div className="foot-col" key={col.title}>
               <h4>{col.title}</h4>
@@ -98,10 +99,10 @@ export default function Footer() {
               ))}
             </div>
           ))}
-        </div>
+        </Reveal>
 
         {/* giant chrome wordmark */}
-        <div className="foot-word">
+        <Reveal className="foot-word">
           Hibi
           <span className="foot-dots">
             <span style={{ background: "var(--sky)" }} />
@@ -109,7 +110,7 @@ export default function Footer() {
             <span style={{ background: "var(--green)" }} />
             <span style={{ background: "var(--orange)" }} />
           </span>
-        </div>
+        </Reveal>
 
         {/* legal / utility row */}
         <div className="foot-base">

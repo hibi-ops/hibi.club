@@ -691,3 +691,46 @@ nav.hibi-nav,
 .marquee{padding:var(--s7) 0;}
 .marquee-seg{font-size:clamp(64px,12vw,170px);}
 .pin-item .display{font-size:clamp(90px,21vw,280px);}
+
+/* ============================================================
+   POLISH PASS — nav fix, tight dropdown, clean glass edges,
+   glass buttons, avant-garde scroll entrances
+   ============================================================ */
+/* the unified-material block set position:relative — restore the fixed nav */
+nav.hibi-nav{position:fixed;}
+
+/* dropdown hugs the bar (was floating too far below) */
+.mega{top:calc(var(--s2) + 60px + 2px);}
+
+/* clean Apple edge: luminous inner ring + soft hairline, subtler rainbow */
+.phone-glass, .hibi-3d .home-3d .panel, .mega, .dock, nav.hibi-nav, .stat-panel{
+  border:1px solid rgba(255,255,255,.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 0 0 1px rgba(255,255,255,.38),
+    0 16px 40px rgba(21,20,26,.09),
+    0 0 56px rgba(255,255,255,.40);
+}
+.phone-glass::after,
+.hibi-3d .home-3d .panel::after,
+.mega::after,
+.dock::after,
+.stat-panel::after{opacity:.28;}
+
+/* buttons join the same material (Creator / Customer / Merchant, glass CTAs) */
+.tab, .btn-glass{
+  background:rgba(255,255,255,.55);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  backdrop-filter:blur(28px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.82);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 8px 22px rgba(21,20,26,.08);
+}
+.tab[data-on="true"]{border-color:transparent;box-shadow:0 8px 22px rgba(21,20,26,.12);}
+
+/* avant-garde entrance for every Reveal-ed element */
+.reveal{opacity:0;transform:translateY(36px) scale(.975);filter:blur(10px);
+  transition:opacity .95s var(--ease),transform .95s var(--ease),filter .95s var(--ease);}
+.reveal[data-in="true"]{opacity:1;transform:none;filter:none;}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;filter:none;transition:none;}
+}
