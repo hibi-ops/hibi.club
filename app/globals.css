@@ -734,3 +734,39 @@ nav.hibi-nav{position:fixed;}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;filter:none;transition:none;}
 }
+
+/* ============================================================
+   SPACING & RHYTHM PASS — generous, consistent 8px-scale breathing
+   ============================================================ */
+/* hero: give the 200px title room to land */
+.hero{padding:160px var(--s3) var(--s8);}
+.hero .title{margin-bottom:var(--s4);}
+.hero .lead{margin-top:var(--s4);}
+.hero-cta{margin-top:var(--s6);}
+
+/* marquees: huge type needs a wide lane and looser separators */
+.marquee{padding:var(--s8) 0;}
+.marquee-seg{padding-right:.35em;}
+
+/* pinned chapters: keep the subtitle clear of 280px descenders */
+.pin-item .display{margin-top:var(--s2);}
+.pin-item .subtitle{margin-top:var(--s5);max-width:520px;}
+
+/* stat cluster: a touch more air between and inside panels */
+.stat-panels{gap:var(--s4);}
+.stat-num .display{line-height:.85;}
+.stat-cap{margin-top:var(--s3);}
+.stat .ptag{margin-bottom:var(--s3);}
+
+/* roles: more pause between head, tabs and the panel */
+.roles .head{margin-bottom:var(--s7);}
+.tabs{margin-bottom:var(--s6);}
+
+/* footer rhythm */
+footer.hibi-footer{padding:var(--s8) 0 var(--s5);}
+.foot-grid{padding:var(--s7) 0;}
+.foot-word{margin-top:var(--s5);}
+
+/* mega list rows breathe a little more */
+.mega-list{gap:4px;}
+.mega-item{padding:14px var(--s2);}
