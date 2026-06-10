@@ -248,7 +248,8 @@ export default function CityParticles() {
       <points
         geometry={geometry}
         frustumCulled={false}
-        rotation={[0, -0.524, 0]}
+        // static city orientation: rotated +60° from the original -30° pose
+        rotation={[0, 0.524, 0]}
       >
         {/* args-constructed so uniforms actually bind */}
         <shaderMaterial
