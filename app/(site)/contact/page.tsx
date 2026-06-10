@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -17,31 +18,31 @@ export default function ContactPage() {
   return (
     <>
       {/* ---------------------------------------------------------- hero */}
-      <Section className="page-hero">
-        <div className="eyebrow">Contact</div>
-        <h1 className="title">
-          Say <span className="hl">hi.</span>
-        </h1>
-        <p className="subtitle">Quiet by design — but we answer.</p>
-        <p className="lead">
-          No chat bubble, no ticket queue, no autoresponder pretending to be a
-          person. Write to us and a human on the Hibi team writes back — usually
-          the one who can actually fix the thing.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="13"
+        eyebrow="Contact"
+        title={
+          <>
+            Say <span className="hl">hi.</span>
+          </>
+        }
+        subtitle="Quiet by design — but we answer."
+        lead="No chat bubble, no ticket queue, no autoresponder pretending to be a person. Write to us and a human on the Hibi team writes back — usually the one who can actually fix the thing."
+      />
 
       {/* ------------------------------------------------- three doors */}
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Who are you?</div>
-          <h2 className="title">
-            Three doors, <span className="hl">one team.</span>
-          </h2>
-          <p className="body">
-            Pick the door that fits. Everything lands with people who read it
-            the same day.
-          </p>
+          <div>
+            <h2 className="title">
+              Three doors, <span className="hl">one team.</span>
+            </h2>
+            <p className="body">
+              Pick the door that fits. Everything lands with people who read it
+              the same day.
+            </p>
+          </div>
         </Reveal>
 
         <Reveal>
@@ -56,11 +57,12 @@ export default function ContactPage() {
                   Thirty minutes, real numbers, no deck-padding.
                 </p>
                 <Magnetic>
-                  <a className="btn btn-primary" href="#">
+                  {/* TODO(jiaming): calendly link */}
+                  <a className="btn btn-primary" href="/signup">
                     Book a demo
                   </a>
                 </Magnetic>
-                <p className="body">TODO(jiaming): calendly link</p>
+                <p className="body">Booking opens at launch.</p>
               </article>
             </TiltCard>
 
@@ -72,7 +74,8 @@ export default function ContactPage() {
                 you want to bring your block onto Hibi — or pitch us the next
                 one — this is your door.
               </p>
-              <p className="body">TODO(jiaming): creator email</p>
+              {/* TODO(jiaming): creator email */}
+              <p className="body">Inbox opens with the Brooklyn launch.</p>
             </article>
 
             <article className="card">
@@ -80,10 +83,11 @@ export default function ContactPage() {
               <h3>Press</h3>
               <p className="body">
                 Covering loyalty, local retail, or what&apos;s happening in
-                Williamsburg? We&apos;ll talk on the record and show you
-                verified visits, not vanity metrics.
+                Brooklyn? We&apos;ll talk on the record and show you verified
+                visits, not vanity metrics.
               </p>
-              <p className="body">TODO(jiaming): press email</p>
+              {/* TODO(jiaming): press email */}
+              <p className="body">Inbox opens with the Brooklyn launch.</p>
             </article>
           </div>
         </Reveal>
@@ -99,17 +103,18 @@ export default function ContactPage() {
             <h2 className="title">Find us on the block.</h2>
             <p className="body">
               Hibi is built block by block, and it starts on ours. We work out
-              of Williamsburg, Brooklyn — close enough to the registers we
-              verify that we can walk to them.
+              of Brooklyn — close enough to the registers we verify that we can
+              walk to them.
             </p>
             <ul className="split-list">
               <li>
                 <Check />
-                <span>Williamsburg, Brooklyn — NYC first, then outward</span>
+                <span>Brooklyn — NYC first, then outward</span>
               </li>
               <li>
                 <Check />
-                <span>TODO(jiaming): street address</span>
+                {/* TODO(jiaming): street address */}
+                <span>Street address published at launch</span>
               </li>
               <li>
                 <Check />

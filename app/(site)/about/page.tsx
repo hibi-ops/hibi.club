@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 
@@ -69,20 +70,24 @@ function Minus() {
 export default function AboutPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">About</div>
-        <h1 className="title">
-          We don't enter cities. We enter{" "}
-          <span className="hl green">blocks.</span>
-        </h1>
-        <p className="subtitle">Day by day. Block by block.</p>
-        <p className="lead">
-          Hibi is the verified-visit membership layer for local commerce. The
-          promise is belonging, not transactions — making “I'm a regular here” a
-          real, payable, beautiful thing.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="08"
+        eyebrow="About"
+        title={
+          <>
+            We don't enter cities. We enter{" "}
+            <span className="hl green">blocks.</span>
+          </>
+        }
+        subtitle="Day by day. Block by block."
+        lead={
+          <>
+            Hibi is the verified-visit membership layer for local commerce. The
+            promise is belonging, not transactions — making “I'm a regular here”
+            a real, payable, beautiful thing.
+          </>
+        }
+      />
 
       <Section tone="paper">
         <div className="manifesto">
@@ -98,10 +103,12 @@ export default function AboutPage() {
       </Section>
 
       <Section>
-        <div className="section-head">
+        <div className="section-head head-row">
           <div className="eyebrow">What we believe</div>
-          <h2 className="title">Four ideas, one practice.</h2>
-          <p className="subtitle">The discipline behind every screen.</p>
+          <div>
+            <h2 className="title">Four ideas, one practice.</h2>
+            <p className="subtitle">The discipline behind every screen.</p>
+          </div>
         </div>
         <div className="pillars">
           {PILLARS.map((p) => (
@@ -115,9 +122,11 @@ export default function AboutPage() {
       </Section>
 
       <Section tone="paper">
-        <div className="section-head">
+        <div className="section-head head-row">
           <div className="eyebrow">Anti-positioning</div>
-          <h2 className="title">What Hibi is — and isn't.</h2>
+          <div>
+            <h2 className="title">What Hibi is — and isn't.</h2>
+          </div>
         </div>
         <div className="isnot">
           <div className="card">

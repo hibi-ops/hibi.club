@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -19,9 +20,10 @@ const PILLARS = [
     name: "Data",
     body: "Visit records are the ledger you pay against, so we guard them the way you guard a balance sheet.",
     list: [
-      "Encrypted in transit and at rest — standards: TODO(jiaming)",
+      // TODO(jiaming): publish the encryption standards
+      "Encrypted in transit and at rest.",
       "One scan stamps one day (日); the ledger is append-only",
-      "Backup and retention specifics: TODO(jiaming)",
+      "Backup and retention specifics publish with the trust review.",
     ],
   },
   {
@@ -29,7 +31,8 @@ const PILLARS = [
     body: "Money moves through a dedicated payment processor — never through our own database.",
     list: [
       "Card numbers never touch Hibi servers",
-      "Processor and PCI scope: TODO(jiaming)",
+      // TODO(jiaming): name the processor and PCI scope
+      "Processor and PCI scope named at launch.",
       "Payouts reconcile against verified visits, never impressions",
     ],
   },
@@ -38,7 +41,8 @@ const PILLARS = [
     body: "Least privilege inside the company, role-based control inside your account.",
     list: [
       "Internal access is least-privilege and logged",
-      "Review cadence and tooling: TODO(jiaming)",
+      // TODO(jiaming): publish the access review cadence and tooling
+      "Review cadence and tooling publish with the trust review.",
       "Separate roles for managers and registers",
     ],
   },
@@ -47,8 +51,10 @@ const PILLARS = [
     body: "If something breaks, you hear it from us first — plainly, and fast.",
     list: [
       "Responsible disclosure programme; every report is read",
-      "Security inbox: TODO(jiaming)",
-      "Incident notification window: TODO(jiaming)",
+      // TODO(jiaming): publish the security inbox address
+      "Security contact opens with the launch.",
+      // TODO(jiaming): commit to an incident notification window
+      "Incident notification window publishes with the trust review.",
     ],
   },
 ];
@@ -56,11 +62,13 @@ const PILLARS = [
 const FAQ_ITEMS = [
   {
     q: "Do you store card numbers?",
-    a: "No. Billing and payouts run through a dedicated payment processor — TODO(jiaming): processor name — and card numbers never touch Hibi servers. We hold a reference token, nothing more.",
+    // TODO(jiaming): name the payment processor
+    a: "No. Billing and payouts run through a dedicated payment processor — named at launch — and card numbers never touch Hibi servers. We hold a reference token, nothing more.",
   },
   {
     q: "How do I report a vulnerability?",
-    a: "Email TODO(jiaming): security email. We read every report, respond within TODO(jiaming): response window, and credit researchers who disclose responsibly.",
+    // TODO(jiaming): publish the security email and response window
+    a: "A dedicated security inbox opens with the launch — every report is read, and responsible disclosure is credited.",
   },
   {
     q: "Do you support SSO for chains?",
@@ -71,34 +79,30 @@ const FAQ_ITEMS = [
 export default function SecurityPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">Security</div>
-        <h1 className="title">
-          Boring, on <span className="hl">purpose.</span>
-        </h1>
-        <p className="subtitle">Trust is the product.</p>
-        <p className="lead">
-          You pay only for verified visits, so the record of those visits has to
-          be beyond question. We treat every scan, every stamp, and every payout
-          like money — because to you, it is.
-        </p>
-        <Magnetic>
-          <CTAPair
-            center
-            primary={{ label: "Start for free", href: "/signup" }}
-            secondary={{ label: "Talk to us", href: "/contact" }}
-          />
-        </Magnetic>
-      </Section>
+      <PageHero
+        index="07"
+        eyebrow="Security"
+        title={
+          <>
+            Boring, on <span className="hl">purpose.</span>
+          </>
+        }
+        subtitle="Trust is the product."
+        lead="You pay only for verified visits, so the record of those visits has to be beyond question. We treat every scan, every stamp, and every payout like money — because to you, it is."
+        primary={{ label: "Start for free", href: "/signup" }}
+        secondary={{ label: "Talk to us", href: "/contact" }}
+      />
 
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">The basics, done properly</div>
-          <h2 className="title">Four things we keep boring.</h2>
-          <p className="lead">
-            No clever architecture, no exotic promises. The fundamentals,
-            audited and repeated, every day.
-          </p>
+          <div>
+            <h2 className="title">Four things we keep boring.</h2>
+            <p className="lead">
+              No clever architecture, no exotic promises. The fundamentals,
+              audited and repeated, every day.
+            </p>
+          </div>
         </Reveal>
         <Reveal>
           <div className="grid-2 stagger">
@@ -150,7 +154,10 @@ export default function SecurityPage() {
               </li>
               <li>
                 <Check />
-                <span>Anomaly detection on scan patterns: TODO(jiaming)</span>
+                {/* TODO(jiaming): describe anomaly detection on scan patterns */}
+                <span>
+                  Anomaly detection specifics publish with the trust review.
+                </span>
               </li>
             </ul>
             <p className="say">Verified visits, not vanity metrics.</p>
@@ -169,9 +176,11 @@ export default function SecurityPage() {
       </Section>
 
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Straight answers</div>
-          <h2 className="title">What merchants ask first.</h2>
+          <div>
+            <h2 className="title">What merchants ask first.</h2>
+          </div>
         </Reveal>
         <Reveal>
           <FAQ items={FAQ_ITEMS} />

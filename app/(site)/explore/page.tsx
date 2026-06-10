@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -11,53 +12,53 @@ import Magnetic from "@/components/Magnetic";
 export const metadata: Metadata = {
   title: "Explore",
   description:
-    "Browse the blocks Hibi runs on — Williamsburg first — and find the places you already love.",
+    "Browse the blocks Hibi runs on — Brooklyn first — and find the places you already love.",
 };
 
 export default function ExplorePage() {
   return (
     <>
       {/* 1 — Hero */}
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow">Explore</div>
-          <h1 className="title">
+      <PageHero
+        index="05"
+        eyebrow="Explore"
+        title={
+          <>
             Find your <span className="hl">hibis.</span>
-          </h1>
-          <p className="subtitle">The places you already love.</p>
-          <p className="lead">
-            Hibi is built block by block, starting in Williamsburg. No feed to
-            scroll, no points to chase — just your spots, one colour each. Scan
-            once at the register and the day is yours.
-          </p>
-          <CTAPair center />
-        </Reveal>
-      </Section>
+          </>
+        }
+        subtitle="The places you already love."
+        lead="Hibi is built block by block, starting in Brooklyn. No feed to scroll, no points to chase — just your spots, one colour each. Scan once at the register and the day is yours."
+      />
 
       {/* 2 — Neighbourhoods */}
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow" style={{ color: "var(--green)" }}>
             Neighbourhoods
           </div>
-          <h2 className="title">Blocks we run on</h2>
-          <p className="lead">
-            One neighbourhood at a time, on purpose. Quiet by design.
-          </p>
+          <div>
+            <h2 className="title">Blocks we run on</h2>
+            <p className="lead">
+              One neighbourhood at a time, on purpose. Quiet by design.
+            </p>
+          </div>
         </Reveal>
         <Reveal>
           <div className="grid-3 stagger">
             <TiltCard>
               <div className="card">
                 <Mark size={40} color="var(--green)" />
-                <h3 className="title">Williamsburg</h3>
+                <h3 className="title">Brooklyn</h3>
                 <p className="body">
                   Bedford coffee counters, bagel lines, late-night slices.
                 </p>
+                {/* TODO(jiaming): confirm launch status */}
+                {/* TODO(jiaming): places count */}
                 <p className="body">
-                  Live — TODO(jiaming) confirm launch status
+                  First on the map
                   <br />
-                  places TODO(jiaming)
+                  places announced with the launch
                 </p>
               </div>
             </TiltCard>
@@ -67,10 +68,11 @@ export default function ExplorePage() {
               <p className="body">
                 One bridge over — Polish bakeries and waterfront cafés.
               </p>
+              {/* TODO(jiaming): places count */}
               <p className="body">
                 Next
                 <br />
-                places TODO(jiaming)
+                places published as the block goes live
               </p>
             </div>
             <div className="card">
@@ -79,10 +81,11 @@ export default function ExplorePage() {
               <p className="body">
                 Warehouse espresso, taquerias, galleries that double as bars.
               </p>
+              {/* TODO(jiaming): places count */}
               <p className="body">
                 Soon
                 <br />
-                places TODO(jiaming)
+                places published as the block goes live
               </p>
             </div>
           </div>
@@ -133,9 +136,7 @@ export default function ExplorePage() {
                   <CountUp to={1} suffix=" block" />
                 </span>
               </div>
-              <div className="stat-cap">
-                live today — Williamsburg, NYC first
-              </div>
+              <div className="stat-cap">live today — Brooklyn, NYC first</div>
             </div>
             <div className="stat-panel">
               <div className="stat-num">

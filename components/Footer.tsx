@@ -18,7 +18,8 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "For creators", href: "/solutions#creator" },
       { label: "For customers", href: "/solutions#customer" },
       { label: "For merchants", href: "/solutions#merchant" },
-      { label: "Gift a membership", href: "#" },
+      // TODO(jiaming): restore "Gift a membership" once the feature exists
+      { label: "Sign up", href: "/signup" },
     ],
   },
   {
@@ -114,11 +115,12 @@ export default function Footer() {
 
         {/* legal / utility row */}
         <div className="foot-base">
+          {/* TODO(jiaming): add Cookies / Accessibility pages when they exist */}
           <div className="foot-legal">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
-            <Link href="#">Cookies</Link>
-            <Link href="#">Accessibility</Link>
+            <Link href="/security">Security</Link>
+            <Link href="/trust">Trust</Link>
           </div>
           <div className="foot-meta">
             <span className="foot-status">
@@ -127,19 +129,10 @@ export default function Footer() {
             <span>NYC · EN</span>
             <span>© 2026 Hibi</span>
           </div>
+          {/* TODO(jiaming): add social links (IG / TikTok / X / LinkedIn) once the accounts exist */}
           <div className="foot-social">
-            <Link href="#" aria-label="Instagram">
-              IG
-            </Link>
-            <Link href="#" aria-label="TikTok">
-              TikTok
-            </Link>
-            <Link href="#" aria-label="X">
-              X
-            </Link>
-            <Link href="#" aria-label="LinkedIn">
-              LinkedIn
-            </Link>
+            <Link href="/journal">Journal</Link>
+            <Link href="/explore">Explore</Link>
           </div>
         </div>
       </div>

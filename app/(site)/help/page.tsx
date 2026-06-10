@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Mark from "@/components/Mark";
 import Reveal from "@/components/Reveal";
@@ -15,34 +16,30 @@ export const metadata: Metadata = {
 export default function HelpPage() {
   return (
     <>
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow">Help center</div>
-          <h1 className="title">
+      <PageHero
+        index="12"
+        eyebrow="Help"
+        title={
+          <>
             Stuck? <span className="hl">Quick.</span>
-          </h1>
-          <p className="subtitle">Short answers, no runaround.</p>
-          <p className="lead">
-            Whether you scan at the register, post the places you love, or run
-            the counter — the answers live here. Quiet by design, even the help
-            page.
-          </p>
-          <CTAPair
-            center
-            primary={{ label: "Contact support", href: "/contact" }}
-            secondary={{ label: "How Hibi works", href: "/how-it-works" }}
-          />
-        </Reveal>
-      </Section>
+          </>
+        }
+        subtitle="Short answers, no runaround."
+        lead="Whether you scan at the register, post the places you love, or run the counter — the answers live here. Quiet by design, even the help page."
+        primary={{ label: "Contact support", href: "/contact" }}
+        secondary={{ label: "How Hibi works", href: "/how-it-works" }}
+      />
 
       <Section>
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Start here</div>
-          <h2 className="title">Pick your side of the counter.</h2>
-          <p className="lead">
-            Three roles, one loop. Find yours and skim the three questions we
-            hear most.
-          </p>
+          <div>
+            <h2 className="title">Pick your side of the counter.</h2>
+            <p className="lead">
+              Three roles, one loop. Find yours and skim the three questions we
+              hear most.
+            </p>
+          </div>
         </Reveal>
         <Reveal>
           <div className="grid-3 stagger">
@@ -77,7 +74,7 @@ export default function HelpPage() {
                 is attributed to you. Views don&apos;t count; doors do.
               </p>
               <p className="body">
-                <strong>Where does this work today?</strong> Williamsburg first,
+                <strong>Where does this work today?</strong> Brooklyn first,
                 then NYC, block by block. If your neighbourhood isn&apos;t live
                 yet, it&apos;s coming.
               </p>
@@ -106,16 +103,19 @@ export default function HelpPage() {
       </Section>
 
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Common questions</div>
-          <h2 className="title">The five we answer most.</h2>
+          <div>
+            <h2 className="title">The five we answer most.</h2>
+          </div>
         </Reveal>
         <Reveal>
           <FAQ
             items={[
               {
                 q: "How do I scan?",
-                a: "Open your phone camera and point it at the Hibi QR at the register. That's the whole gesture — one scan, one day stamped. TODO(jiaming): confirm whether a scan works straight from the camera with no app installed, or whether the Hibi app is required.",
+                // TODO(jiaming): confirm whether a scan works straight from the camera with no app installed, or whether the Hibi app is required.
+                a: "Open your phone camera and point it at the Hibi QR at the register. That's the whole gesture — one scan, one day stamped. The full scan how-to publishes alongside the launch.",
               },
               {
                 q: "Where do my days show up?",
@@ -123,15 +123,18 @@ export default function HelpPage() {
               },
               {
                 q: "I scanned but didn't get a stamp. What now?",
-                a: "First, check you scanned the Hibi QR at the register (not a menu or payment code) and that you have a connection. One scan counts once per day per place, so a second scan the same day won't add another 日. If a legitimate visit still isn't showing, tell us. TODO(jiaming): document the support flow for missing stamps — where to report, what info to include, expected turnaround.",
+                // TODO(jiaming): document the support flow for missing stamps — where to report, what info to include, expected turnaround.
+                a: "First, check you scanned the Hibi QR at the register (not a menu or payment code) and that you have a connection. One scan counts once per day per place, so a second scan the same day won't add another 日. If a legitimate visit still isn't showing, tell us — the full missing-stamp flow publishes at launch.",
               },
               {
                 q: "How do creators get paid?",
-                a: "Earnings follow verified visits: when someone discovers a place through your post and then shows up and scans at the register, that visit is attributed to you. You're never paid for impressions or clicks — only for people who walked through the door. TODO(jiaming): confirm payout rates, schedule, and minimum threshold.",
+                // TODO(jiaming): confirm payout rates, schedule, and minimum threshold.
+                a: "Earnings follow verified visits: when someone discovers a place through your post and then shows up and scans at the register, that visit is attributed to you. You're never paid for impressions or clicks — only for people who walked through the door. Payout rates and schedule are confirmed at launch.",
               },
               {
                 q: "How does billing work for merchants?",
-                a: "You pay only when someone shows up — each verified scan at your register is a billable visit, and nothing else is. No charges for impressions, profile views, or posts about your place. Your dashboard lists every visit you're billed for, so the invoice and the foot traffic always match. TODO(jiaming): confirm per-visit pricing, billing cycle, and any caps.",
+                // TODO(jiaming): confirm per-visit pricing, billing cycle, and any caps.
+                a: "You pay only when someone shows up — each verified scan at your register is a billable visit, and nothing else is. No charges for impressions, profile views, or posts about your place. Your dashboard lists every visit you're billed for, so the invoice and the foot traffic always match. Per-visit pricing is confirmed with each block as it goes live.",
               },
             ]}
           />

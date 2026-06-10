@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
@@ -11,21 +13,14 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <>
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow" style={{ color: "var(--green)" }}>
-            Legal
-          </div>
-          <h1 className="title">Terms.</h1>
-          <p className="subtitle">The fine print, kept human.</p>
-          <p className="lead">
-            These terms are the agreement between Hibi and everyone who uses it
-            — creators who post places, customers who scan at the register, and
-            merchants who pay for verified visits. By using Hibi, you agree to
-            them. Quiet by design, even here.
-          </p>
-        </Reveal>
-      </Section>
+      <PageHero
+        index="16"
+        eyebrow="Terms"
+        title={<>Terms.</>}
+        subtitle="The fine print, kept human."
+        lead="These terms are the agreement between Hibi and everyone who uses it — creators who post places, customers who scan at the register, and merchants who pay for verified visits. By using Hibi, you agree to them. Quiet by design, even here."
+        cta={false}
+      />
 
       <Section tone="paper">
         <Reveal>
@@ -36,7 +31,7 @@ export default function TermsPage() {
               the register; each scan stamps one day (日). Fifty days makes a
               regular. One colour per place, one stamp per day. We provide the
               platform — the places, the people and the visits are real,
-              starting in Williamsburg, NYC, and built block by block.
+              starting in Brooklyn, NYC, and built block by block.
             </p>
             <p className="body">
               <strong>Accounts.</strong> You need an account to post a place,
@@ -52,9 +47,11 @@ export default function TermsPage() {
               free. Merchants pay only for verified visits — a real person, at
               the register, on a real day. Never for impressions, never for
               clicks. Creators are paid per attributed visit when someone they
-              brought through the door actually shows up. TODO(jiaming): creator
-              rates, merchant pricing, billing cycles and refund terms.
+              brought through the door actually shows up. Creator rates,
+              merchant pricing, billing cycles and refund terms publish at
+              launch.
             </p>
+            {/* TODO(jiaming): confirm creator rates, merchant pricing, billing cycles and refund terms */}
             <p className="body">
               <strong>Acceptable use.</strong> Don&apos;t fake visits, farm
               stamps, lend your phone around the counter, scrape the platform,
@@ -63,12 +60,13 @@ export default function TermsPage() {
               close accounts that abuse the system, quietly, like everything
               else we do.
             </p>
+            {/* TODO(jiaming): legal review before publication */}
             <p className="body">
               <strong>Liability.</strong> Hibi is provided as-is. We verify
               visits; we don&apos;t guarantee outcomes, foot traffic, or that
               your favourite seat is free. Limitations of liability,
-              indemnification, governing law and dispute resolution are
-              TODO(jiaming): legal review before publication.
+              indemnification, governing law and dispute resolution publish
+              after legal review.
             </p>
           </div>
         </Reveal>
@@ -76,8 +74,10 @@ export default function TermsPage() {
 
       <Section>
         <Reveal>
+          {/* TODO(jiaming): publish a dedicated legal email */}
           <p className="body" style={{ textAlign: "center" }}>
-            Questions about these terms? Write to TODO(jiaming): legal email.
+            Questions about these terms? Reach us through the{" "}
+            <Link href="/contact">contact page</Link>.
           </p>
         </Reveal>
       </Section>

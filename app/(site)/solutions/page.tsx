@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Mark from "@/components/Mark";
 import Check from "@/components/Check";
@@ -35,7 +36,7 @@ const AUDIENCES: Audience[] = [
       "Editorial by default — no influencer theatrics",
     ],
     say: "“I'm stamping my hibi at Oslo.” — the block I belong to.",
-    cta: { label: "Become a creator", href: "#" },
+    cta: { label: "Become a creator", href: "/signup" },
   },
   {
     id: "customer",
@@ -49,7 +50,7 @@ const AUDIENCES: Audience[] = [
       "Belong without earning anything",
     ],
     say: "日々、ひとつずつ。 — one visit at a time.",
-    cta: { label: "Find your hibis", href: "#" },
+    cta: { label: "Find your hibis", href: "/signup" },
     reverse: true,
   },
   {
@@ -64,26 +65,20 @@ const AUDIENCES: Audience[] = [
       "Reconciles cleanly to the books",
     ],
     say: "From walk-by to regular — measurable.",
-    cta: { label: "Become a hibi", href: "#" },
+    cta: { label: "Become a hibi", href: "/signup" },
   },
 ];
 
 export default function SolutionsPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">Solutions</div>
-        <h1 className="title">One rail, three sides of the block.</h1>
-        <p className="subtitle">
-          The same visit means something different to everyone.
-        </p>
-        <p className="lead">
-          A creator posts, a customer scans, a merchant pays — one verified
-          visit, three kinds of belonging. Here's what Hibi does for each side
-          of the counter.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="03"
+        eyebrow="Solutions"
+        title="One rail, three sides of the block."
+        subtitle="The same visit means something different to everyone."
+        lead="A creator posts, a customer scans, a merchant pays — one verified visit, three kinds of belonging. Here's what Hibi does for each side of the counter."
+      />
 
       {AUDIENCES.map((a, i) => (
         <Section

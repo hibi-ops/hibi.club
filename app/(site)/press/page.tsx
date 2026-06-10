@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -12,9 +13,9 @@ export const metadata: Metadata = {
     "Press resources for journalists writing about Hibi — boilerplate, fast facts, brand assets, and a press inbox. Verified visits, not vanity metrics.",
 };
 
+// TODO(jiaming): add the "Founded" fast fact once the date is settled.
 const FAST_FACTS = [
-  "Founded: TODO(jiaming)",
-  "Headquarters: New York City — first blocks in Williamsburg",
+  "Headquarters: New York City — first blocks in Brooklyn",
   "Model: merchants pay per verified visit, never per impression",
 ];
 
@@ -28,26 +29,19 @@ export default function PressPage() {
   return (
     <>
       {/* 1 — Hero */}
-      <Section className="page-hero">
-        <div className="eyebrow" style={{ color: "var(--sky)" }}>
-          Press
-        </div>
-        <h1 className="title">
-          The quiet <span className="hl">story.</span>
-        </h1>
-        <p className="subtitle">Verified visits, not vanity metrics.</p>
-        <p className="lead">
-          Hibi is the membership layer for local commerce — a way for the places
-          people actually return to, to know it, prove it, and pay only for it.
-          If you&apos;re writing about us, everything you need is on this page,
-          and a person reads every note.
-        </p>
-        <CTAPair
-          center
-          primary={{ label: "Email press", href: "#" }}
-          secondary={{ label: "Read the boilerplate", href: "#boilerplate" }}
-        />
-      </Section>
+      <PageHero
+        index="11"
+        eyebrow="Press"
+        title={
+          <>
+            The quiet <span className="hl">story.</span>
+          </>
+        }
+        subtitle="Verified visits, not vanity metrics."
+        lead="Hibi is the membership layer for local commerce — a way for the places people actually return to, to know it, prove it, and pay only for it. If you're writing about us, everything you need is on this page, and a person reads every note."
+        primary={{ label: "Email press", href: "/contact" }}
+        secondary={{ label: "Read the boilerplate", href: "#boilerplate" }}
+      />
 
       {/* 2 — Boilerplate + fast facts */}
       <Section tone="paper" id="boilerplate">
@@ -65,7 +59,7 @@ export default function PressPage() {
               regular, and every place carries one colour of its own. There are
               no points to farm and nothing to game: a footstep at the counter,
               not a tracked click. Hibi is quiet by design and built block by
-              block, starting in Williamsburg, New York. Where regulars belong.
+              block, starting in Brooklyn, New York. Where regulars belong.
             </p>
             <ul className="split-list">
               {FAST_FACTS.map((f) => (
@@ -92,12 +86,14 @@ export default function PressPage() {
 
       {/* 3 — Press kit + coverage */}
       <Section>
-        <div className="section-head">
+        <div className="section-head head-row">
           <div className="eyebrow" style={{ color: "var(--sky)" }}>
             Resources
           </div>
-          <h2 className="title">For your desk.</h2>
-          <p className="subtitle">Assets first, adjectives second.</p>
+          <div>
+            <h2 className="title">For your desk.</h2>
+            <p className="subtitle">Assets first, adjectives second.</p>
+          </div>
         </div>
         <Reveal>
           <div className="grid-2 stagger">
@@ -109,7 +105,8 @@ export default function PressPage() {
                 drop into a layout. Please don&apos;t redraw the mark or set it
                 in a colour a place hasn&apos;t earned.
               </p>
-              <p className="body">TODO(jiaming): asset bundle link</p>
+              {/* TODO(jiaming): asset bundle link */}
+              <p className="body">The bundle publishes at launch.</p>
             </div>
             <div className="card">
               <Mark size={40} color="var(--ink)" />
@@ -119,13 +116,15 @@ export default function PressPage() {
                 instead of impressions, and about building a network one block
                 at a time.
               </p>
-              <p className="body">TODO(jiaming): press mentions</p>
+              {/* TODO(jiaming): press mentions */}
+              <p className="body">Collected here as coverage lands.</p>
             </div>
           </div>
         </Reveal>
+        {/* TODO(jiaming): press email — link it here once the inbox exists. */}
         <p className="price-foot-note">
-          For interviews, embargoes, or fact-checking, write to TODO(jiaming):
-          press email — replies come from a person, not a tool.
+          For interviews, embargoes, or fact-checking — the press inbox opens
+          with the Brooklyn launch, and replies come from a person, not a tool.
         </p>
       </Section>
 
@@ -137,14 +136,11 @@ export default function PressPage() {
           <Magnetic>
             <CTAPair
               center
-              primary={{ label: "Email press", href: "#" }}
+              primary={{ label: "Email press", href: "/contact" }}
               secondary={{ label: "How Hibi works", href: "/how-it-works" }}
             />
           </Magnetic>
-          <p className="price-foot-note">
-            TODO(jiaming): press email — link the button above once the inbox
-            exists.
-          </p>
+          {/* TODO(jiaming): press email — link the button above once the inbox exists. */}
         </Reveal>
       </Section>
     </>

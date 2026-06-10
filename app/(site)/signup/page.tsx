@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
 import Reveal from "@/components/Reveal";
@@ -9,7 +10,7 @@ import Magnetic from "@/components/Magnetic";
 export const metadata: Metadata = {
   title: "Sign up",
   description:
-    "Join Hibi as a creator, a customer, or a merchant. The same visit, three kinds of belonging — built block by block, starting in Williamsburg.",
+    "Join Hibi as a creator, a customer, or a merchant. The same visit, three kinds of belonging — built block by block, starting in Brooklyn.",
 };
 
 const roles = [
@@ -45,18 +46,18 @@ const roles = [
 export default function SignupPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">Start for free</div>
-        <h1 className="title">
-          Pick your <span className="hl">side.</span>
-        </h1>
-        <p className="subtitle">The same visit, three kinds of belonging.</p>
-        <p className="lead">
-          Hibi is one loop with three ways in. A creator posts a place, a
-          customer stamps a day, a merchant counts the regulars — choose where
-          you stand on the block.
-        </p>
-      </Section>
+      <PageHero
+        index="14"
+        eyebrow="Start for free"
+        title={
+          <>
+            Pick your <span className="hl">side.</span>
+          </>
+        }
+        subtitle="The same visit, three kinds of belonging."
+        lead="Hibi is one loop with three ways in. A creator posts a place, a customer stamps a day, a merchant counts the regulars — choose where you stand on the block."
+        cta={false}
+      />
 
       <Section>
         <Reveal>
@@ -76,11 +77,11 @@ export default function SignupPage() {
                     ))}
                   </ul>
                   <Magnetic>
-                    <a className="btn btn-primary" href="#">
+                    <a className="btn btn-primary" href="/contact">
                       {r.cta}
                     </a>
                   </Magnetic>
-                  <p className="price-foot-note">TODO(jiaming): signup flow</p>
+                  {/* TODO(jiaming): signup flow */}
                 </div>
               </TiltCard>
             ))}

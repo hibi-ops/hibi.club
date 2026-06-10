@@ -13,12 +13,14 @@ export default function CountUp({
   duration?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [val, setVal] = useState(0);
+  // SSR/no-JS shows the real number; JS rewinds to 0 and counts up on view
+  const [val, setVal] = useState(to);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     let raf = 0;
+    setVal(0);
     const io = new IntersectionObserver(
       (es) => {
         if (!es.some((e) => e.isIntersecting)) return;

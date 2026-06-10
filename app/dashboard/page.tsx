@@ -84,9 +84,8 @@ export default function DashboardPage() {
             <h1>Overview</h1>
             <div className="sub">Oslo Coffee · last 30 days</div>
           </div>
-          <span className="pill-sample">
-            Stub · sample data — TODO(jiaming)
-          </span>
+          {/* TODO(jiaming): replace stub with live data */}
+          <span className="pill-sample">Stub · sample data</span>
         </div>
 
         <div className="tiles">
@@ -102,7 +101,8 @@ export default function DashboardPage() {
           </div>
           <div className="tile">
             <div className="lbl">Owed this cycle</div>
-            <div className="val todo">TODO(jiaming)</div>
+            {/* TODO(jiaming): amount = verified visits × per-visit price (pricing not set) */}
+            <div className="val todo">—</div>
             <div className="delta">verified visits × price</div>
           </div>
           <div className="tile">
@@ -148,7 +148,8 @@ export default function DashboardPage() {
                     </td>
                     <td>{r.time}</td>
                     <td>
-                      <span className="amt-todo">TODO(jiaming)</span>
+                      {/* TODO(jiaming): per-visit amount (pricing not set) */}
+                      <span className="amt-todo">—</span>
                     </td>
                   </tr>
                 ))}

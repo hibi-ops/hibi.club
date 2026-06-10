@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -18,7 +19,8 @@ export const metadata: Metadata = {
 const FAQ_ITEMS = [
   {
     q: "How does verification work?",
-    a: "A customer scans a QR at the register — at the counter, at the moment they pay. That scan is the proof of presence, and it is the only signal Hibi bills against. TODO(jiaming): publish the full verification specifics (device checks, scan windows, fraud handling).",
+    // TODO(jiaming): publish the full verification specifics (device checks, scan windows, fraud handling).
+    a: "A customer scans a QR at the register — at the counter, at the moment they pay. That scan is the proof of presence, and it is the only signal Hibi bills against. The full verification spec — device checks, scan windows, fraud handling — publishes alongside the launch.",
   },
   {
     q: "What counts as a visit?",
@@ -26,7 +28,8 @@ const FAQ_ITEMS = [
   },
   {
     q: "What do merchants actually pay?",
-    a: "Merchants pay only for verified visits — never for impressions, reach, or clicks. If nobody walks in, the bill is zero. TODO(jiaming): confirm per-visit pricing and billing cadence for the Williamsburg launch.",
+    // TODO(jiaming): confirm per-visit pricing and billing cadence for the Brooklyn launch.
+    a: "Merchants pay only for verified visits — never for impressions, reach, or clicks. If nobody walks in, the bill is zero. Per-visit pricing is confirmed with each block as it goes live.",
   },
   {
     q: "Is my data sold?",
@@ -38,29 +41,29 @@ export default function HowItWorksPage() {
   return (
     <>
       {/* 1 — Hero */}
-      <Section className="page-hero">
-        <div className="eyebrow">How it works</div>
-        <h1 className="title">
-          Post. Scan. <span className="hl">Belong.</span>
-        </h1>
-        <p className="subtitle">The currency is the visit.</p>
-        <p className="lead">
-          A creator posts a place worth walking to. A customer scans a QR at the
-          register when they show up. The merchant pays for that verified visit
-          only — never for impressions.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="01"
+        eyebrow="How it works"
+        title={
+          <>
+            Post. Scan. <span className="hl">Belong.</span>
+          </>
+        }
+        subtitle="The currency is the visit."
+        lead="A creator posts a place worth walking to. A customer scans a QR at the register when they show up. The merchant pays for that verified visit only — never for impressions."
+      />
 
       {/* 2 — The rail, in three steps */}
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">The rail</div>
-          <h2 className="title">Three steps, one footstep</h2>
-          <p className="lead">
-            No points maze, no coupon theatre. Just proof that someone showed up
-            — and a bill that only exists because they did.
-          </p>
+          <div>
+            <h2 className="title">Three steps, one footstep</h2>
+            <p className="lead">
+              No points maze, no coupon theatre. Just proof that someone showed
+              up — and a bill that only exists because they did.
+            </p>
+          </div>
         </Reveal>
         <Reveal>
           <div className="steps stagger">
@@ -191,12 +194,14 @@ export default function HowItWorksPage() {
 
       {/* 4 — FAQ */}
       <Section tone="paper">
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Questions</div>
-          <h2 className="title">The fine print, out loud</h2>
-          <p className="lead">
-            Quiet by design — including how the mechanics work.
-          </p>
+          <div>
+            <h2 className="title">The fine print, out loud</h2>
+            <p className="lead">
+              Quiet by design — including how the mechanics work.
+            </p>
+          </div>
         </Reveal>
         <Reveal>
           <FAQ items={FAQ_ITEMS} />
@@ -209,7 +214,7 @@ export default function HowItWorksPage() {
           See it on your <span className="hl">block.</span>
         </h2>
         <p className="lead">
-          Starting in Williamsburg, NYC — built block by block.
+          Starting in Brooklyn, NYC — built block by block.
         </p>
         <Magnetic>
           <CTAPair center />

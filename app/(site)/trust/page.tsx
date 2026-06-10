@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Reveal from "@/components/Reveal";
@@ -35,11 +36,13 @@ const SAFEGUARDS = [
   },
   {
     h: "Anomaly detection on every pattern",
-    p: "Scan behaviour that does not look like a human walking into a shop is flagged and held before it ever reaches your invoice. TODO(jiaming): describe the verification stack in detail.",
+    // TODO(jiaming): describe the verification stack in detail.
+    p: "Scan behaviour that does not look like a human walking into a shop is flagged and held before it ever reaches your invoice. The full verification stack publishes alongside the launch.",
     list: [
       "Unusual patterns held out of billing automatically",
       "Reviewed before they can cost you anything",
-      "TODO(jiaming): detection methodology summary",
+      // TODO(jiaming): detection methodology summary
+      "Methodology summary published with the launch",
     ],
   },
   {
@@ -60,34 +63,30 @@ const FAQ_ITEMS = [
   },
   {
     q: "How do refunds work?",
-    a: "If a billed visit should not have been billed, it is credited back. TODO(jiaming): publish the refund policy — timelines, the dispute window, and how credits appear on the invoice.",
+    // TODO(jiaming): publish the refund policy — timelines, the dispute window, and how credits appear on the invoice.
+    a: "If a billed visit should not have been billed, it is credited back. The full refund policy — timelines, the dispute window, and how credits appear on the invoice — publishes alongside the launch.",
   },
   {
     q: "Can visits be faked?",
-    a: "We design for defense in depth: the scan must happen at your register, one scan can only ever stamp one day, anomalous patterns are held before billing, and anything you dispute comes off the invoice while we review. No single layer is the whole story. TODO(jiaming): detail the full anti-fraud stack.",
+    // TODO(jiaming): detail the full anti-fraud stack.
+    a: "We design for defense in depth: the scan must happen at your register, one scan can only ever stamp one day, anomalous patterns are held before billing, and anything you dispute comes off the invoice while we review. No single layer is the whole story. The full anti-fraud stack is documented as each block goes live.",
   },
 ];
 
 export default function TrustPage() {
   return (
     <>
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow" style={{ color: "var(--green)" }}>
-            Trust
-          </div>
-          <h1 className="title">
+      <PageHero
+        index="06"
+        eyebrow="Trust"
+        title={
+          <>
             Real visits. <span className="hl">Provably.</span>
-          </h1>
-          <p className="subtitle">Verified visits, not vanity metrics.</p>
-          <p className="lead">
-            Every line on your Hibi invoice maps to a person who physically
-            stood at your register. No impressions, no estimates, no modelled
-            reach — if you paid for it, it happened.
-          </p>
-          <CTAPair center />
-        </Reveal>
-      </Section>
+          </>
+        }
+        subtitle="Verified visits, not vanity metrics."
+        lead="Every line on your Hibi invoice maps to a person who physically stood at your register. No impressions, no estimates, no modelled reach — if you paid for it, it happened."
+      />
 
       <Section tone="paper">
         <Reveal className="section-head">
@@ -140,9 +139,10 @@ export default function TrustPage() {
             </div>
 
             <div className="stat-panel stat-chip">
+              {/* TODO(jiaming): publish quarterly trust metrics — scans held, disputes resolved, credits issued. */}
               <p className="say">
-                TODO(jiaming): publish quarterly trust metrics — scans held,
-                disputes resolved, credits issued.
+                Quarterly trust metrics — scans held, disputes resolved, credits
+                issued — will publish right here.
               </p>
             </div>
           </div>

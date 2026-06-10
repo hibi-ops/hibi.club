@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
@@ -11,20 +13,14 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <>
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow" style={{ color: "var(--green)" }}>
-            Legal
-          </div>
-          <h1 className="title">Privacy.</h1>
-          <p className="subtitle">Quiet by design.</p>
-          <p className="lead">
-            Hibi collects the minimum needed to verify visits — nothing more.
-            The currency is the visit, not your attention. No ad tracking, no
-            selling data, no noise.
-          </p>
-        </Reveal>
-      </Section>
+      <PageHero
+        index="15"
+        eyebrow="Privacy"
+        title={<>Privacy.</>}
+        subtitle="Quiet by design."
+        lead="Hibi collects the minimum needed to verify visits — nothing more. The currency is the visit, not your attention. No ad tracking, no selling data, no noise."
+        cta={false}
+      />
 
       <Section tone="paper">
         <Reveal>
@@ -50,16 +46,17 @@ export default function PrivacyPage() {
               anything. Verified visits, not vanity metrics — the model works
               precisely because your data stays inside it.
             </p>
+            {/* TODO(jiaming): legal review before publication */}
             <p className="body">
-              <strong>Retention.</strong> TODO(jiaming): legal review —
-              retention periods for visit records, account data, and deletion
-              timelines to be confirmed with counsel.
+              <strong>Retention.</strong> Retention periods for visit records,
+              account data, and deletion timelines are being confirmed with
+              counsel and publish with the launch.
             </p>
             <p className="body">
-              <strong>Your rights.</strong> TODO(jiaming): legal review —
-              access, correction, export, and deletion rights (including
-              region-specific rights for NYC and beyond) to be confirmed with
-              counsel.
+              <strong>Your rights.</strong> Access, correction, export, and
+              deletion rights — including region-specific rights for NYC and
+              beyond — are being confirmed with counsel and publish with the
+              launch.
             </p>
           </div>
         </Reveal>
@@ -67,8 +64,10 @@ export default function PrivacyPage() {
 
       <Section>
         <Reveal>
+          {/* TODO(jiaming): publish a dedicated privacy email */}
           <p className="body" style={{ textAlign: "center" }}>
-            Questions? TODO(jiaming): privacy email.
+            Questions? Reach us through the{" "}
+            <Link href="/contact">contact page</Link>.
           </p>
         </Reveal>
       </Section>

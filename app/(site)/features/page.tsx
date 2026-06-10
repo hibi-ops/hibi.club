@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Mark from "@/components/Mark";
 import Check from "@/components/Check";
@@ -108,19 +109,17 @@ function Media({ color }: { color: string }) {
 export default function FeaturesPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">Features</div>
-        <h1 className="title">
-          Built around the <span className="hl sky">visit.</span>
-        </h1>
-        <p className="subtitle">Post, scan, verify, pay — one quiet loop.</p>
-        <p className="lead">
-          Hibi is the attribution rail for local commerce. Four capabilities
-          turn a real footstep into a membership your block can measure, and pay
-          for.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="02"
+        eyebrow="Features"
+        title={
+          <>
+            Built around the <span className="hl sky">visit.</span>
+          </>
+        }
+        subtitle="Post, scan, verify, pay — one quiet loop."
+        lead="Hibi is the attribution rail for local commerce. Four capabilities turn a real footstep into a membership your block can measure, and pay for."
+      />
 
       <Section>
         {FEATURES.map((f) => (

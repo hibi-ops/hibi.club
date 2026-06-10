@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
 import Check from "@/components/Check";
 import Mark from "@/components/Mark";
@@ -12,22 +13,23 @@ export const metadata: Metadata = {
     "Dispatches from the neighbourhoods Hibi runs on — slow notes on places, regulars, and what we learn block by block.",
 };
 
+// TODO(jiaming): date — set real dates on each post when it publishes.
 const POSTS = [
   {
-    date: "TODO(jiaming): date",
+    date: "In progress",
     name: "Day 50 at Oslo Coffee",
     teaser:
       "The fiftieth scan lands on an ordinary Tuesday and nobody claps. The card just turns — and a visitor quietly becomes a regular.",
   },
   {
-    date: "TODO(jiaming): date",
+    date: "In progress",
     name: "Why we never count impressions",
     teaser:
       "An impression is a maybe; a scan at the register is a fact. Notes on building a business where the currency is the visit.",
   },
   {
-    date: "TODO(jiaming): date",
-    name: "Williamsburg, week one",
+    date: "In progress",
+    name: "Brooklyn, week one",
     teaser:
       "Field notes from the first blocks Hibi went live on — one colour per place, one register, the first regulars on the books.",
   },
@@ -37,28 +39,26 @@ export default function JournalPage() {
   return (
     <>
       {/* 1 — Hero */}
-      <Section className="page-hero">
-        <Reveal>
-          <div className="eyebrow">Journal</div>
-          <h1 className="title">
+      <PageHero
+        index="10"
+        eyebrow="Journal"
+        title={
+          <>
             Notes from the <span className="hl">block.</span>
-          </h1>
-          <p className="subtitle">Slow writing about fast neighbourhoods.</p>
-          <p className="lead">
-            Dispatches from the streets Hibi runs on. We write the way the
-            product works — quietly, in seasons, about places and the people who
-            keep showing up to them. Built block by block.
-          </p>
-          <CTAPair center />
-        </Reveal>
-      </Section>
+          </>
+        }
+        subtitle="Slow writing about fast neighbourhoods."
+        lead="Dispatches from the streets Hibi runs on. We write the way the product works — quietly, in seasons, about places and the people who keep showing up to them. Built block by block."
+      />
 
       {/* 2 — Latest entries */}
       <Section>
-        <Reveal className="section-head">
+        <Reveal className="section-head head-row">
           <div className="eyebrow">Latest</div>
-          <h2 className="title">First entries, in progress.</h2>
-          <p className="subtitle">Three pieces we&apos;re writing now.</p>
+          <div>
+            <h2 className="title">First entries, in progress.</h2>
+            <p className="subtitle">Three pieces we&apos;re writing now.</p>
+          </div>
         </Reveal>
         <Reveal>
           <div className="grid-3 stagger">
@@ -67,15 +67,11 @@ export default function JournalPage() {
                 <div className="eyebrow" style={{ color: "var(--sky)" }}>
                   {post.date}
                 </div>
-                <h3
-                  className="title"
-                  style={{ margin: "var(--s2) 0 var(--s2)" }}
-                >
-                  {post.name}
-                </h3>
+                <h3>{post.name}</h3>
                 <p className="body">{post.teaser}</p>
+                {/* TODO(jiaming): link each entry once it publishes */}
                 <p className="eyebrow" style={{ marginTop: "var(--s3)" }}>
-                  Read soon — TODO(jiaming)
+                  Read soon
                 </p>
               </article>
             ))}
@@ -113,13 +109,10 @@ export default function JournalPage() {
             </ul>
             <p className="say">Quiet by design.</p>
             <CTAPair
-              primary={{ label: "Subscribe", href: "#" }}
+              primary={{ label: "Subscribe", href: "/contact" }}
               secondary={{ label: "About Hibi", href: "/about" }}
             />
-            <p className="price-foot-note" style={{ textAlign: "left" }}>
-              TODO(jiaming): hook the subscribe button to the newsletter service
-              once it exists.
-            </p>
+            {/* TODO(jiaming): hook the subscribe button to the newsletter service once it exists. */}
           </div>
           <div className="split-media">
             <Mark size={120} color="var(--sky)" />

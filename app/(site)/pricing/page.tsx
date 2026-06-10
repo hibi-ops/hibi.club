@@ -1,33 +1,14 @@
 import type { Metadata } from "next";
 import Section from "@/components/Section";
+import PageHero from "@/components/PageHero";
 import CTAPair from "@/components/CTAPair";
+import Check from "@/components/Check";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
     "Pay only for verified store visits — never impressions, never clicks. Creators and customers use Hibi free; merchants pay per verified visit.",
 };
-
-/** Small ink check — General Sans/ink discipline, never a neon. */
-function Check() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M5 12.5l4 4 10-10"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 type Tier = {
   name: string;
@@ -47,7 +28,8 @@ const TIERS: Tier[] = [
     who: "For a single location.",
     amount: "—",
     unit: "/ verified visit",
-    sub: <span className="price-todo">TODO(jiaming): per-visit price</span>,
+    // TODO(jiaming): per-visit price
+    sub: "Per-visit pricing announced at launch.",
     features: [
       "Verified-visit billing — pay per scan, never per impression",
       "QR code at the register",
@@ -55,14 +37,15 @@ const TIERS: Tier[] = [
       "Payout & visit dashboard",
       "Email support",
     ],
-    cta: { label: "Start for free", href: "#" },
+    cta: { label: "Start for free", href: "/signup" },
   },
   {
     name: "Block",
     who: "For a few places on the block.",
     amount: "—",
     unit: "/ verified visit",
-    sub: <span className="price-todo">TODO(jiaming): per-visit price</span>,
+    // TODO(jiaming): per-visit price
+    sub: "Per-visit pricing announced at launch.",
     featured: true,
     features: [
       "Everything in Counter",
@@ -71,7 +54,7 @@ const TIERS: Tier[] = [
       "Exports & monthly statements",
       "Priority support",
     ],
-    cta: { label: "Start for free", href: "#" },
+    cta: { label: "Start for free", href: "/signup" },
   },
   {
     name: "Citywide",
@@ -85,7 +68,7 @@ const TIERS: Tier[] = [
       "API access & webhooks",
       "Dedicated success manager",
     ],
-    cta: { label: "Talk to us", href: "#" },
+    cta: { label: "Talk to us", href: "/contact" },
   },
 ];
 
@@ -110,27 +93,27 @@ const STEPS = [
 export default function PricingPage() {
   return (
     <>
-      <Section className="page-hero">
-        <div className="eyebrow">Pricing</div>
-        <h1 className="title">
-          Pay for the <span className="hl sky">visit.</span>
-        </h1>
-        <p className="subtitle">Never the impression.</p>
-        <p className="lead">
-          You're billed only when a customer scans at your register — one
-          verified visit, one charge. No scan, no fee. Never for impressions,
-          clicks, or reach.
-        </p>
-        <CTAPair center />
-      </Section>
+      <PageHero
+        index="04"
+        eyebrow="Pricing"
+        title={
+          <>
+            Pay for the <span className="hl sky">visit.</span>
+          </>
+        }
+        subtitle="Never the impression."
+        lead="You're billed only when a customer scans at your register — one verified visit, one charge. No scan, no fee. Never for impressions, clicks, or reach."
+      />
 
       <Section tone="paper">
-        <div className="section-head">
+        <div className="section-head head-row">
           <div className="eyebrow">For merchants</div>
-          <h2 className="title">Pay only when they show up.</h2>
-          <p className="subtitle">
-            No reach to buy, no clicks to chase — just verified visits.
-          </p>
+          <div>
+            <h2 className="title">Pay only when they show up.</h2>
+            <p className="subtitle">
+              No reach to buy, no clicks to chase — just verified visits.
+            </p>
+          </div>
         </div>
 
         <div className="price-grid">
@@ -170,9 +153,11 @@ export default function PricingPage() {
       </Section>
 
       <Section>
-        <div className="section-head">
+        <div className="section-head head-row">
           <div className="eyebrow">How billing works</div>
-          <h2 className="title">A visit, or nothing.</h2>
+          <div>
+            <h2 className="title">A visit, or nothing.</h2>
+          </div>
         </div>
         <div className="steps">
           {STEPS.map((s) => (
