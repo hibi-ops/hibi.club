@@ -978,7 +978,10 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    reader is leaving behind, not the one being offered */
 .est-alt{display:block;font-size:clamp(26px,3vw,36px);font-weight:500;letter-spacing:-.03em;
   line-height:1.1;color:var(--gray-s);font-variant-numeric:tabular-nums lining-nums;}
-.est-sub{display:block;font-size:13px;color:var(--gray-s);margin-top:var(--s1);line-height:1.5;}
+.est-sub{display:block;font-size:13px;color:var(--gray-s);margin-top:var(--s1);line-height:1.5;max-width:38ch;}
+/* on the creator side the second figure is money coming in, not money being
+   left behind, so it keeps the money hue instead of receding */
+.est-alt-earn{color:var(--okT);}
 .est-note{margin-top:var(--s4);padding-top:var(--s3);border-top:var(--edge-2);
   font-size:13.5px;line-height:1.6;color:var(--gray-s);max-width:64ch;}
 .est-cta{margin-top:var(--s4);}

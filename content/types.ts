@@ -117,6 +117,15 @@ export type Dict = {
     why: { label: string; title: string; cols: Col[] };
     how: { label: string; title: string; steps: Step[] };
     split: { label: string; title: string; body: string; s: SplitData };
+    /* The creator's mirror of the merchant estimator: same two sliders, the
+       other side of the same transaction. */
+    calc: {
+      label: string; title: string; lead: string;
+      billLabel: string; visitsLabel: string;
+      firstLabel: string; perVisitLabel: string;
+      trailLabel: string; trailNote: string;
+      note: string; cta: string;
+    };
     faq: { label: string; title: string; items: QA[] };
   };
 

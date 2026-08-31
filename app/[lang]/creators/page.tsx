@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
+import CreatorCalc from '@/components/CreatorCalc';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import { Head, Cols, Steps, Faq, Access, TextLink, ThumbBar, SpecCard, Split } from '@/components/blocks';
@@ -59,6 +60,13 @@ export default async function Creators({ params }: P) {
           <div className="wrap">
             <Head label={c.split.label} title={c.split.title} lead={c.split.body} />
             <div className="sec-body"><Split s={c.split.s} /></div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="wrap">
+            <Head label={c.calc.label} title={c.calc.title} lead={c.calc.lead} />
+            <div className="sec-body"><CreatorCalc c={c.calc} href="#access" /></div>
           </div>
         </section>
 

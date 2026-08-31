@@ -4,6 +4,8 @@ import type { Dict } from '@/content/types';
 
 const money = (n: number) =>
   '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+/* a unit price carries cents: rounding $6.75 to $7 is a 4% lie about the rate */
+const unit = (n: number) => '$' + n.toFixed(2);
 
 /* Defaults are a typical first-cohort store, not zeroes. An empty calculator
    asks the visitor to invent two numbers before it will tell them anything;
@@ -39,7 +41,7 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
         <div className="est-primary">
           <span className="k-head">{c.youPayLabel}</span>
           <output className="est-total">{money(monthly)}</output>
-          <span className="est-sub">{money(Math.round(perVisit))} {c.perVisitLabel}</span>
+          <span className="est-sub">{unit(perVisit)} {c.perVisitLabel}</span>
         </div>
         {/* The comparison is never shown alone — a number only means something
             against the number the reader already lives with. */}
