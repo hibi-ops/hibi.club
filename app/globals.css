@@ -1074,6 +1074,14 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .doc-sec p{color:var(--ink-2);font-size:15px;line-height:1.65;}
 .doc-sec p+p{margin-top:var(--s2);}
 
+/* ===== 404 =============================================================== */
+.nf{min-height:100vh;min-height:100svh;display:flex;align-items:center;
+  padding:var(--s7) 0;background:var(--snow);}
+.nf-num{display:block;line-height:.9;}
+.nf-title{margin-top:var(--s4);max-width:16ch;}
+.nf-lead{margin-top:var(--s3);max-width:44ch;}
+.nf-cta{margin-top:var(--s5);}
+
 /* ===== prose (legal) ===== */
 .prose{max-width:74ch;}
 .prose h2{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:var(--s6) 0 var(--s2);}
