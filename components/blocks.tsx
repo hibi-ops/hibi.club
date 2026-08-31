@@ -60,10 +60,18 @@ export function Faq({ items }: { items: QA[] }) {
 }
 
 export function PriceTiers({ tiers }: { tiers: Dict['home']['pricing']['tiers'] }) {
+  /* The numeral's area carries the rate, so its height is the square root of
+     the value normalised to the largest — the eye compares areas, not heights.
+     Read off the copy rather than hardcoded, so the type cannot end up
+     describing a rate table that has since changed. */
+  const vals = tiers.map(p => parseFloat(p.num));
+  const top = Math.max(...vals.filter(v => Number.isFinite(v) && v > 0), 0);
   return (
     <div className="rates">
       {tiers.map((p, i) => (
-        <div className="rate" key={p.title}>
+        <div className="rate" key={p.title}
+          style={{ '--rw': top && Number.isFinite(vals[i]) && vals[i] > 0
+            ? (Math.sqrt(vals[i]) / Math.sqrt(top)).toFixed(3) : 1 } as React.CSSProperties}>
           <span className="rk">{p.title}</span>
           <span className="rd">{p.body}</span>
           <span className="rv">

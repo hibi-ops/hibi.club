@@ -319,8 +319,8 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
    Name, scope, and the rate with its unit — the reason this reads as pricing
    and not as three decorative numbers. */
 .rates{border-top:1px solid var(--ink);border-bottom:var(--edge);}
-.rate{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr) minmax(0,3fr);gap:var(--s4);
-  align-items:baseline;padding:var(--s4) 0;}
+.rate{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,4fr);gap:var(--s4);
+  align-items:center;padding:var(--s4) 0;}
 .rate+.rate{border-top:var(--edge-2);}
 .rate{padding-left:0;padding-right:0;}
 .rate{transition:background var(--t1) var(--ease);}
@@ -331,9 +331,21 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .rate .rk{display:flex;align-items:center;gap:var(--s2);font-size:15px;font-weight:600;}
 .rate .rd{font-size:14px;line-height:1.55;color:var(--gray-s);max-width:40ch;}
 .rate .rv{text-align:right;}
-@media(max-width:768px){.rate .rv{text-align:left;}}
-.rate .rn{font-size:clamp(30px,3.4vw,46px);font-weight:600;letter-spacing:-.03em;
-  font-variant-numeric:tabular-nums lining-nums;line-height:1;}
+@media(max-width:768px){.rate .rv{text-align:left;}
+  .rate .rn{font-size:clamp(34px,9.5vw,46px);}}
+/* The three rates step 15 / 8 / 4, and the old table said so only in the
+   digits — three numerals at one size, the reader doing the arithmetic. The
+   numeral's AREA is now proportional to its rate, so its height goes as the
+   square root of the value (area, not height, is what the eye compares).
+   --rw is computed per row in PriceTiers from the content itself, so if the
+   rates change the sizes follow instead of lying.
+   The encoding is switched OFF below 768px, not floored. A floor collapsed
+   8% and 4% to 29px and 28px — near-identical, which does not merely lose the
+   code, it lies about the rates. And the rows stack there, so the three
+   numerals are never in one eyeful to be compared anyway. */
+.rate .rn{font-size:calc(var(--rw,1) * clamp(40px,8.2vw,124px));
+  font-weight:600;letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums lining-nums;line-height:.92;}
 .rate .ru{display:block;font-size:12px;color:var(--gray-s);margin-top:var(--s0);line-height:1.4;}
 
 
@@ -1138,13 +1150,31 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   .field input,.field select{height:44px;}
   .seg button{height:38px;}
 }
-.field input,.field select,.field textarea{height:36px;border:1px solid rgba(21,20,26,.16);
-  border-radius:var(--r-sm);padding:0 var(--s2);font:inherit;font-size:14px;background:var(--snow);
-  color:var(--ink);box-shadow:inset 0 1px 1px rgba(21,20,26,.03);
-  transition:border-color var(--t1) var(--ease),box-shadow var(--t1) var(--ease);}
-.field textarea{height:96px;padding:var(--s1) var(--s2);resize:vertical;line-height:1.5;}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brandD);
-  box-shadow:0 0 0 3px rgba(7,103,141,.14);}
+/* Ruled fields, not boxes. Five bordered rectangles were the last place on
+   the site still drawing containers, against this stylesheet's own rule that
+   a surface is DRAWN rather than lifted — and against the page's whole
+   argument that it is a printed ledger. A field is now the line you write on.
+   The known cost of underline-only fields is affordance: a bare rule is a
+   weaker target than a box. Paid for three ways — the rule is 1.5px and ink
+   at 22% rather than a hairline, the input keeps its full 36/44px height so
+   the hit area is unchanged, and hover tints the whole field so the target
+   shows itself before the click. */
+.field input,.field select,.field textarea{height:36px;border:0;
+  border-bottom:1.5px solid rgba(21,20,26,.22);border-radius:0;
+  padding:0 2px;font:inherit;font-size:14px;background:transparent;
+  color:var(--ink);box-shadow:none;
+  transition:border-color var(--t1) var(--ease),background var(--t1) var(--ease);}
+.field textarea{height:96px;padding:var(--s0) 2px;resize:vertical;line-height:1.5;}
+@media(hover:hover){
+  .field input:hover,.field select:hover,.field textarea:hover{background:rgba(21,20,26,.035);}
+}
+/* focus is a hard cut, like every other state on this site: the rule goes to
+   full ink at 2px with no fade, and the caps label above it goes ink too, so
+   the pair reads as one active object */
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;
+  border-bottom:2px solid var(--ink);background:rgba(21,20,26,.035);transition:none;}
+.field:focus-within label{color:var(--ink);}
+.field input::placeholder,.field textarea::placeholder{color:var(--gray-s);}
 .form-foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;
   gap:var(--s3);flex-wrap:wrap;padding-top:var(--s0);}
 .form-note{font-size:12.5px;color:var(--gray-s);max-width:48ch;line-height:1.5;}
@@ -1351,16 +1381,22 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 
 
 
+
+
 /* ===== dither edge =======================================================
-   The ink plate used to begin and end on a hard cut. It now dissolves: six
-   rows of paper-coloured dots shrinking inward, so the black is PRINTED onto
-   the sheet instead of pasted over it. Coverage steps 92% → 66% → 43% → 26% → 13% → 3%.
-   This is the half of Y2K worth having — 1-bit, ordered, no colour — and it
-   is the opposite of a gradient in the way that matters here: every dot has a
-   hard edge (the stop moves 0.1px) and the ramp is countable steps, not
-   smoothing. Same pen as the hairline rules and the outline type.
-   10px pitch, not 7: at 7 the dots stop reading as dots and become noise, and
-   a halftone that you cannot count the cells of is just a texture swatch.
+   The ink plate is PRINTED onto the sheet, not pasted over it: its top and
+   bottom dissolve through 8 rows of paper-coloured dots shrinking inward.
+   Coverage steps 92 76 60 45 32 20 10 3%.
+   Eight steps, not six. The first pass stepped 92-66-43-26-13-3, whose
+   intervals are 26pts at the dense end and 10 at the sparse end — you could
+   see where each band began. These are spaced so the *perceived* jump is
+   even, which is what stops the ramp reading as stripes.
+   This is the half of Y2K worth having: 1-bit, ordered, no colour, same pen
+   as the hairline rules and the outline type. And it is the opposite of a
+   gradient in the way that matters — every dot has a hard edge (the stop
+   moves 0.1px) and the ramp is countable steps, not smoothing.
+   10px pitch. At 7 the dots stop reading as dots and become noise, and a
+   halftone whose cells you cannot count is just a texture swatch.
    Rows alternate a half-pitch in x — a lattice, not a grid.
    The positions MUST live in background-position; `radial-gradient(...) left
    0 top 0` is `background` SHORTHAND syntax and silently voids the whole
@@ -1370,18 +1406,22 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    ========================================================================= */
 .tone-ink{
   background-image:
-    radial-gradient(circle at 5px 5px,var(--paper) 5.4px,transparent 5.5px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.6px,transparent 4.7px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.7px,transparent 3.8px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.9px,transparent 3px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.0px,transparent 2.1px),
-    radial-gradient(circle at 5px 5px,var(--paper) 1.0px,transparent 1.1px),
-    radial-gradient(circle at 5px 5px,var(--paper) 5.4px,transparent 5.5px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.6px,transparent 4.7px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.7px,transparent 3.8px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.9px,transparent 3px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.0px,transparent 2.1px),
-    radial-gradient(circle at 5px 5px,var(--paper) 1.0px,transparent 1.1px);
+    radial-gradient(circle at 5px 5px,var(--paper) 5.41px,transparent 5.51px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.92px,transparent 5.02px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.37px,transparent 4.47px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.78px,transparent 3.88px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.19px,transparent 3.29px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.52px,transparent 2.62px),
+    radial-gradient(circle at 5px 5px,var(--paper) 1.78px,transparent 1.88px),
+    radial-gradient(circle at 5px 5px,var(--paper) 0.98px,transparent 1.08px),
+    radial-gradient(circle at 5px 5px,var(--paper) 5.41px,transparent 5.51px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.92px,transparent 5.02px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.37px,transparent 4.47px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.78px,transparent 3.88px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.19px,transparent 3.29px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.52px,transparent 2.62px),
+    radial-gradient(circle at 5px 5px,var(--paper) 1.78px,transparent 1.88px),
+    radial-gradient(circle at 5px 5px,var(--paper) 0.98px,transparent 1.08px);
   background-position:
     left 5px top 0px,
     left 0px top 10px,
@@ -1389,17 +1429,20 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
     left 0px top 30px,
     left 5px top 40px,
     left 0px top 50px,
+    left 5px top 60px,
+    left 0px top 70px,
     left 5px bottom 0px,
     left 0px bottom 10px,
     left 5px bottom 20px,
     left 0px bottom 30px,
     left 5px bottom 40px,
-    left 0px bottom 50px;
+    left 0px bottom 50px,
+    left 5px bottom 60px,
+    left 0px bottom 70px;
   background-repeat:repeat-x;
   background-size:10px 10px;
-  /* the dissolve needs its own room: 6 rows x 10px, and the section's normal
-     top padding is 36-56px, so the first label landed inside the dot field
-     and became unreadable. The plate gets a margin the way a printed one does. */
-  padding-top:calc(clamp(36px,4vw,56px) + 60px);
-  padding-bottom:calc(clamp(36px,4vw,56px) + 60px);
+  /* the dissolve needs its own room: 8 rows x 10px against a section
+     padding of 36-56px, or the first label lands inside the dot field. */
+  padding-top:calc(clamp(36px,4vw,56px) + 80px);
+  padding-bottom:calc(clamp(36px,4vw,56px) + 80px);
 }
