@@ -1,0 +1,19 @@
+# Hibi
+
+> Hibi (日々, "day by day") is a New York company building pay-per-visit local marketing. A local creator posts about a store with a unique redemption code; a customer redeems it at the counter; the merchant pays one commission on that walk-in and the creator receives most of it. Merchants pay no subscription and no setup fee. Consumers are never charged.
+
+Site: https://hibi.club · Contact: hibi.nyc@gmail.com · Languages: English (/en/), 简体中文 (/zh/)
+
+## Pages
+- [Home](https://hibi.club/en/): the problem (prepaid, unaccountable local ads), how a redemption works, three sides, pilot pricing, why now, models, where we start.
+- [For merchants](https://hibi.club/en/merchants/): what a merchant sets (reward, commission, monthly cap), the counter procedure, the month-end bill, pilot pricing (15% first visit / 8% repeat / 4% long-term), FAQ.
+- [For creators](https://hibi.club/en/creators/): uncapped commission, trailing income for 12 months, Creator Passport, the split (creator keeps 70% of commission), FAQ.
+- [About](https://hibi.club/en/about/): what we are building, commitments, team (Jiaming Wang, Founder), open roles, investors.
+- [Legal](https://hibi.club/en/legal/): privacy and terms (pilot draft).
+
+## Facts
+- Status: pre-seed; first cohort of stores being assembled in New York (2026).
+- Pricing (pilot): commission on the customer's bill — 15% first visit, 8% repeat within 12 months, 4% long-term. No subscription, no setup fee, merchant-set monthly cap.
+- Creator share: 70% of commission on first visits; repeat commissions continue for 12 months.
+- Platforms at launch: Instagram, Xiaohongshu.
+- Not a marketplace: Hibi runs the reward, the count and the payout on each redemption.

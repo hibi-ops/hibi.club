@@ -31,3 +31,7 @@ yarn-error.log*
 
 # deploy
 .vercel
+
+# local archive of the pre-rebuild site: 126MB of binaries (point clouds, TTFs)
+# that would live in git history forever. Kept on disk, out of the repo.
+_archive/

@@ -1,139 +1,47 @@
-import Link from "next/link";
-import Reveal from "./Reveal";
+import Link from 'next/link';
+import Wordmark from './Wordmark';
+import { SITE, href, type Lang } from '@/content/site';
+import type { Dict } from '@/content/types';
 
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/features" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "Solutions", href: "/solutions" },
-      { label: "Merchant dashboard", href: "/dashboard" },
-      { label: "How it works", href: "/how-it-works" },
-    ],
-  },
-  {
-    title: "Who it's for",
-    links: [
-      { label: "For creators", href: "/solutions#creator" },
-      { label: "For customers", href: "/solutions#customer" },
-      { label: "For merchants", href: "/solutions#merchant" },
-      // TODO(jiaming): restore "Gift a membership" once the feature exists
-      { label: "Sign up", href: "/signup" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Journal", href: "/journal" },
-      { label: "Contact", href: "/contact" },
-      { label: "Press", href: "/press" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Help center", href: "/help" },
-      { label: "Trust report", href: "/trust" },
-      { label: "Cities we serve", href: "/explore" },
-      { label: "Security", href: "/security" },
-    ],
-  },
-];
-
-export default function Footer() {
+export default function Footer({ lang, t }: { lang: Lang; t: Dict }) {
+  const year = new Date().getFullYear();
   return (
-    <footer className="hibi-footer">
+    <footer className="footer">
       <div className="wrap">
-        {/* closing CTA + newsletter */}
-        <Reveal className="foot-cta-band">
-          <div className="foot-cta">
-            <h3 className="title">
-              Become someone&apos;s{" "}
-              <span style={{ fontStyle: "italic" }}>hibi</span>.
-            </h3>
-            <div className="row">
-              <Link className="btn btn-primary" href="/signup">
-                Start for free
-              </Link>
-              <Link className="btn btn-glass" href="/contact">
-                Book a demo
-              </Link>
-            </div>
+        <div className="footer-top">
+          <Wordmark className="giant" />
+          <p className="lead" style={{ maxWidth: '28ch' }}>{t.footer.tagline}</p>
+        </div>
+        <div className="footer-cols">
+          <div>
+            <span className="label gray">{t.footer.product}</span>
+            <Link href={href(lang, 'merchants')}>{t.nav.merchants}</Link>
+            <Link href={href(lang, 'creators')}>{t.nav.creators}</Link>
+            <Link href={`${href(lang)}#access`}>{t.nav.cta}</Link>
           </div>
-          <div className="foot-news">
-            <span className="foot-news-label">
-              The quiet newsletter — once a season
-            </span>
-            <div className="foot-news-row">
-              <input
-                type="email"
-                placeholder="you@yourblock.com"
-                aria-label="Email address"
-                className="foot-news-input"
-              />
-              <button
-                type="button"
-                className="foot-news-btn"
-                aria-label="Subscribe"
-              >
-                →
-              </button>
-            </div>
-            <span className="foot-news-note">
-              No spam. Unsubscribe anytime.
-            </span>
+          <div>
+            <span className="label gray">{t.footer.company}</span>
+            <Link href={href(lang, 'about')}>{t.nav.about}</Link>
+            <Link href={`${href(lang, 'about')}#hiring`}>{t.about.hiring.label}</Link>
+            <Link href={`${href(lang, 'about')}#investors`}>{t.footer.investors}</Link>
           </div>
-        </Reveal>
-
-        {/* sitemap */}
-        <Reveal className="foot-grid">
-          {COLUMNS.map((col) => (
-            <div className="foot-col" key={col.title}>
-              <h4>{col.title}</h4>
-              {col.links.map((l) => (
-                <Link key={l.label} href={l.href}>
-                  {l.label}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </Reveal>
-
-        {/* giant chrome wordmark */}
-        <Reveal className="foot-word">
-          Hibi
-          <span className="foot-dots">
-            <span style={{ background: "var(--sky)" }} />
-            <span style={{ background: "var(--pink)" }} />
-            <span style={{ background: "var(--green)" }} />
-            <span style={{ background: "var(--orange)" }} />
-          </span>
-        </Reveal>
-
-        {/* legal / utility row */}
-        <div className="foot-base">
-          {/* TODO(jiaming): add Cookies / Accessibility pages when they exist */}
-          <div className="foot-legal">
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-            <Link href="/security">Security</Link>
-            <Link href="/trust">Trust</Link>
+          <div>
+            <span className="label gray">{t.footer.contact}</span>
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <span>{SITE.city}</span>
+            {SITE.social.instagram && <a href={SITE.social.instagram} rel="noopener">Instagram</a>}
+            {SITE.social.xiaohongshu && <a href={SITE.social.xiaohongshu} rel="noopener">小红书</a>}
           </div>
-          <div className="foot-meta">
-            <span className="foot-status">
-              <span className="dot" /> All systems normal
-            </span>
-            <span>NYC · EN</span>
-            <span>© 2026 Hibi</span>
+          <div>
+            <span className="label gray">{t.footer.legal}</span>
+            <Link href={`${href(lang, 'legal')}#privacy`}>{t.footer.privacy}</Link>
+            <Link href={`${href(lang, 'legal')}#terms`}>{t.footer.terms}</Link>
+            <Link href={href(lang === 'en' ? 'zh' : 'en')} hrefLang={lang === 'en' ? 'zh' : 'en'}>{lang === 'en' ? '中文' : 'English'}</Link>
           </div>
-          {/* TODO(jiaming): add social links (IG / TikTok / X / LinkedIn) once the accounts exist */}
-          <div className="foot-social">
-            <Link href="/journal">Journal</Link>
-            <Link href="/explore">Explore</Link>
-          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© {year} {SITE.name}. {t.footer.rights}</span>
+          <span>{t.footer.built} · 日々</span>
         </div>
       </div>
     </footer>
