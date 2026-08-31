@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
-import Estimator from '@/components/Estimator';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
-import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard, Checks } from '@/components/blocks';
+import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
 import { pageMetadata, faqJsonLd } from '@/lib/seo';
 
@@ -83,8 +82,12 @@ export default async function Merchants({ params }: P) {
           <div className="wrap">
             <Head label={m.pricing.label} title={m.pricing.title} />
             <div className="sec-body"><PriceTiers tiers={m.pricing.tiers} /></div>
-            <div className="sec-body tight"><Checks items={m.pricing.extras} /></div>
-            <p className="muted sec-body" style={{ maxWidth: '60ch' }}>{m.pricing.foot}</p>
+            <div className="grid sec-body" style={{ alignItems: 'center' }}>
+              <p className="c7 muted">{m.pricing.foot}</p>
+              <div className="c5">
+                <TextLink href={href(lang, 'pricing')}>{t.footer.fullPricing}</TextLink>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -97,12 +100,6 @@ export default async function Merchants({ params }: P) {
           </div>
         </section>
 
-        <section className="section tone-paper">
-          <div className="wrap">
-            <Head label={m.calc.label} title={m.calc.title} lead={m.calc.lead} />
-            <div className="sec-body"><Estimator c={m.calc} formHref="#access" /></div>
-          </div>
-        </section>
 
         <Access t={t} lang={lang} role="merchant" />
       </main>

@@ -51,7 +51,7 @@ export default async function Pricing({ params }: P) {
         <section className="section tone-paper">
           <div className="wrap">
             <Head label={p.calc.label} title={p.calc.title} lead={p.calc.lead} />
-            <div className="sec-body"><Estimator c={t.merchants.calc} formHref="#access" /></div>
+            <div className="sec-body"><Estimator c={p.calc} formHref="#access" /></div>
           </div>
         </section>
 

@@ -10,7 +10,7 @@ const money = (n: number) =>
    a pre-filled one has already answered the question and invites a correction.
    The result is then handed to the form, so the visitor confirms rather than
    re-enters. */
-export default function Estimator({ c, formHref }: { c: Dict['merchants']['calc']; formHref: string }) {
+export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc']; formHref: string }) {
   const [bill, setBill] = useState(45);
   const [visits, setVisits] = useState(25);
 

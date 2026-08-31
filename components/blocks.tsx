@@ -17,7 +17,10 @@ export function Head({ label, title, lead, wide, small }: { label: string; title
 
 export function Cols({ items, n }: { items: Col[]; n?: number }) {
   return (
-    <div className="cols" style={{ ['--n' as string]: n ?? items.length }}>
+    /* the column count is a class, not just a custom property: the hairline
+       rules need to know where a row starts, and CSS cannot read a variable
+       inside :nth-child() */
+    <div className={`cols cols-${n ?? items.length}`}>
       {items.map(c => (
         <div key={c.title}>
           <span className="label">{c.label}</span>

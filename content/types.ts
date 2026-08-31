@@ -38,6 +38,7 @@ export type Dict = {
   nav: { merchants: string; creators: string; pricing: string; security: string; about: string; cta: string };
   footer: {
     tagline: string;
+    fullPricing: string;
     product: string; company: string; contact: string; legal: string;
     privacy: string; terms: string; rights: string; built: string;
     investors: string;
@@ -104,19 +105,9 @@ export type Dict = {
     meta: Meta;
     eyebrow: string; title: string; lead: string; heroCard: HeroCard;
     set: { label: string; title: string; rows: { k: string; v: string }[] };
-    /* An estimator, not a marketing widget. It answers the one question a
-       merchant actually has — "what would this cost me?" — before asking for
-       anything, and it hands its own numbers to the form. */
-    calc: {
-      label: string; title: string; lead: string;
-      spendLabel: string; visitsLabel: string;
-      youPayLabel: string; perVisitLabel: string; capLabel: string;
-      compareLabel: string; compareValue: string; compareNote: string;
-      note: string; cta: string;
-    };
     counter: { label: string; title: string; body: string; steps: Step[] };
     bill: { label: string; title: string; body: string; ledger: string; note: string };
-    pricing: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[]; extras: string[]; foot: string };
+    pricing: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[]; foot: string };
     faq: { label: string; title: string; items: QA[] };
   };
 
@@ -145,7 +136,15 @@ export type Dict = {
     meta: Meta;
     eyebrow: string; title: string; lead: string;
     rates: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[] };
-    calc: { label: string; title: string; lead: string };
+    /* An estimator, not a marketing widget: it answers "what would this cost
+       me?" before asking for anything, and hands its own number to the form. */
+    calc: {
+      label: string; title: string; lead: string;
+      spendLabel: string; visitsLabel: string;
+      youPayLabel: string; perVisitLabel: string; capLabel: string;
+      compareLabel: string; compareValue: string; compareNote: string;
+      note: string; cta: string;
+    };
     free: { label: string; title: string; items: string[]; note: string };
     compare: {
       label: string; title: string; body: string;

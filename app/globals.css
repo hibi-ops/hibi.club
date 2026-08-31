@@ -494,8 +494,13 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 @media(max-width:900px){.hero{padding:var(--s5) 0 0;}}
 .hero-grid{display:block;position:relative;}
 .hero .hero-title{margin:var(--s2) 0 0;max-width:none;position:relative;z-index:1;}
+/* two columns only when there IS a second thing; a lone copy column would
+   otherwise sit next to 420px of nothing */
 .hero-sub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:var(--s7);
   align-items:start;margin-top:var(--s5);padding-bottom:var(--s4);}
+.hero-sub:has(> :only-child){grid-template-columns:minmax(0,1fr);}
+.hero-sub:has(> :only-child) .lead{max-width:52ch;}
+html[lang="zh-Hans"] .hero-sub:has(> :only-child) .lead{max-width:34em;}
 @media(max-width:900px){.hero-sub{grid-template-columns:1fr;gap:var(--s5);}}
 /* the card rises just far enough that the headline's last word sits on its
    shoulder — the overlap is the gesture, the card's own header stays legible */
@@ -780,12 +785,23 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    Bordered panels rather than lifted cards, and tight enough that three of
    them read as one row of a table rather than three separate objects.
    ========================================================================= */
-.cols{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:0;}
-.cols>*{padding:var(--s3) var(--s4) 0 0;border-top:1px solid var(--ink);
+.cols{display:grid;gap:0;}
+.cols-2{grid-template-columns:repeat(2,1fr);}
+.cols-3{grid-template-columns:repeat(3,1fr);}
+.cols-4{grid-template-columns:repeat(4,1fr);}
+.cols>*{padding:var(--s3) var(--s4) var(--s4) 0;border-top:var(--edge);
   display:flex;flex-direction:column;}
-.cols>*+*{border-top:var(--edge);padding-left:var(--s4);border-left:var(--edge-2);}
-@media(max-width:768px){.cols{grid-template-columns:1fr;}
-  .cols>*+*{padding-left:0;border-left:none;}}
+/* the lead cell of the whole block opens on an ink rule */
+.cols>*:first-child{border-top:1px solid var(--ink);}
+/* a left hairline everywhere except the first cell OF EACH ROW — with a
+   wrapping grid, `* + *` would rule the start of every row after the first */
+.cols-2>*:not(:nth-child(2n+1)),
+.cols-3>*:not(:nth-child(3n+1)),
+.cols-4>*:not(:nth-child(4n+1)){padding-left:var(--s4);border-left:var(--edge-2);}
+@media(max-width:768px){
+  .cols-2,.cols-3,.cols-4{grid-template-columns:1fr;}
+  .cols>*{padding-left:0 !important;border-left:none !important;}
+}
 .cols .label{display:block;margin-bottom:var(--s1);}
 .cols .h3{margin-bottom:var(--s1);}
 .cols p{color:var(--ink-2);font-size:14px;line-height:1.55;margin-top:auto;padding-top:var(--s1);}
