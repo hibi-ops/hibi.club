@@ -93,9 +93,12 @@ export default async function Merchants({ params }: P) {
 
         <section className="section">
           <div className="wrap">
-            <div className="grid">
-              <div className="c4"><Head label={m.faq.label} title={m.faq.title} small /></div>
-              <div className="c8"><Faq items={m.faq.items} /></div>
+            <div className="rail">
+              <div className="rail-head">
+                <span className="label lbl">{m.faq.label}</span>
+                <h2 className="h2"><span className="hl">{m.faq.title}</span></h2>
+              </div>
+              <Faq items={m.faq.items} />
             </div>
           </div>
         </section>

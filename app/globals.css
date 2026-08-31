@@ -926,19 +926,45 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   .cmp-hibi::before{background:var(--ink) !important;}
 }
 
-/* ===== FAQ =============================================================== */
-.faq{background:var(--snow);border:var(--edge);border-radius:var(--r-lg);overflow:hidden;}
-.faq details+details{border-top:var(--edge-2);}
-.faq summary{list-style:none;cursor:pointer;padding:var(--s3) var(--s4);display:flex;
-  justify-content:space-between;gap:var(--s3);font-weight:500;font-size:16px;letter-spacing:-.005em;
-  transition:background var(--t1) var(--ease);}
-@media(hover:hover){.faq summary:hover{background:var(--paper);}}
+/* ===== FAQ ===============================================================
+   Typeset like every other list on the site: an ink rule opens the block,
+   hairlines separate the questions, no card. A question is a row you can open,
+   not a tile.
+   ========================================================================= */
+.faq{border-top:1px solid var(--ink);}
+.faq details{border-bottom:var(--edge-2);}
+.faq summary{list-style:none;cursor:pointer;padding:var(--s3) var(--s5) var(--s3) 0;
+  display:flex;justify-content:space-between;gap:var(--s3);align-items:baseline;
+  font-weight:500;font-size:16.5px;letter-spacing:-.008em;position:relative;
+  transition:color var(--t1) var(--ease);}
+@media(hover:hover){.faq summary:hover{color:var(--brandInk);}}
 .faq summary::-webkit-details-marker{display:none;}
-.faq summary::after{content:'';width:9px;height:9px;flex:none;margin-top:6px;
-  border-right:1.6px solid var(--gray-s);border-bottom:1.6px solid var(--gray-s);
-  transform:rotate(45deg);transition:transform var(--t2) var(--ease);}
-.faq details[open] summary::after{transform:rotate(-135deg);}
-.faq .a{padding:0 var(--s4) var(--s3);color:var(--ink-2);max-width:70ch;font-size:14.5px;line-height:1.6;}
+/* A plus that turns into a minus. The horizontal stroke collapses to nothing
+   while the vertical one rotates a quarter turn into its place — so the mark
+   ends as a single bar, and the state is unambiguous even mid-transition.
+   currentColor lets it inherit the summary's hover and open colours. */
+.faq summary::after{content:'';position:absolute;right:0;top:calc(var(--s3) + .55em);
+  width:11px;height:11px;flex:none;color:var(--gray-s);
+  background:
+    linear-gradient(currentColor,currentColor) center/11px 1.5px no-repeat,
+    linear-gradient(currentColor,currentColor) center/1.5px 11px no-repeat;
+  transition:transform var(--t2) var(--ease),background-size var(--t2) var(--ease),
+    color var(--t1) var(--ease);}
+.faq details[open] summary::after{transform:rotate(90deg);color:var(--ink);
+  background-size:0 1.5px,1.5px 11px;}
+@media(hover:hover){.faq summary:hover::after{color:var(--brandInk);}}
+.faq details[open] summary{color:var(--ink);}
+.faq .a{padding:0 var(--s5) var(--s4) 0;color:var(--ink-2);max-width:68ch;
+  font-size:14.5px;line-height:1.65;}
+/* the answer unfolds rather than appearing, where the browser supports it */
+@supports (interpolate-size: allow-keywords){
+  @media(prefers-reduced-motion:no-preference){
+    .faq details{interpolate-size:allow-keywords;}
+    .faq details::details-content{block-size:0;overflow:hidden;
+      transition:block-size var(--t2) var(--ease),content-visibility var(--t2) allow-discrete;}
+    .faq details[open]::details-content{block-size:auto;}
+  }
+}
 
 /* ===== estimator =========================================================
    Two sliders and one figure. The controls are macOS-weight: a 4px track, a

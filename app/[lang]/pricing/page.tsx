@@ -90,8 +90,13 @@ export default async function Pricing({ params }: P) {
 
         <section className="section">
           <div className="wrap">
-            <Head label={p.faq.label} title={p.faq.title} />
-            <div className="sec-body"><Faq items={p.faq.items} /></div>
+            <div className="rail">
+              <div className="rail-head">
+                <span className="label lbl">{p.faq.label}</span>
+                <h2 className="h2"><span className="hl">{p.faq.title}</span></h2>
+              </div>
+              <Faq items={p.faq.items} />
+            </div>
           </div>
         </section>
 

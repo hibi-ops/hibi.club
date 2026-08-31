@@ -72,9 +72,12 @@ export default async function Creators({ params }: P) {
 
         <section className="section">
           <div className="wrap">
-            <div className="grid">
-              <div className="c4"><Head label={c.faq.label} title={c.faq.title} small /></div>
-              <div className="c8"><Faq items={c.faq.items} /></div>
+            <div className="rail">
+              <div className="rail-head">
+                <span className="label lbl">{c.faq.label}</span>
+                <h2 className="h2"><span className="hl">{c.faq.title}</span></h2>
+              </div>
+              <Faq items={c.faq.items} />
             </div>
           </div>
         </section>
