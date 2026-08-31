@@ -1370,79 +1370,27 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    ========================================================================= */
 ::selection{background:var(--sky);color:var(--ink);text-shadow:none;}
 
+/* ===== on the halftone edge that used to live here =======================
+   Two versions of a dot-screen dissolve at the ink plate's edges were built
+   and both are gone. Keeping the reasoning so it is not rebuilt a third time.
 
+   v1 — 10px orthogonal lattice, 6 coarse steps. Read as the frit band round a
+        car windscreen, because it was the same object: uniform round dots,
+        square lattice, visible size jumps.
+   v2 — 8x4 lattice on a true 45deg screen, 12 steps. Genuinely better at 1:1
+        and it does read as print rather than as glass.
 
+   v2 was deleted anyway, on a reason that outranks how it looked: this site's
+   grammar is the HARD CUT. The marker bar inverts with transition:none, the
+   entrance is a wipe and not a fade, and the comment on that animation in
+   this very file says "the cut, not the fade". A dissolve is a fade. The
+   device was borrowed for its Y2K reference and never checked against the
+   language it was joining.
 
+   It also failed the signature test: after the home spread went back to
+   paper, the ink plate survives only on about and security. Something that
+   appears twice, on secondary pages, is not a signature — it is an outlier.
 
-
-
-
-
-
-
-
-
-
-/* ===== dither edge =======================================================
-   The ink plate is PRINTED onto the sheet, not pasted over it: its top and
-   bottom dissolve through 8 rows of paper-coloured dots shrinking inward.
-   Coverage steps 92 76 60 45 32 20 10 3%.
-   Eight steps, not six. The first pass stepped 92-66-43-26-13-3, whose
-   intervals are 26pts at the dense end and 10 at the sparse end — you could
-   see where each band began. These are spaced so the *perceived* jump is
-   even, which is what stops the ramp reading as stripes.
-   This is the half of Y2K worth having: 1-bit, ordered, no colour, same pen
-   as the hairline rules and the outline type. And it is the opposite of a
-   gradient in the way that matters — every dot has a hard edge (the stop
-   moves 0.1px) and the ramp is countable steps, not smoothing.
-   10px pitch. At 7 the dots stop reading as dots and become noise, and a
-   halftone whose cells you cannot count is just a texture swatch.
-   Rows alternate a half-pitch in x — a lattice, not a grid.
-   The positions MUST live in background-position; `radial-gradient(...) left
-   0 top 0` is `background` SHORTHAND syntax and silently voids the whole
-   background-image declaration.
-   Print flattens it: .tone-ink's print rule is a background shorthand with
-   !important, which clears background-image along with the colour.
+   The plate now begins and ends on a hard edge, which is what everything else
+   here does.
    ========================================================================= */
-.tone-ink{
-  background-image:
-    radial-gradient(circle at 5px 5px,var(--paper) 5.41px,transparent 5.51px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.92px,transparent 5.02px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.37px,transparent 4.47px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.78px,transparent 3.88px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.19px,transparent 3.29px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.52px,transparent 2.62px),
-    radial-gradient(circle at 5px 5px,var(--paper) 1.78px,transparent 1.88px),
-    radial-gradient(circle at 5px 5px,var(--paper) 0.98px,transparent 1.08px),
-    radial-gradient(circle at 5px 5px,var(--paper) 5.41px,transparent 5.51px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.92px,transparent 5.02px),
-    radial-gradient(circle at 5px 5px,var(--paper) 4.37px,transparent 4.47px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.78px,transparent 3.88px),
-    radial-gradient(circle at 5px 5px,var(--paper) 3.19px,transparent 3.29px),
-    radial-gradient(circle at 5px 5px,var(--paper) 2.52px,transparent 2.62px),
-    radial-gradient(circle at 5px 5px,var(--paper) 1.78px,transparent 1.88px),
-    radial-gradient(circle at 5px 5px,var(--paper) 0.98px,transparent 1.08px);
-  background-position:
-    left 5px top 0px,
-    left 0px top 10px,
-    left 5px top 20px,
-    left 0px top 30px,
-    left 5px top 40px,
-    left 0px top 50px,
-    left 5px top 60px,
-    left 0px top 70px,
-    left 5px bottom 0px,
-    left 0px bottom 10px,
-    left 5px bottom 20px,
-    left 0px bottom 30px,
-    left 5px bottom 40px,
-    left 0px bottom 50px,
-    left 5px bottom 60px,
-    left 0px bottom 70px;
-  background-repeat:repeat-x;
-  background-size:10px 10px;
-  /* the dissolve needs its own room: 8 rows x 10px against a section
-     padding of 36-56px, or the first label lands inside the dot field. */
-  padding-top:calc(clamp(36px,4vw,56px) + 80px);
-  padding-bottom:calc(clamp(36px,4vw,56px) + 80px);
-}

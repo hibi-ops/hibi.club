@@ -91,12 +91,15 @@ export default async function Home({ params }: P) {
         </section>
 
         {/* THREE SIDES */}
-        {/* The page's second anchor. It earns one: this is where the whole
-            model is stated — three parties, one transaction — and without it
-            the page reads as one good screen followed by documentation.
-            Ink, not a colour plane. A 600px field of any hue has to earn
-            itself; ink is right by construction. */}
-        <section className="section tone-ink">
+        {/* Stays on paper. This was a full-bleed ink plate for a while, on the
+            argument that the page wanted a second anchor after the hero — but
+            it already has five (the outline $0, the $300-3,000, the walk-in
+            stage, the marquee, the rate staircase), and one dark band in the
+            middle of a light page reads as a box pasted on rather than a
+            chapter. The deciding rule is the site's own: data lives on paper,
+            dark grounds are for statements (about's open roles, security's
+            "what we have not done"). A split of someone's bill is data. */}
+        <section className="section">
           <div className="wrap">
             <Head label={h.sides.label} title={h.sides.title} wide />
             <div className="sec-body"><Split s={h.sides.split} /></div>
