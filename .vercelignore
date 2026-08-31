@@ -1,0 +1,12 @@
+# Vercel builds from source in the cloud, so every local build artefact that
+# gets uploaded is pure latency. The first deploy pushed 53.2MB and appeared to
+# hang for ~16 minutes with no visible progress, which is what sent this
+# looking for a build failure that did not exist.
+.next/
+out/
+
+# 637MB of point clouds and TTFs kept on disk, out of git — and out of this.
+_archive/
+
+node_modules/
+.git/
