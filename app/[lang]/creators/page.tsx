@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import CreatorCalc from '@/components/CreatorCalc';
+import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import { Head, Cols, Steps, Faq, Access, TextLink, ThumbBar, SpecCard, Split } from '@/components/blocks';
@@ -63,7 +64,11 @@ export default async function Creators({ params }: P) {
           </div>
         </section>
 
-        <section className="section">
+        {/* the contour field is a readout here, not a backdrop: the walk-ins
+            slider drives its relief, and the contour interval is fixed, so more
+            traffic is steeper ground crossing more lines */}
+        <section className="section relief">
+          <Wash variant="field" />
           <div className="wrap">
             <Head label={c.calc.label} title={c.calc.title} lead={c.calc.lead} />
             <div className="sec-body"><CreatorCalc c={c.calc} href="#access" /></div>

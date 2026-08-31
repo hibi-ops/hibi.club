@@ -719,6 +719,11 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   transition:opacity 1.4s var(--ease);}
 .wash.wash-on{opacity:1;}
 .wash{top:calc(var(--nav-h) * -1);}
+/* a field instance sits inside its own section, so it does not reach up under
+   the nav the way the hero's does */
+.wash-field{top:0;}
+.relief{position:relative;isolation:isolate;}
+.relief>.wrap{position:relative;z-index:1;}
 .hero{position:relative;isolation:isolate;}
 .hero .wrap{position:relative;z-index:1;}
 /* with a live field behind it, the static radial would only muddy the hue */

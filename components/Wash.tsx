@@ -14,8 +14,16 @@ import { useEffect, useRef } from 'react';
  *
  * Static CSS wash stays underneath as base and fallback: no WebGL, coarse
  * pointer or reduced motion simply means the ground holds still.
+ *
+ * variant="field" places the same instrument behind an estimator section, and
+ * there it stops being ambient: the relief is DRIVEN by the walk-ins slider
+ * (`hibi:relief`, the same event pattern WeekStats already uses for redeems).
+ * The contour interval is fixed, so raising the number does not just make the
+ * picture busier — it makes the ground steeper, and steeper ground crosses
+ * more contours. More traffic, more lines. That is the job; without it this
+ * would be the fourth ambient field to get torn out of this project.
  */
-export default function Wash() {
+export default function Wash({ variant = 'hero' }: { variant?: 'hero' | 'field' } = {}) {
   const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,6 +52,10 @@ export default function Wash() {
         uT: { value: 0 },
         uP: { value: new T.Vector2(0.5, 0.5) },
         uAspect: { value: 1 },
+        /* relief. The hero sits at the baseline; a field instance is driven by
+           its section's slider between 0 and 1. */
+        uLevel: { value: 0.25 },
+        uVariant: { value: variant === 'field' ? 1 : 0 },
       };
 
       const mat = new T.ShaderMaterial({
@@ -53,7 +65,7 @@ export default function Wash() {
         vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position,1.0);}`,
         fragmentShader: /* glsl */`
           precision highp float;
-          uniform float uT, uAspect;
+          uniform float uT, uAspect, uLevel, uVariant;
           uniform vec2 uP;
           varying vec2 vUv;
 
@@ -79,7 +91,9 @@ export default function Wash() {
             vec2 uv = vUv;
             vec2 p = vec2(uv.x * uAspect, uv.y) * 3.1;
 
-            float h = terrain(p + vec2(uT * 0.018, uT * 0.011));
+            /* the contour INTERVAL is fixed below, so amplitude is the only
+               thing that changes: steeper ground crosses more lines. */
+            float h = terrain(p + vec2(uT * 0.018, uT * 0.011)) * mix(0.75, 2.0, uLevel);
 
             /* the pointer is a rise in the ground: contours crowd around it,
                which is what a hill looks like on a survey sheet */
@@ -97,9 +111,14 @@ export default function Wash() {
             float idx = step(0.5, abs(fract(band / 5.0) - 0.5) * 2.0 - 0.86);
             float ink = line * (0.055 + 0.075 * idx);
 
-            // resolve to clean paper before the copy, and toward the right
-            ink *= smoothstep(0.04, 0.66, uv.y);
-            ink *= mix(1.0, 0.35, smoothstep(0.34, 1.0, uv.x));
+            /* resolve to clean paper before the copy. The hero clears its
+               lower half (lead, buttons, ledger card); a field clears its left,
+               where .est caps at 820px and the numbers live. */
+            float mHero  = smoothstep(0.04, 0.66, uv.y)
+                         * mix(1.0, 0.35, smoothstep(0.34, 1.0, uv.x));
+            float mField = smoothstep(0.0, 0.30, uv.y)
+                         * smoothstep(0.28, 0.92, uv.x);
+            ink *= mix(mHero, mField, uVariant);
 
             gl_FragColor = vec4(vec3(0.082, 0.078, 0.102), ink);
           }`,
@@ -126,6 +145,16 @@ export default function Wash() {
       };
       window.addEventListener('pointermove', onMove, { passive: true });
 
+      /* decoupled the way WeekStats listens for hibi:redeem — the calculator
+         does not need a handle on the renderer, and the hero instance simply
+         never hears the event. */
+      let level = uniforms.uLevel.value;
+      const onRelief = (e: Event) => {
+        const v = (e as CustomEvent<{ level: number }>).detail?.level;
+        if (typeof v === 'number') level = Math.min(1, Math.max(0, v));
+      };
+      if (variant === 'field') window.addEventListener('hibi:relief', onRelief);
+
       let visible = true;
       const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; });
       io.observe(el);
@@ -139,6 +168,8 @@ export default function Wash() {
         if (!visible) return;
         uniforms.uT.value = clock.getElapsedTime();
         uniforms.uP.value.lerp(target, 0.045);
+        /* eased, not snapped: the ground is being surveyed, not switched */
+        uniforms.uLevel.value += (level - uniforms.uLevel.value) * 0.08;
         renderer.render(scene, cam);
       };
       tick();
@@ -147,6 +178,7 @@ export default function Wash() {
         cancelAnimationFrame(raf);
         io.disconnect(); ro.disconnect();
         window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('hibi:relief', onRelief);
         mat.dispose(); renderer.dispose();
         renderer.domElement.remove();
         el.classList.remove('wash-on');
@@ -156,5 +188,5 @@ export default function Wash() {
     return () => { stop = true; cleanup(); };
   }, []);
 
-  return <div ref={host} className="wash" aria-hidden="true" />;
+  return <div ref={host} className={`wash${variant === 'field' ? ' wash-field' : ''}`} aria-hidden="true" />;
 }

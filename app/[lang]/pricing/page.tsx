@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Estimator from '@/components/Estimator';
+import Wash from '@/components/Wash';
 import { Head, PriceTiers, Checks, Faq, Access, ThumbBar } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
 import { pageMetadata, faqJsonLd } from '@/lib/seo';
@@ -48,7 +49,8 @@ export default async function Pricing({ params }: P) {
         </section>
 
         {/* the estimator lives on the page that owns the numbers */}
-        <section className="section tone-paper">
+        <section className="section tone-paper relief">
+          <Wash variant="field" />
           <div className="wrap">
             <Head label={p.calc.label} title={p.calc.title} lead={p.calc.lead} />
             <div className="sec-body"><Estimator c={p.calc} formHref="#access" /></div>

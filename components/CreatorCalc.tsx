@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Dict } from '@/content/types';
 
 const money = (n: number) =>
@@ -29,6 +29,16 @@ export default function CreatorCalc({ c, href }: { c: Dict['creators']['calc']; 
   const perVisit = bill * FIRST;
   const month = perVisit * visits;
   const trailing = bill * REPEAT * RETURNS * visits;
+
+  /* The walk-ins figure drives the contour field behind this section: fixed
+     contour interval, so more traffic is literally steeper ground. Published
+     as an event rather than a prop so the renderer stays decoupled — the same
+     shape as hibi:redeem. */
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('hibi:relief', {
+      detail: { level: (visits - 5) / 115 },
+    }));
+  }, [visits]);
 
   return (
     <div className="est">
