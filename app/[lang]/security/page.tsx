@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
+import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
 import { Head, Cols, Steps, Checks, Access, TextLink, ThumbBar } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
@@ -22,6 +23,7 @@ export default async function Security({ params }: P) {
       <Nav lang={lang} t={t} current="security" />
       <main id="main" tabIndex={-1}>
         <section className="hero lit">
+          <Wash seed={4} />
           <div className="wrap">
             <div className="hero-grid">
               <span className="label rise">{s.eyebrow}</span>

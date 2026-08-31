@@ -25,6 +25,7 @@ export default async function Pricing({ params }: P) {
       <JsonLd data={faqJsonLd(p.faq.items)} />
       <main id="main" tabIndex={-1}>
         <section className="hero lit">
+          <Wash seed={3} />
           <div className="wrap">
             <div className="hero-grid">
               <span className="label rise">{p.eyebrow}</span>
@@ -50,7 +51,7 @@ export default async function Pricing({ params }: P) {
 
         {/* the estimator lives on the page that owns the numbers */}
         <section className="section tone-paper relief">
-          <Wash variant="field" />
+          <Wash variant="field" seed={7} />
           <div className="wrap">
             <Head label={p.calc.label} title={p.calc.title} lead={p.calc.lead} />
             <div className="sec-body"><Estimator c={p.calc} formHref="#access" /></div>

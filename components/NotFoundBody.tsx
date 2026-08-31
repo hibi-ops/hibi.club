@@ -5,11 +5,16 @@
  *
  * Neither knows the visitor's language: not-found.tsx receives no params. So
  * it offers both rather than guessing. The numeral is hollow because outline
- * means absence everywhere else on the site.
+ * means absence everywhere else on the site — and the contour field is here
+ * for the same reason: the survey sheet is drawn, the ground is there, and
+ * nothing has been built on it. You are off the map, not nowhere.
  */
+import Wash from './Wash';
+
 export default function NotFoundBody() {
   return (
     <main className="nf">
+      <Wash seed={8} />
       <div className="wrap">
         <span className="num num-void nf-num" aria-hidden="true">404</span>
         <h1 className="h1 nf-title"><span className="hl">This page does not exist.</span></h1>

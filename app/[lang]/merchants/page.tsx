@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
+import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
 import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard } from '@/components/blocks';
@@ -24,6 +25,7 @@ export default async function Merchants({ params }: P) {
       <JsonLd data={faqJsonLd(m.faq.items)} />
       <main id="main" tabIndex={-1}>
         <section className="hero lit">
+          <Wash seed={1} />
           <div className="wrap">
             <div className="hero-grid">
               <span className="label rise">{m.eyebrow}</span>

@@ -25,6 +25,7 @@ export default async function Creators({ params }: P) {
       <JsonLd data={faqJsonLd(c.faq.items)} />
       <main id="main" tabIndex={-1}>
         <section className="hero lit-pink lit">
+          <Wash seed={2} />
           <div className="wrap">
             <div className="hero-grid">
               <span className="label rise">{c.eyebrow}</span>
@@ -68,7 +69,7 @@ export default async function Creators({ params }: P) {
             slider drives its relief, and the contour interval is fixed, so more
             traffic is steeper ground crossing more lines */}
         <section className="section relief">
-          <Wash variant="field" />
+          <Wash variant="field" seed={6} />
           <div className="wrap">
             <Head label={c.calc.label} title={c.calc.title} lead={c.calc.lead} />
             <div className="sec-body"><CreatorCalc c={c.calc} href="#access" /></div>

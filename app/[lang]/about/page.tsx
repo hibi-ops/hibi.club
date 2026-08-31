@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
+import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
 import { Head, Cols, Access, ThumbBar, Feats, SpecCard } from '@/components/blocks';
 import { getDict, SITE, type Lang } from '@/content';
@@ -22,6 +23,7 @@ export default async function About({ params }: P) {
       <Nav lang={lang} t={t} current="about" />
       <main id="main" tabIndex={-1}>
         <section className="hero lit">
+          <Wash seed={5} />
           <div className="wrap">
             <div className="hero-grid">
               <span className="label rise">{a.eyebrow}</span>

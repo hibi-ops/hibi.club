@@ -23,7 +23,9 @@ import { useEffect, useRef } from 'react';
  * more contours. More traffic, more lines. That is the job; without it this
  * would be the fourth ambient field to get torn out of this project.
  */
-export default function Wash({ variant = 'hero' }: { variant?: 'hero' | 'field' } = {}) {
+export default function Wash(
+  { variant = 'hero', seed = 0 }: { variant?: 'hero' | 'field'; seed?: number } = {},
+) {
   const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,6 +58,12 @@ export default function Wash({ variant = 'hero' }: { variant?: 'hero' | 'field' 
            its section's slider between 0 and 1. */
         uLevel: { value: 0.25 },
         uVariant: { value: variant === 'field' ? 1 : 0 },
+        /* Every hero stands on this sheet, so without an offset all six pages
+           would show the identical hill — one asset repeated, which is what a
+           background looks like. The offset makes them different sheets of the
+           same survey. Irrational multipliers so no two seeds land on the same
+           noise lattice cell. */
+        uSeed: { value: new T.Vector2(seed * 13.73, seed * 7.31) },
       };
 
       const mat = new T.ShaderMaterial({
@@ -66,7 +74,7 @@ export default function Wash({ variant = 'hero' }: { variant?: 'hero' | 'field' 
         fragmentShader: /* glsl */`
           precision highp float;
           uniform float uT, uAspect, uLevel, uVariant;
-          uniform vec2 uP;
+          uniform vec2 uP, uSeed;
           varying vec2 vUv;
 
           vec2 hash(vec2 p){
@@ -93,7 +101,7 @@ export default function Wash({ variant = 'hero' }: { variant?: 'hero' | 'field' 
 
             /* the contour INTERVAL is fixed below, so amplitude is the only
                thing that changes: steeper ground crosses more lines. */
-            float h = terrain(p + vec2(uT * 0.018, uT * 0.011)) * mix(0.75, 2.0, uLevel);
+            float h = terrain(p + uSeed + vec2(uT * 0.018, uT * 0.011)) * mix(0.75, 2.0, uLevel);
 
             /* the pointer is a rise in the ground: contours crowd around it,
                which is what a hill looks like on a survey sheet */

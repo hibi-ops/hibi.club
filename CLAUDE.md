@@ -14,7 +14,13 @@
   驱动**（`hibi:relief` 事件，和 WeekStats 听 `hibi:redeem` 同一个模式，渲染器不拿 props）。
   关键是**等高距固定、只改振幅**——所以拉高不是"画面变花"，是地变陡，陡地穿过更多等高线。
   没有这条它就是第四个被拆掉的氛围场。落点：pricing 的 Estimator、creators 的 CreatorCalc。
-  两个实例不会同页共存；rAF 由 IntersectionObserver 门控。
+  **全站落点**：六个 hero（首页 + 五个子页）、两个计算器段、404。每处一个不同的 `seed`，
+  乘数取无理数——同一张测绘图的不同图幅，而不是同一张贴图铺六遍。
+  404 用它是因为语义正好：图纸画好了、地在那儿、上面什么都没建——**你是在图外，不是不存在**。
+  `.hero.lit.has-wash{background-image:none}`（0,3,0）会压掉 `.lit-pink`（0,1,0）的静态径向，
+  不用另外处理。creators/pricing 每页两个 WebGL context，都由 IntersectionObserver 门控 rAF。
+  注：dev 下 `/en/任意路径` 会落到 Next 内置 404，这是既有行为不是 bug；真正导出成
+  `out/404.html` 的是 `/404/` 路由，要看品牌 404 得访问那里。
 - **不许再发明蓝色**。试过两支，都被否，原因不同，记下来别再试：
   - `#0b5cff` 色相 220°，wordmark 是 196.8°，差 23 度 → **是另一个颜色，不是更亮的**。
     用户："太冷了看上去毫无关联"。
