@@ -5,7 +5,7 @@ import type { Dict } from './types';
 
 export const en: Dict = {
   langName: 'EN',
-  nav: { merchants: 'Merchants', creators: 'Creators', about: 'About', cta: 'Get early access' },
+  nav: { merchants: 'Merchants', creators: 'Creators', pricing: 'Pricing', security: 'Security', about: 'About', cta: 'Get early access' },
   footer: {
     tagline: 'Settlement for walk-in customers.',
     product: 'Product', company: 'Company', contact: 'Contact', legal: 'Legal',
@@ -361,6 +361,122 @@ export const en: Dict = {
       title: 'Pre-seed, New York',
       body: 'We are raising a pre-seed round to run the first cohort of stores. Materials on request.',
       cta: 'Request the deck',
+    },
+  },
+
+  pricing: {
+    meta: {
+      title: 'Hibi pricing — one commission, three rates',
+      description: 'No subscription, no setup fee. A commission on the bill when a customer redeems at your counter: 15% first visit, 8% repeat, 4% long-term. Pilot pricing, New York.',
+    },
+    eyebrow: 'Pricing',
+    title: 'You pay when someone walks in.',
+    lead: 'There is one line on the invoice: a commission on bills that were actually redeemed at your counter. No subscription, no setup fee, and a monthly cap you set.',
+    rates: {
+      label: 'The rates',
+      title: 'One commission. Three rates.',
+      tiers: [
+        { num: '15%', title: 'First visit', body: 'Of the bill, on a customer’s first redemption at your store.', unit: 'of the bill' },
+        { num: '8%', title: 'Repeat visit', body: 'Inside the 12-month window opened by the first visit.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'Once the customer is a regular.', unit: 'of the bill' },
+      ],
+    },
+    calc: {
+      label: 'What it would cost you',
+      title: 'Move the two numbers you already know.',
+      lead: 'Both are pre-set to a typical first-cohort store. Change them to yours — nothing is sent anywhere, and the result carries into the form.',
+    },
+    free: {
+      label: 'Not billed',
+      title: 'Everything else is zero.',
+      items: [
+        'No subscription',
+        'No setup or onboarding fee',
+        'No minimum term',
+        'No charge for posts that bring nobody',
+        'No charge for the creator’s content',
+        'No hardware to buy',
+      ],
+      note: 'A post that produces no walk-in costs you nothing. That is the whole difference from ad spend.',
+    },
+    compare: {
+      label: 'Against ad spend',
+      title: 'The same month, two ways.',
+      body: 'A typical store prepays $300–3,000 a month across Instagram, Google and Yelp. Below is the same month run on commissions instead — the numbers move with the customers, not with the budget.',
+      adsHead: 'Ad spend',
+      hibiHead: 'Hibi',
+      rows: [
+        { k: 'Paid', ads: 'Before anyone shows up', hibi: 'After they redeem at the counter' },
+        { k: 'Priced on', ads: 'Impressions and clicks', hibi: 'The bill they actually paid' },
+        { k: 'If nobody comes', ads: 'You still paid', hibi: 'You owe nothing' },
+        { k: 'Record of who came', ads: 'None', hibi: 'One line per customer' },
+        { k: 'Ceiling', ads: 'Your budget', hibi: 'A cap you set, pausable anytime' },
+      ],
+    },
+    faq: {
+      label: 'Questions',
+      title: 'What merchants ask about price',
+      items: [
+        { q: 'What do I pay if nobody comes?', a: 'Nothing. The commission exists only where a customer redeemed a code at your counter. There is no floor and no subscription underneath it.' },
+        { q: 'Is the reward part of the commission?', a: 'No. The mystery-box reward is a discount you fund from your own menu, capped at the bill. The commission is calculated on the bill and is separate from it.' },
+        { q: 'How is the cap enforced?', a: 'You set a monthly cap. When commissions reach it, your codes stop being billable for the rest of the month; you can raise it, lower it, or pause entirely at any time.' },
+        { q: 'When am I billed?', a: 'Weekly, by card or ACH, for the redemptions in that week. Every line names the creator, the time, the bill and the commission.' },
+        { q: 'Will these rates change?', a: 'These are pilot rates. Final rates are set together with the first cohort of stores and published on this page — merchants in the pilot keep their pilot rate through the pilot.' },
+      ],
+    },
+  },
+
+  security: {
+    meta: {
+      title: 'Hibi security — how a redemption is verified',
+      description: 'What happens to a redemption and to the data around it: one-use codes, counter confirmation, outlier review, weekly settlement. Pilot stage, stated plainly.',
+    },
+    eyebrow: 'Security',
+    title: 'A redemption is a claim about money.',
+    lead: 'So it is treated like one. Every code is single-use, every redemption is confirmed by your own staff at the counter, and anything that looks unlike the rest goes to a person before it is ever billed.',
+    pillars: {
+      label: 'Four commitments',
+      title: 'What we hold ourselves to',
+      cols: [
+        { label: 'Verification', title: 'The counter is the source of truth', body: 'A code is only worth something once your staff confirms the amount on the spot. Nothing bills off a screenshot, a link, or a claim made after the fact.' },
+        { label: 'Payment', title: 'We never touch your card data', body: 'Customers pay you exactly as they do today, on your own terminal. Hibi bills the commission separately and never sits in the customer’s payment path.' },
+        { label: 'Data', title: 'Nothing is sold', body: 'What leaves the system is anonymous and aggregated. You see your customers; the creator sees the customers they sent; nobody buys either list.' },
+        { label: 'Money out', title: 'One weekly settlement', body: 'Commissions settle on a weekly cycle with a line for every redemption. Disputes pause a line rather than a whole invoice.' },
+      ],
+    },
+    redemption: {
+      label: 'The check',
+      title: 'What has to be true before a line is billable',
+      steps: [
+        { title: 'The code is live and unused', body: 'One code per creator per campaign, one use per customer. Spent, expired and paused codes stop at the counter.' },
+        { title: 'Your staff confirms the amount', body: 'The redemption records the bill your staff enters — both sides confirm the same number before anything is written.' },
+        { title: 'The pattern holds up', body: 'Timing, amount, device and location are scored against the store’s own history. Outliers are held for manual review instead of being billed.' },
+      ],
+      note: 'A held line does not delay the rest of your invoice. It either clears into the following week or is dropped.',
+    },
+    data: {
+      label: 'The record',
+      title: 'What we keep, and for whom',
+      rows: [
+        { k: 'Per redemption', v: 'Store, creator code, time, bill amount, commission, first visit or return' },
+        { k: 'The merchant sees', v: 'Their own redemptions, in full' },
+        { k: 'The creator sees', v: 'The customers they sent, and what they earned' },
+        { k: 'The consumer', v: 'Identified only as far as preventing a second use of the same reward' },
+        { k: 'Sold to third parties', v: 'Never' },
+        { k: 'On request', v: 'Export or deletion by email — see Privacy' },
+      ],
+      note: 'This site itself sets no tracking cookies and runs no third-party advertising scripts.',
+    },
+    stage: {
+      label: 'Honest about the stage',
+      title: 'What we have not done yet.',
+      body: 'Hibi is pre-launch. We would rather say what is missing than imply a maturity we have not earned:',
+      items: [
+        'No SOC 2 or ISO audit yet — planned once the first cohort is live',
+        'No published uptime history, because there is no production traffic to report on',
+        'Pilot terms are contracts we can still change with the first cohort',
+      ],
+      cta: 'Ask us anything about this',
     },
   },
 

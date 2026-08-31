@@ -7,6 +7,7 @@ export default function Nav({ lang, t, current }: { lang: Lang; t: Dict; current
   const links: { key: PathKey; label: string }[] = [
     { key: 'merchants', label: t.nav.merchants },
     { key: 'creators', label: t.nav.creators },
+    { key: 'pricing', label: t.nav.pricing },
     { key: 'about', label: t.nav.about },
   ];
   return (

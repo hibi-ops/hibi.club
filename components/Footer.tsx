@@ -17,7 +17,8 @@ export default function Footer({ lang, t }: { lang: Lang; t: Dict }) {
             <span className="label gray">{t.footer.product}</span>
             <Link href={href(lang, 'merchants')}>{t.nav.merchants}</Link>
             <Link href={href(lang, 'creators')}>{t.nav.creators}</Link>
-            <Link href={`${href(lang)}#access`}>{t.nav.cta}</Link>
+            <Link href={href(lang, 'pricing')}>{t.nav.pricing}</Link>
+            <Link href={href(lang, 'security')}>{t.nav.security}</Link>
           </div>
           <div>
             <span className="label gray">{t.footer.company}</span>

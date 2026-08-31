@@ -20,7 +20,7 @@ export const LANGS = ['en', 'zh'] as const;
 export type Lang = (typeof LANGS)[number];
 export const DEFAULT_LANG: Lang = 'en';
 
-export const PATHS = ['', 'merchants', 'creators', 'about', 'legal'] as const;
+export const PATHS = ['', 'merchants', 'creators', 'pricing', 'security', 'about', 'legal'] as const;
 export type PathKey = (typeof PATHS)[number];
 
 export function href(lang: Lang, path: PathKey | string = '') {

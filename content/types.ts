@@ -35,7 +35,7 @@ export type FormCopy = {
 
 export type Dict = {
   langName: string;
-  nav: { merchants: string; creators: string; about: string; cta: string };
+  nav: { merchants: string; creators: string; pricing: string; security: string; about: string; cta: string };
   footer: {
     tagline: string;
     product: string; company: string; contact: string; legal: string;
@@ -137,6 +137,33 @@ export type Dict = {
     team: { label: string; title: string; founder: { name: string; role: string; bio: string }; body: string };
     hiring: { label: string; title: string; roles: Col[]; cta: string };
     investors: { label: string; title: string; body: string; cta: string };
+  };
+
+  /* The authoritative price page. Merchants keeps a summary and links here —
+     Stripe's pattern: one page owns the numbers, everything else cites it. */
+  pricing: {
+    meta: Meta;
+    eyebrow: string; title: string; lead: string;
+    rates: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[] };
+    calc: { label: string; title: string; lead: string };
+    free: { label: string; title: string; items: string[]; note: string };
+    compare: {
+      label: string; title: string; body: string;
+      rows: { k: string; ads: string; hibi: string }[];
+      adsHead: string; hibiHead: string;
+    };
+    faq: { label: string; title: string; items: QA[] };
+  };
+
+  /* Not a trust-badge page: what actually happens to a redemption and to the
+     data around it, at pilot stage, stated plainly. */
+  security: {
+    meta: Meta;
+    eyebrow: string; title: string; lead: string;
+    pillars: { label: string; title: string; cols: Col[] };
+    redemption: { label: string; title: string; steps: Step[]; note: string };
+    data: { label: string; title: string; rows: { k: string; v: string }[]; note: string };
+    stage: { label: string; title: string; body: string; items: string[]; cta: string };
   };
 
   legal: {

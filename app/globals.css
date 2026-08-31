@@ -882,6 +882,34 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 
 /* ===== pricing bar (creators page) ===== */
 
+/* ===== comparison table ==================================================
+   Two columns, one argument. Typeset with the site's table grammar: an ink
+   rule under the head, hairlines between rows, and the Hibi column set in ink
+   while the alternative recedes — the contrast IS the content.
+   ========================================================================= */
+.cmp{width:100%;border-collapse:collapse;text-align:left;}
+.cmp th,.cmp td{padding:var(--s3) var(--s4) var(--s3) 0;vertical-align:baseline;}
+.cmp thead th{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--gray-s);padding-bottom:var(--s1);border-bottom:1px solid var(--ink);}
+.cmp tbody tr{border-bottom:var(--edge-2);transition:background var(--t1) var(--ease);}
+@media(hover:hover){.cmp tbody tr:hover{background:var(--snow);}}
+.cmp tbody th{font-size:14px;font-weight:600;width:22%;}
+.cmp td{font-size:14.5px;line-height:1.55;width:39%;}
+.cmp-ads{color:var(--gray-s);}
+.cmp-hibi{color:var(--ink);font-weight:500;}
+@media(max-width:768px){
+  /* a two-column argument cannot shrink; it restacks into labelled pairs */
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto;}
+  .cmp thead{display:none;}
+  .cmp tbody tr{padding:var(--s3) 0;}
+  .cmp th,.cmp td{padding:0;}
+  .cmp tbody th{margin-bottom:var(--s1);}
+  .cmp td{padding-left:var(--s3);position:relative;}
+  .cmp td+td{margin-top:var(--s0);}
+  .cmp td::before{content:'';position:absolute;left:0;top:.62em;width:6px;height:1px;background:var(--mist);}
+  .cmp-hibi::before{background:var(--ink) !important;}
+}
+
 /* ===== FAQ =============================================================== */
 .faq{background:var(--snow);border:var(--edge);border-radius:var(--r-lg);overflow:hidden;}
 .faq details+details{border-top:var(--edge-2);}
