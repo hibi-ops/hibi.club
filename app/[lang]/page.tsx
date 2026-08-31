@@ -91,11 +91,12 @@ export default async function Home({ params }: P) {
         </section>
 
         {/* THREE SIDES */}
-        {/* The one spread that goes electric. It earns it: this is the section
-            where the whole model is stated — three parties, one transaction —
-            and a page needs a second anchor after the hero or it reads as one
-            good screen followed by documentation. */}
-        <section className="section tone-hibi">
+        {/* The page's second anchor. It earns one: this is where the whole
+            model is stated — three parties, one transaction — and without it
+            the page reads as one good screen followed by documentation.
+            Ink, not a colour plane. A 600px field of any hue has to earn
+            itself; ink is right by construction. */}
+        <section className="section tone-ink">
           <div className="wrap">
             <Head label={h.sides.label} title={h.sides.title} wide />
             <div className="sec-body"><Split s={h.sides.split} /></div>
