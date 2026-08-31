@@ -37,8 +37,8 @@
   --s5:32px; --s6:48px; --s7:64px; --s8:96px;
 
   /* type scale — fluid */
-  --t-hero:clamp(46px, 8.6vw, 124px);
-  --t-h1:clamp(28px, 3.4vw, 44px);
+  --t-hero:clamp(35px, 8.4vw, 124px);
+  --t-h1:clamp(26px, 3.4vw, 44px);
   --t-h2:clamp(22px, 2.4vw, 32px);
   --t-h3:clamp(16px, 1.2vw, 18px);
   --t-num:clamp(56px, 10vw, 148px);
@@ -129,7 +129,7 @@ html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1{font-weight:600;}
 /* CJK glyphs are full-width, so a line that fits in Latin at 84px runs off at
    the same size in Chinese. Drop the display sizes one rung; the hand-broken
    lines then hold without folding a second time. */
-html[lang="zh-Hans"] .hero-title{font-size:clamp(38px,6.6vw,92px);line-height:1.12;}
+html[lang="zh-Hans"] .hero-title{font-size:clamp(29px,6.4vw,92px);line-height:1.14;}
 html[lang="zh-Hans"] .h1{font-size:clamp(27px,3.4vw,44px);line-height:1.24;}
 html[lang="zh-Hans"] .h2{font-size:clamp(22px,2.4vw,32px);line-height:1.3;}
 html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1,html[lang="zh-Hans"] .h2{letter-spacing:0;}
@@ -346,6 +346,10 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
   body{padding-bottom:72px;}
   .nav-right .btn-nav{display:none;}
   .hero .cta-row .btn-primary{display:none;}
+  /* with the primary action in the thumb bar, a bordered button here reads as
+     a competing CTA; it steps down to a link */
+  .hero .cta-row .btn-second{background:none;border-color:transparent;box-shadow:none;
+    padding:0;height:auto;color:var(--brandInk);}
 }
 
 /* ===== type ==============================================================
@@ -475,15 +479,19 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .nav-mobile-links{display:none;}
 @media(max-width:720px){
   .nav{height:auto;}
+  .nav-in{height:46px;}
+  .wordmark{height:22px;}
+  .lang a{padding:3px 7px;font-size:11.5px;}
   /* a row of equal segments, not a scroller: three items always fit, and
      overflow:auto was drawing a scrollbar corner that read as a stray widget */
   /* auto-fit, not a hard column count: adding a fifth link should not wrap
      the row (adding the fourth silently did) */
-  .nav-mobile-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));
-    gap:var(--s0);padding:var(--s0) 0 var(--s1);font-size:13.5px;font-weight:500;
+  /* chrome was eating 12% of an 812px screen; this row is now 40px */
+  .nav-mobile-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));
+    gap:2px;padding:0 0 var(--s0);font-size:13px;font-weight:500;
     border-top:var(--edge-2);}
   .nav-mobile-links a{color:var(--ink-2);white-space:nowrap;text-align:center;
-    padding:7px var(--s1);border-radius:var(--r-sm);}
+    padding:9px var(--s0);border-radius:var(--r-sm);}
   .nav-mobile-links a[aria-current="page"]{color:var(--ink);background:rgba(21,20,26,.06);}
 }
 
@@ -494,7 +502,14 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 /* The headline is the layout: full measure, cut tight, sitting OVER the page
    grid. The ledger is pulled up into its space — overlap, not slots. */
 .hero{padding:var(--s6) 0 0;}
-@media(max-width:900px){.hero{padding:var(--s5) 0 0;}}
+@media(max-width:900px){.hero{padding:var(--s4) 0 0;}}
+@media(max-width:640px){
+  .hero{padding:var(--s3) 0 0;}
+  .hero .hero-title{margin:var(--s1) 0 0;}
+  .hero-sub{margin-top:var(--s4);gap:var(--s4);padding-bottom:var(--s3);}
+  /* the facts read as one caption block, not three spaced lines */
+  .hero-foot{margin-top:var(--s3);gap:6px var(--s3);font-size:12.5px;}
+}
 .hero-grid{display:block;position:relative;}
 .hero .hero-title{margin:var(--s2) 0 0;max-width:none;position:relative;z-index:1;}
 /* two columns only when there IS a second thing; a lone copy column would
@@ -553,6 +568,13 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .hero-title .line{display:block;width:fit-content;padding:0 .06em;margin-left:-.06em;}
 .hero-title .line:nth-child(2){margin-left:clamp(20px,3.5vw,64px);}
 .hero-title .line:nth-child(3){margin-left:clamp(40px,7vw,128px);}
+/* On a phone the indents steal the very width the lines need, so each step
+   wraps and the staircase collapses into rubble. The gesture needs room;
+   below that room it is simply switched off. */
+@media(max-width:640px){
+  .hero-title .line:nth-child(2),
+  .hero-title .line:nth-child(3){margin-left:0;}
+}
 /* inversion at the scale of typography itself: the cut, not a fade */
 @media(hover:hover){
   .hero-title .line:hover{background:var(--ink);color:var(--snow);transition:none;}
@@ -566,6 +588,9 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   color:transparent;-webkit-text-stroke:1.5px rgba(21,20,26,.10);
   user-select:none;pointer-events:none;transition:translate .6s var(--ease);}
 @media(max-width:900px){.hibi-mark{font-size:110px;-webkit-text-stroke:1px rgba(21,20,26,.10);}}
+/* at phone width there is no clear margin for it to stand in — it would sit
+   under the headline, which is the one thing that must stay clean */
+@media(max-width:640px){.hibi-mark{display:none;}}
 .hero-title .line.accent{color:var(--brandInk);}
 /* the facts belong to the CTA block, so they sit closer to it than the CTA
    sits to the paragraph above */
@@ -728,6 +753,16 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   font-size:clamp(64px,7vw,104px);font-weight:600;line-height:1;letter-spacing:-.02em;
   color:transparent;-webkit-text-stroke:1.5px rgba(21,20,26,.10);
   font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;}
+@media(max-width:768px){
+  /* stacked, a giant outline numeral at the right edge numbers nothing; it
+     rejoins the stage label as a small ordinal, which is what it always was */
+  /* Stacked, the order is already stated by the stacking — and by the labels
+     themselves, which run post → counter → bill. The numeral would only add an
+     alignment problem for information the reader already has, so it goes.
+     (It could not be made inline anyway: .wi-col is a flex container, which
+     blockifies its children.) */
+  .wi-ord{display:none;}
+}
 .wi-col>*:not(.wi-ord){position:relative;z-index:1;}
 .wi-t{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
   color:var(--gray-s);margin-bottom:var(--s3);}
@@ -838,6 +873,15 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .sg-2{background:rgba(82,182,221,.45);}
 .tone-ink .sg-0{background:var(--snow);}
 .split-keys{display:flex;gap:var(--s6);flex-wrap:wrap;margin-top:var(--s3);}
+@media(max-width:640px){
+  /* three shares are one set — a wrapped third orphaned below two others reads
+     as unrelated. Rows keep them together at any width. */
+  .split-keys{display:grid;grid-template-columns:1fr auto;gap:0;}
+  .split-keys>div{display:grid;grid-template-columns:subgrid;grid-column:1/-1;
+    align-items:baseline;padding:var(--s1) 0;}
+  .split-keys>div+div{border-top:var(--edge-2);}
+  .split-keys dd{font-size:16px;}
+}
 .split-keys div{display:flex;flex-direction:column;gap:2px;}
 .split-keys dt{display:flex;align-items:center;gap:var(--s1);font-size:13px;color:var(--gray-s);}
 .split-keys dd{font-size:19px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums lining-nums;}
@@ -918,7 +962,10 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .cmp-hibi{color:var(--ink);font-weight:500;}
 @media(max-width:768px){
   /* a two-column argument cannot shrink; it restacks into labelled pairs */
-  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto;}
+  /* `.cmp tbody th` (0,1,2) outranks `.cmp th` (0,1,1), so the desktop 22%
+     survived here and squeezed the row labels into two lines */
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;}
+  .cmp tbody th,.cmp td{width:auto;}
   .cmp thead{display:none;}
   .cmp tbody tr{padding:var(--s3) 0;}
   .cmp th,.cmp td{padding:0;}
