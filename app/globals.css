@@ -1345,3 +1345,61 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 
 
 
+
+
+
+
+
+
+/* ===== dither edge =======================================================
+   The ink plate used to begin and end on a hard cut. It now dissolves: six
+   rows of paper-coloured dots shrinking inward, so the black is PRINTED onto
+   the sheet instead of pasted over it. Coverage steps 92% → 66% → 43% → 26% → 13% → 3%.
+   This is the half of Y2K worth having — 1-bit, ordered, no colour — and it
+   is the opposite of a gradient in the way that matters here: every dot has a
+   hard edge (the stop moves 0.1px) and the ramp is countable steps, not
+   smoothing. Same pen as the hairline rules and the outline type.
+   10px pitch, not 7: at 7 the dots stop reading as dots and become noise, and
+   a halftone that you cannot count the cells of is just a texture swatch.
+   Rows alternate a half-pitch in x — a lattice, not a grid.
+   The positions MUST live in background-position; `radial-gradient(...) left
+   0 top 0` is `background` SHORTHAND syntax and silently voids the whole
+   background-image declaration.
+   Print flattens it: .tone-ink's print rule is a background shorthand with
+   !important, which clears background-image along with the colour.
+   ========================================================================= */
+.tone-ink{
+  background-image:
+    radial-gradient(circle at 5px 5px,var(--paper) 5.4px,transparent 5.5px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.6px,transparent 4.7px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.7px,transparent 3.8px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.9px,transparent 3px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.0px,transparent 2.1px),
+    radial-gradient(circle at 5px 5px,var(--paper) 1.0px,transparent 1.1px),
+    radial-gradient(circle at 5px 5px,var(--paper) 5.4px,transparent 5.5px),
+    radial-gradient(circle at 5px 5px,var(--paper) 4.6px,transparent 4.7px),
+    radial-gradient(circle at 5px 5px,var(--paper) 3.7px,transparent 3.8px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.9px,transparent 3px),
+    radial-gradient(circle at 5px 5px,var(--paper) 2.0px,transparent 2.1px),
+    radial-gradient(circle at 5px 5px,var(--paper) 1.0px,transparent 1.1px);
+  background-position:
+    left 5px top 0px,
+    left 0px top 10px,
+    left 5px top 20px,
+    left 0px top 30px,
+    left 5px top 40px,
+    left 0px top 50px,
+    left 5px bottom 0px,
+    left 0px bottom 10px,
+    left 5px bottom 20px,
+    left 0px bottom 30px,
+    left 5px bottom 40px,
+    left 0px bottom 50px;
+  background-repeat:repeat-x;
+  background-size:10px 10px;
+  /* the dissolve needs its own room: 6 rows x 10px, and the section's normal
+     top padding is 36-56px, so the first label landed inside the dot field
+     and became unreadable. The plate gets a margin the way a printed one does. */
+  padding-top:calc(clamp(36px,4vw,56px) + 60px);
+  padding-bottom:calc(clamp(36px,4vw,56px) + 60px);
+}
