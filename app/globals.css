@@ -26,20 +26,26 @@
   --okT:#04794d; --warnT:#ac5213; --infoT:#1c7198;
   --inkB:#102c37; --inkB2:#17414f;
   --gGreen:#31a074; --gSky:#2897c3; --gPink:#ee4f8e; --gOrange:#f35d12;
-  /* ---- blue · the brand colour, taken electric ---------------------------
-     #07678d was a muted teal — a blue that has already apologised. Same hue
-     family, saturation and lightness pushed until it reads as a signal rather
-     than a shade. This is the ACTION colour: buttons, labels, the marker bar.
-     Not a new hue in the system; the old one at full volume.
-     --sky (#52b6dd) does NOT follow it. Sky means INFORMATION — the amounts
-     inside the ledger card, the wordmark face. Data and action must not be
-     the same blue, or the card starts looking clickable.
-     Contrast, measured: snow on volt 5.25:1 (passes at the 11px the eyebrow
-     needs); volt on snow 5.25:1; volt on ink only 3.5:1, which is why dark
-     grounds keep sky instead of following volt down. */
+  /* ---- blue · the logo's own hue, saturation opened up -------------------
+     The whole family is locked to ONE hue angle. Measured: the wordmark's
+     --sky is 196.8deg, --hibi 196.9deg, --act 196.1deg. Nothing here is a
+     new colour — it is #52b6dd with the saturation taken from 67% to 100%
+     and the lightness moved to whatever each job needs for contrast.
+     (An earlier pass sat at 220deg. That is 23deg off the logo, which is a
+     different hue, not a brighter one — it read as unrelated and cold.)
+
+       --sky  #52b6dd  INFORMATION. Ledger amounts, wordmark face. Untouched.
+       --hibi #00a1e0  THE MARK. Grounds only, always with ink type: 6.3:1
+                       that way, and only 2.9:1 with white, so it can never
+                       carry white text.
+       --act  #007ba8  ACTION. Buttons and labels — dark enough for white
+                       type (4.8:1) and for ink type on snow (4.8:1).
+
+     Data and action stay separate blues, or the ledger card starts looking
+     clickable. */
   --brand:#52b6dd;
-  --volt:#0b5cff; --voltD:#0740c2;
-  --brandInk:var(--volt); --brandD:var(--volt); --brandP:var(--voltD);
+  --hibi:#00a1e0; --act:#007ba8; --actD:#025f82;
+  --brandInk:var(--act); --brandD:var(--act); --brandP:var(--actD);
 
   /* ---- spacing · 4px base ------------------------------------------------
      An 8px-only ladder has no rung between 8 and 16, which is exactly the gap
@@ -162,8 +168,8 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
 @media(max-width:768px){.c12,.c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 4}}
 .tone-paper{background:var(--paper);}
 .tone-ink{background:var(--ink);color:var(--snow);}
-/* volt on ink is 3.5:1 — too thin for an 11px tracked cap. Dark grounds keep
-   sky, which clears 7.9:1 there and is the wordmark's own hue. */
+/* --act on ink is 3.84:1 — too thin for an 11px tracked cap. Dark grounds
+   take sky instead, same hue, 7.95:1 there. */
 .tone-ink .label{color:var(--sky);}
 .tone-ink .muted{color:var(--mist);}
 /* The px values that survive below are optical, not layout: baseline nudges on
@@ -412,7 +418,7 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
    than on .section so the run stays contiguous: a section without a header
    would otherwise burn an index and leave a hole in the sequence. */
 main{counter-reset:sec;}
-.lbl::before{content:counter(sec,decimal-leading-zero);color:var(--volt);
+.lbl::before{content:counter(sec,decimal-leading-zero);color:var(--act);
   font-size:1.5em;letter-spacing:.02em;margin-right:.7em;
   font-variant-numeric:tabular-nums lining-nums;vertical-align:-.06em;}
 .tone-ink .lbl::before{color:var(--snow);}
@@ -458,11 +464,11 @@ main{counter-reset:sec;}
 .btn-lg{height:42px;padding:0 var(--s4);font-size:15px;}
 .btn-primary{background-color:var(--brandD);color:var(--snow);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),var(--sh);}
-/* was a 4%-lighter blue: a hover you had to go looking for. The button now
-   rests at full volt and snaps to ink on contact — no transition, the same
-   cut as the headline bar. Inverting to black is the only move left once the
-   rest state is already the loudest colour on the page. */
-@media(hover:hover){.btn-primary:hover{background-color:var(--ink);color:var(--snow);transition:none;}}
+/* was a 4%-lighter blue: a hover you had to go looking for. It now snaps up
+   the same hue — --act to --hibi, white type to ink — which is precisely the
+   marker bar's move, so the button and the headings answer the pointer in the
+   same language. No transition. */
+@media(hover:hover){.btn-primary:hover{background-color:var(--hibi);color:var(--ink);transition:none;}}
 /* pressed goes darker, never lighter — lighter reads as released */
 .btn-primary:active{background-color:var(--brandP);box-shadow:inset 0 1px 2px rgba(0,0,0,.18);}
 /* secondary is a bordered button, the macOS counterpart to a filled one:
@@ -595,10 +601,10 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .hl{-webkit-box-decoration-break:clone;box-decoration-break:clone;
   padding:0 .08em;margin-left:-.08em;}
 @media(hover:hover){
-  /* the bar is volt now, not ink. Same hard cut, same zero transition — the
-     gesture is untouched, only its volume. Snow-on-volt is legible on BOTH
+  /* the bar is hibi now, not ink. Same hard cut, same zero transition — the
+     gesture is untouched, only its volume. Ink-on-hibi is legible on BOTH
      grounds, so the dark-section variant no longer needs its own rule. */
-  .hl:hover,.tone-ink .hl:hover{background:var(--volt);color:var(--snow);transition:none;}
+  .hl:hover,.tone-ink .hl:hover{background:var(--hibi);color:var(--ink);transition:none;}
 }
 
 /* a staircase, not a paragraph: each line steps in, and the inversion bars
@@ -615,7 +621,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 }
 /* inversion at the scale of typography itself: the cut, not a fade */
 @media(hover:hover){
-  .hero-title .line:hover{background:var(--volt);color:var(--snow);transition:none;}
+  .hero-title .line:hover{background:var(--hibi);color:var(--ink);transition:none;}
 }
 /* Hibi IS 日々. Set vertically, outline only, bleeding off the top edge —
    a signature, not a watermark. */
@@ -631,20 +637,19 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* The payoff line is struck through and left that way — a permanently-on bar
    teaches the gesture: you see the "on" state here, then find you can fire it
    yourself on every other heading. It does not compete with the ledger card
-   six inches away, because that card is sky and this is volt: data and action
-   are deliberately different blues.
-   Hover swaps the roles rather than the hue — ink ground, sky type, the one
-   place on the page the two blues are allowed to meet. */
-.hero-title .line.accent{background:var(--volt);color:var(--snow);}
+   six inches away: that card is sky as TYPE, this is hibi as GROUND. Same
+   hue, opposite roles, so they read as one family without competing.
+   Hover swaps the roles rather than the hue — ink ground, hibi type. */
+.hero-title .line.accent{background:var(--hibi);color:var(--ink);}
 @media(hover:hover){
-  .hero-title .line.accent:hover{background:var(--ink);color:var(--sky);}
+  .hero-title .line.accent:hover{background:var(--ink);color:var(--hibi);}
 }
 /* the facts belong to the CTA block, so they sit closer to it than the CTA
    sits to the paragraph above */
 /* The eyebrow is the page's other static mark: a label struck through.
    Square corners — a rounded chip would be a badge, and a badge is a softer,
    different object than a mark made with a pen. */
-.hero .label{background:var(--volt);color:var(--snow);display:inline-block;
+.hero .label{background:var(--hibi);color:var(--ink);display:inline-block;
   padding:3px 7px 2px;margin-left:-7px;}
 .hero-foot{margin-top:var(--s4);display:flex;gap:var(--s1) var(--s4);flex-wrap:wrap;
   color:var(--gray-s);font-size:13px;letter-spacing:.01em;}
@@ -1316,10 +1321,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   .card,.rows,.faq,.rates,.list,.ledger-card,.spec-card{border:1px solid #999;box-shadow:none;}
   .lit,.lit-pink,.lit-green,.lit-orange,.tone-paper{background:#fff !important;background-image:none !important;}
   .tone-ink{background:#fff !important;color:#000 !important;}
-  /* the dark tones flatten to white on paper, so every child that was given an
-     explicit light colour has to come back to ink or it prints as nothing */
-  .tone-volt,.tone-volt *{background-color:transparent !important;color:#000 !important;}
-  .tone-volt .sg-0,.tone-volt .sg-1,.tone-volt .sg-2{background-color:#000 !important;}
+  .tone-hibi{background:#fff !important;}
   a[href^="http"]::after{content:' (' attr(href) ')';font-size:11px;color:#555;}
   body{font-size:11pt;padding-bottom:0;}
 }
@@ -1337,61 +1339,28 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    use. The cheapest possible place for the accent to appear, and the one with
    the least excuse needed: selecting text IS highlighting it.
    ========================================================================= */
-::selection{background:var(--volt);color:var(--snow);text-shadow:none;}
+::selection{background:var(--hibi);color:var(--ink);text-shadow:none;}
 
 
-/* ===== tone-volt · the electric ground ====================================
-   Written as a MODIFIER of .tone-ink rather than a third tone: the markup
-   carries both classes, so all 35 dark-ground rules (hairlines, inverted
-   buttons, white headings, the white section index) apply untouched and only
-   the handful of things that must actually differ are restated here. A real
-   third tone would have meant maintaining two parallel sets forever.
-   Everything below is measured against volt's L=0.1501.
+/* ===== tone-hibi · the one full-bleed spread ==============================
+   #00a1e0 can only carry ink type, so this is a LIGHT tone, not a dark one —
+   which means it needs almost nothing: the default ink headings, ink body and
+   hairline borders all already work on it. Only the greys fail (--gray-s is
+   1.7:1 here) and the two things that would be hibi-on-hibi.
    ========================================================================= */
-.tone-volt{background:var(--volt);}
-/* sky on volt is 2.25:1 — the two blues are too close to sit on each other */
-.tone-volt .label{color:var(--snow);}
-/* --mist is 3.82:1 here, under the body-text floor; 90% white is 4.53:1 */
-.tone-volt .muted,.tone-volt .cols p,.tone-volt .step p,.tone-volt .row p,
-.tone-volt .lead,.tone-volt .feat .fb,.tone-volt .split-keys dt,
-.tone-volt .split-cap,.tone-volt .split-note{color:rgba(255,255,255,.9);}
-.tone-volt .checks svg{color:var(--snow);}
-/* the marker bar cannot be volt on volt — on this ground the cut goes to ink */
+.tone-hibi{background:var(--hibi);}
+.tone-hibi .label,.tone-hibi .label.gray,.tone-hibi .lbl::before{color:var(--ink);}
+/* --gray-s is 1.70:1 on this ground; --ink-2 is 7.06:1 */
+.tone-hibi .muted,.tone-hibi .cols p,.tone-hibi .feat .fb,.tone-hibi .split-keys dt,
+.tone-hibi .split-cap,.tone-hibi .split-note,.tone-hibi .lead{color:var(--ink-2);}
+/* the marker bar cannot be hibi on hibi — on this ground the cut goes to ink */
 @media(hover:hover){
-  .tone-volt .hl:hover{background:var(--ink);color:var(--snow);transition:none;}
+  .tone-hibi .hl:hover{background:var(--ink);color:var(--hibi);transition:none;}
 }
-/* the split bar was ink / volt / sky — two of those vanish here. A three-step
-   white ladder instead: the shares stay ordered, which is all the bar says. */
-.tone-volt .sg-1{background:rgba(255,255,255,.55);}
-.tone-volt .sg-2{background:rgba(255,255,255,.26);}
+/* the split bar's third share was sky at 45% — invisible against its own hue.
+   An ink ladder instead: the shares stay ordered, which is all the bar says. */
+.tone-hibi .sg-1{background:rgba(21,20,26,.55);}
+.tone-hibi .sg-2{background:rgba(21,20,26,.24);}
 
 
-/* ===== masthead ==========================================================
-   The nav was the last frosted-glass object on the site, which made it the
-   last thing here that looks like a 2021 SaaS template — and this file's own
-   header has said "no glass" since v2. It is now a hard ink band: chrome that
-   sits ON the page instead of dissolving into it, and the one horizontal that
-   holds the whole layout down while the type underneath goes to 168px.
-   Solid, not translucent: blur means the band's colour changes as content
-   scrolls under it, and a masthead that flickers between grounds is not a
-   masthead. The volt CTA reads as a plane of pure colour against it.
-   ========================================================================= */
-.nav{background:var(--ink);border-bottom:none;
-  -webkit-backdrop-filter:none;backdrop-filter:none;}
-@supports not (backdrop-filter:blur(1px)){.nav{background:var(--ink);}}
-.nav .wordmark{--shadow:var(--sky);--face:var(--snow);}
-.nav-links a,.nav-mobile-links a{color:rgba(255,255,255,.66);}
-/* the same inversion as the marker bar: hard cut to a white plate, no fade */
-@media(hover:hover){
-  .nav-links a:hover,.nav-mobile-links a:hover{background:var(--snow);color:var(--ink);transition:none;}
-}
-.nav-links a[aria-current="page"],.nav-mobile-links a[aria-current="page"]{
-  color:var(--snow);background:rgba(255,255,255,.14);}
-.nav-mobile-links{border-top-color:rgba(255,255,255,.13);}
-/* the language control keeps its segmented shape, inverted */
-.lang{background:rgba(255,255,255,.11);}
-.lang a{color:rgba(255,255,255,.62);}
-@media(hover:hover){.lang a:hover{color:var(--snow);}}
-.lang a[aria-current="true"]{background:var(--snow);color:var(--ink);box-shadow:none;}
-/* focus has to be visible on ink, and volt at 3.5:1 against it is not */
-.nav :focus-visible{outline-color:var(--snow);}
+
