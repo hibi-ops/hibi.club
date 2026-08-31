@@ -28,6 +28,19 @@
   --gGreen:#31a074; --gSky:#2897c3; --gPink:#ee4f8e; --gOrange:#f35d12;
   --brand:#52b6dd; --brandInk:#13749a; --brandD:#07678d; --brandP:#054a65;
 
+  /* ---- acid · the one saturated hit --------------------------------------
+     Everything above is either ink or information (sky = data, green/orange =
+     status). None of it can shout, which is why the page had one volume.
+     Acid is the shout. Chartreuse and not magenta/purple: those read Y2K and
+     2019-gradient respectively, both of which were rejected here. Chartreuse
+     is HIGHLIGHTER ink, so on this site it arrives with a job already — the
+     signature gesture is a highlight, and this is what a highlighter is.
+     It carries no status meaning (it is not green, not amber), so it cannot
+     lie about state.
+     LAW: acid is a GROUND, never a text colour. #d6f930 as text on white is
+     1.2:1 — invisible. Ink on acid is 15.1:1. Two hits per screen, maximum. */
+  --acid:#d6f930;
+
   /* ---- spacing · 4px base ------------------------------------------------
      An 8px-only ladder has no rung between 8 and 16, which is exactly the gap
      a dense desktop layout lives in (label-to-value, icon-to-text, row padding).
@@ -37,7 +50,7 @@
   --s5:32px; --s6:48px; --s7:64px; --s8:96px;
 
   /* type scale — fluid */
-  --t-hero:clamp(35px, 8.4vw, 124px);
+  --t-hero:clamp(35px, 9.2vw, 168px);
   --t-h1:clamp(26px, 3.4vw, 44px);
   --t-h2:clamp(22px, 2.4vw, 32px);
   --t-h3:clamp(16px, 1.2vw, 18px);
@@ -99,8 +112,6 @@ img,svg{display:block;max-width:100%;}
 button{font:inherit;}
 /* selection: a wash, not a fill. A saturated highlight behind body text
    fights the text it is meant to mark. */
-::selection{background:rgba(82,182,221,.28);color:var(--ink);}
-.tone-ink ::selection{background:rgba(82,182,221,.36);color:var(--snow);}
 /* one focus ring, everywhere, and it follows the corner of what it wraps */
 :focus-visible{outline:2px solid var(--brandD);outline-offset:2px;border-radius:var(--r-sm);}
 .btn:focus-visible{outline-offset:3px;}
@@ -129,7 +140,7 @@ html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1{font-weight:600;}
 /* CJK glyphs are full-width, so a line that fits in Latin at 84px runs off at
    the same size in Chinese. Drop the display sizes one rung; the hand-broken
    lines then hold without folding a second time. */
-html[lang="zh-Hans"] .hero-title{font-size:clamp(29px,6.4vw,92px);line-height:1.14;}
+html[lang="zh-Hans"] .hero-title{font-size:clamp(29px,7vw,124px);line-height:1.1;}
 html[lang="zh-Hans"] .h1{font-size:clamp(27px,3.4vw,44px);line-height:1.24;}
 html[lang="zh-Hans"] .h2{font-size:clamp(22px,2.4vw,32px);line-height:1.3;}
 html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1,html[lang="zh-Hans"] .h2{letter-spacing:0;}
@@ -151,7 +162,10 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
 @media(max-width:768px){.c12,.c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 4}}
 .tone-paper{background:var(--paper);}
 .tone-ink{background:var(--ink);color:var(--snow);}
-.tone-ink .label{color:var(--sky);}
+/* On ink the label is a marker, not information — and sky is reserved for
+   information. Acid as text is only barred on light grounds; on ink it is
+   11.9:1. This is what makes the dark sections read as the same album. */
+.tone-ink .label{color:var(--acid);}
 .tone-ink .muted{color:var(--mist);}
 /* The px values that survive below are optical, not layout: baseline nudges on
    an icon against text, the 2px slot inside a segmented control, the 6px inset
@@ -368,7 +382,8 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .k-head{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gray-s);}
 .ordinal{font-size:13px;font-weight:600;letter-spacing:0;color:var(--ink-2);
   font-variant-numeric:tabular-nums lining-nums;}
-.hero-title{font-size:var(--t-hero);font-weight:500;letter-spacing:-.04em;line-height:.96;text-wrap:balance;}
+.hero-title{font-size:var(--t-hero);font-weight:500;letter-spacing:-.052em;line-height:.9;text-wrap:balance;}
+@media(max-width:640px){.hero-title{letter-spacing:-.035em;line-height:.96;}}
 .h1{font-size:var(--t-h1);font-weight:500;letter-spacing:-.028em;line-height:1.08;text-wrap:balance;}
 .h2{font-size:var(--t-h2);font-weight:500;letter-spacing:-.02em;line-height:1.18;text-wrap:balance;}
 .h3{font-size:var(--t-h3);font-weight:600;letter-spacing:-.008em;line-height:1.35;}
@@ -393,7 +408,25 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .stack-l>*+*{margin-top:var(--s4);}
 /* section header: the label row is a caption for the heading, so it sits
    tight against it. The old 24px gap made them read as separate blocks. */
-.lbl{display:block;margin-bottom:var(--s2);}
+.lbl{display:block;margin-bottom:var(--s2);counter-increment:sec;}
+/* Sections are numbered like a track listing. The counter sits on .lbl rather
+   than on .section so the run stays contiguous: a section without a header
+   would otherwise burn an index and leave a hole in the sequence. */
+main{counter-reset:sec;}
+.lbl::before{content:counter(sec,decimal-leading-zero);color:var(--ink);
+  font-size:1.5em;letter-spacing:.02em;margin-right:.7em;
+  font-variant-numeric:tabular-nums lining-nums;vertical-align:-.06em;}
+.tone-ink .lbl::before{color:var(--snow);}
+@media(min-width:1296px){
+  /* Running down the gutter the number leads and the name follows — the two
+     halves of a catalogue line, stacked rather than set side by side.
+     `horizontal-tb` on the pseudo-element only: vertical-rl lays Latin digits
+     on their side, and a rotated index is a decoration, whereas an upright one
+     is a number you can read. Sized to be the anchor of the section — at 11px
+     it was a footnote to a heading it is supposed to be indexing. */
+  .label.lbl::before{writing-mode:horizontal-tb;display:block;text-align:center;
+    font-size:3.4em;line-height:1;letter-spacing:-.03em;margin:0 0 .34em -.1em;}
+}
 /* set on the left edge, reading downward — the Japanese editorial habit the
    brand name comes from. Wide screens only; it needs the gutter to stand in. */
 @media(min-width:1296px){
@@ -426,7 +459,10 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .btn-lg{height:42px;padding:0 var(--s4);font-size:15px;}
 .btn-primary{background-color:var(--brandD);color:var(--snow);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),var(--sh);}
-@media(hover:hover){.btn-primary:hover{background-color:#08739e;}}
+/* was a 4%-lighter blue: a hover you have to look for. The primary action
+   keeps its sober blue at rest — it is the money button — and snaps to acid
+   on contact, no transition, same cut as the headline bar. */
+@media(hover:hover){.btn-primary:hover{background-color:var(--acid);color:var(--ink);transition:none;}}
 /* pressed goes darker, never lighter — lighter reads as released */
 .btn-primary:active{background-color:var(--brandP);box-shadow:inset 0 1px 2px rgba(0,0,0,.18);}
 /* secondary is a bordered button, the macOS counterpart to a filled one:
@@ -559,8 +595,10 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .hl{-webkit-box-decoration-break:clone;box-decoration-break:clone;
   padding:0 .08em;margin-left:-.08em;}
 @media(hover:hover){
-  .hl:hover{background:var(--ink);color:var(--snow);transition:none;}
-  .tone-ink .hl:hover{background:var(--snow);color:var(--ink);}
+  /* the bar is acid now, not ink. Same hard cut, same zero transition — the
+     gesture is untouched, only its volume. A bonus: ink-on-acid is legible on
+     BOTH grounds, so the dark-section variant no longer needs its own rule. */
+  .hl:hover,.tone-ink .hl:hover{background:var(--acid);color:var(--ink);transition:none;}
 }
 
 /* a staircase, not a paragraph: each line steps in, and the inversion bars
@@ -577,8 +615,8 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 }
 /* inversion at the scale of typography itself: the cut, not a fade */
 @media(hover:hover){
-  .hero-title .line:hover{background:var(--ink);color:var(--snow);transition:none;}
-  .hero-title .line.accent:hover{background:var(--brandInk);color:var(--snow);}
+  .hero-title .line:hover,
+  .hero-title .line.accent:hover{background:var(--acid);color:var(--ink);transition:none;}
 }
 /* Hibi IS 日々. Set vertically, outline only, bleeding off the top edge —
    a signature, not a watermark. */
@@ -591,9 +629,25 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* at phone width there is no clear margin for it to stand in — it would sit
    under the headline, which is the one thing that must stay clean */
 @media(max-width:640px){.hibi-mark{display:none;}}
-.hero-title .line.accent{color:var(--brandInk);}
+/* The payoff line is struck through with highlighter and left that way. Two
+   reasons it is the accent rather than the blue it replaces: blue is spoken
+   for (sky = information, and it is doing that job six inches away inside the
+   ledger card, where it must not have a rival), and a permanently-on bar
+   teaches the gesture — you see the "on" state here, then find you can fire
+   it yourself on every other heading.
+   On ink the roles swap rather than the colour changing: acid as TEXT is only
+   barred on light grounds (1.2:1); on ink it is 11.9:1. */
+.hero-title .line.accent{background:var(--acid);color:var(--ink);}
+@media(hover:hover){
+  .hero-title .line.accent:hover{background:var(--ink);color:var(--acid);}
+}
 /* the facts belong to the CTA block, so they sit closer to it than the CTA
    sits to the paragraph above */
+/* The eyebrow is the page's single static acid mark: a label struck through
+   with highlighter. Square corners — a rounded chip would be a badge, and a
+   badge is a different, softer object than a mark made by a pen. */
+.hero .label{background:var(--acid);color:var(--ink);display:inline-block;
+  padding:3px 7px 2px;margin-left:-7px;}
 .hero-foot{margin-top:var(--s4);display:flex;gap:var(--s1) var(--s4);flex-wrap:wrap;
   color:var(--gray-s);font-size:13px;letter-spacing:.01em;}
 .hero-foot span{display:inline-flex;gap:var(--s1);align-items:center;}
@@ -1264,3 +1318,11 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;
     transition-duration:.001ms !important;scroll-behavior:auto !important;}
 }
+
+
+/* ===== selection =========================================================
+   Dragging across the page marks it with the same highlighter the headings
+   use. The cheapest possible place for the accent to appear, and the one with
+   the least excuse needed: selecting text IS highlighting it.
+   ========================================================================= */
+::selection{background:var(--acid);color:var(--ink);text-shadow:none;}
