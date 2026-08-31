@@ -35,7 +35,7 @@ export type FormCopy = {
 
 export type Dict = {
   langName: string;
-  nav: { merchants: string; creators: string; pricing: string; security: string; about: string; cta: string };
+  nav: { merchants: string; creators: string; pricing: string; security: string; about: string; cta: string; skip: string };
   footer: {
     tagline: string;
     fullPricing: string;

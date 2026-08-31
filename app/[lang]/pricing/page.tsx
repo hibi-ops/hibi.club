@@ -22,7 +22,7 @@ export default async function Pricing({ params }: P) {
     <>
       <Nav lang={lang} t={t} current="pricing" />
       <JsonLd data={faqJsonLd(p.faq.items)} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hero lit">
           <div className="wrap">
             <div className="hero-grid">

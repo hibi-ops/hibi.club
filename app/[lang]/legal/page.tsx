@@ -24,7 +24,7 @@ export default async function Legal({ params }: P) {
   return (
     <>
       <Nav lang={lang} t={t} current="legal" />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hero lit">
           <div className="wrap">
             <span className="label">{l.eyebrow}</span>

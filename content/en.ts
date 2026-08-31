@@ -5,7 +5,7 @@ import type { Dict } from './types';
 
 export const en: Dict = {
   langName: 'EN',
-  nav: { merchants: 'Merchants', creators: 'Creators', pricing: 'Pricing', security: 'Security', about: 'About', cta: 'Get early access' },
+  nav: { merchants: 'Merchants', creators: 'Creators', pricing: 'Pricing', security: 'Security', about: 'About', cta: 'Get early access', skip: 'Skip to content' },
   footer: {
     tagline: 'Settlement for walk-in customers.',
     fullPricing: 'Full pricing, caps and billing',

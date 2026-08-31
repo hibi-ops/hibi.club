@@ -20,7 +20,7 @@ export default async function Security({ params }: P) {
   return (
     <>
       <Nav lang={lang} t={t} current="security" />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hero lit">
           <div className="wrap">
             <div className="hero-grid">

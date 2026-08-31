@@ -477,8 +477,11 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
   .nav{height:auto;}
   /* a row of equal segments, not a scroller: three items always fit, and
      overflow:auto was drawing a scrollbar corner that read as a stray widget */
-  .nav-mobile-links{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s0);
-    padding:var(--s0) 0 var(--s1);font-size:14px;font-weight:500;border-top:var(--edge-2);}
+  /* auto-fit, not a hard column count: adding a fifth link should not wrap
+     the row (adding the fourth silently did) */
+  .nav-mobile-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));
+    gap:var(--s0);padding:var(--s0) 0 var(--s1);font-size:13.5px;font-weight:500;
+    border-top:var(--edge-2);}
   .nav-mobile-links a{color:var(--ink-2);white-space:nowrap;text-align:center;
     padding:7px var(--s1);border-radius:var(--r-sm);}
   .nav-mobile-links a[aria-current="page"]{color:var(--ink);background:rgba(21,20,26,.06);}
@@ -1127,6 +1130,12 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 }
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+/* Skip link: the first tab stop on every page. Hidden until focused, then it
+   lands as a real control at the top-left — a keyboard visitor should not have
+   to tab through the whole nav to reach the page. */
+.skip{position:fixed;top:var(--s2);left:var(--s2);z-index:200;transform:translateY(-200%);
+  transition:transform var(--t2) var(--ease);}
+.skip:focus-visible{transform:none;}
 
 /* ===== hover on the ink ground ===========================================
    Every hover fill above is a LIGHT wash, which on the ink ground paints a

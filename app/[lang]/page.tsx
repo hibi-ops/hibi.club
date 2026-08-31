@@ -24,7 +24,7 @@ export default async function Home({ params }: P) {
   return (
     <>
       <Nav lang={lang} t={t} current="" />
-      <main>
+      <main id="main" tabIndex={-1}>
         {/* HERO — the underlight belongs here and nowhere else: it is what the
             ledger card floats on. §5.4 says one hue per page, the page's own. */}
         <section className="hero lit">

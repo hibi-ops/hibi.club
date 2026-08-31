@@ -22,7 +22,7 @@ export default async function Creators({ params }: P) {
     <>
       <Nav lang={lang} t={t} current="creators" />
       <JsonLd data={faqJsonLd(c.faq.items)} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hero lit-pink lit">
           <div className="wrap">
             <div className="hero-grid">

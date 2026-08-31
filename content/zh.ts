@@ -5,7 +5,7 @@ import type { Dict } from './types';
 
 export const zh: Dict = {
   langName: '中文',
-  nav: { merchants: '商家', creators: '创作者', pricing: '定价', security: '安全', about: '关于', cta: '申请加入' },
+  nav: { merchants: '商家', creators: '创作者', pricing: '定价', security: '安全', about: '关于', cta: '申请加入', skip: '跳到正文' },
   footer: {
     tagline: '按到店客人结算的本地推广。',
     fullPricing: '完整定价、上限与结算',
