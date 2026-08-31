@@ -324,9 +324,13 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .rate+.rate{border-top:var(--edge-2);}
 .rate{padding-left:0;padding-right:0;}
 .rate{transition:background var(--t1) var(--ease);}
+/* the row's numeral takes the marker bar on hover — the same hard cut as the
+   headings, rather than a colour crossfade. It is the page's one gesture, so
+   the biggest number in each row should answer to it too. */
 @media(hover:hover){.rate:hover{background:var(--paper);}
-  .rate:hover .rn{color:var(--brandInk);}}
-.rate .rn{transition:color var(--t1) var(--ease);}
+  .rate:hover .rn{background:var(--sky);color:var(--ink);transition:none;}}
+.rate .rn{padding:0 .06em;margin-right:-.06em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
 @media(max-width:768px){.rate{grid-template-columns:1fr;gap:var(--s1);padding:var(--s3);}}
 .rate .rk{display:flex;align-items:center;gap:var(--s2);font-size:15px;font-weight:600;}
 .rate .rd{font-size:14px;line-height:1.55;color:var(--gray-s);max-width:40ch;}
@@ -902,6 +906,13 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   display:flex;flex-direction:column;}
 /* the lead cell of the whole block opens on an ink rule */
 .cols>*:first-child{border-top:1px solid var(--ink);}
+/* hovering a cell darkens ITS OWN top rule to full ink — the cell says which
+   one it is by the line it is ruled with, not by moving. Hard cut, no fade,
+   and the hairline is already the page's smallest unit of emphasis. */
+@media(hover:hover){
+  .cols>*{transition:border-top-color var(--t1) var(--ease);}
+  .cols>*:hover{border-top-color:var(--ink);transition:none;}
+}
 /* a left hairline everywhere except the first cell OF EACH ROW — with a
    wrapping grid, `* + *` would rule the start of every row after the first */
 .cols-2>*:not(:nth-child(2n+1)),
@@ -1271,9 +1282,8 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
      then the element goes back to being unclipped.
      The -.25em bleed on the other three sides is for the marker bar, padded
      .08em past its text box and otherwise shaved by the clip. */
-  .rise{animation:rise var(--t3) cubic-bezier(.2,.9,.2,1) backwards;}
+  .rise{animation:wipe var(--t3) cubic-bezier(.2,.9,.2,1) both;}
   .rise:nth-child(2){animation-delay:.07s}.rise:nth-child(3){animation-delay:.14s}.rise:nth-child(4){animation-delay:.21s}
-  @keyframes rise{from{clip-path:inset(-.25em 100% -.25em -.25em)}to{clip-path:inset(-.25em -.25em -.25em -.25em)}}
 }
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 /* Skip link: the first tab stop on every page. Hidden until focused, then it
@@ -1321,17 +1331,34 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    run on the main thread. Behind @supports, so a browser without them simply
    shows the finished state — which is the correct state anyway.
 
-   The rule is that motion may only reveal something that is already there. No
-   element moves more than 12px and nothing scales; a card that flies in from
-   the side is announcing itself rather than arriving.
+   The rule is that motion may only reveal something that is already there.
+   Nothing moves, nothing scales, nothing fades: the entrance is the same WIPE
+   the hero uses on load. This block used to be `opacity 0 + translateY(12px)`,
+   which meant the page spoke two languages — a wipe above the fold and the
+   internet's house-style fade-up below it.
+
+   A section now arrives in three beats, the order you read it in: the index
+   label, the heading, then the body. The ranges overlap, so it is a cascade
+   rather than three separate events.
+
+   .hero-grid is deliberately NOT here. It is above the fold, so a view()
+   timeline would show it already finished; the load-time .rise owns it.
    ========================================================================= */
+@keyframes wipe{
+  from{clip-path:inset(-100% 100% -100% -100%);}
+  /* the reveal completes at 92% and the clip then opens past the box on every
+     side. The end state must clip NOTHING: with fill-mode both it persists,
+     and a permanent clipping context eats the focus rings of any control
+     inside — which .sec-body is full of. */
+  92% {clip-path:inset(-100% 0 -100% -100%);}
+  to  {clip-path:inset(-100% -100% -100% -100%);}
+}
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .sec-body,.lbl,.hero-grid>*{
-      animation:enter linear both;
-      animation-timeline:view();
-      animation-range:entry 8% cover 26%;}
-    @keyframes enter{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+    .lbl,.hd,.sec-body{animation:wipe linear both;animation-timeline:view();}
+    .lbl     {animation-range:entry 6%  cover 20%;}
+    .hd      {animation-range:entry 10% cover 26%;}
+    .sec-body{animation-range:entry 14% cover 32%;}
 
     /* the split bar draws itself as it comes into view — the one place where
        motion carries meaning, because the bar IS a measurement */
