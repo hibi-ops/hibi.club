@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
   robots: { index: true, follow: true },
 };
-export const viewport: Viewport = { themeColor: '#ffffff', width: 'device-width', initialScale: 1 };
+export const viewport: Viewport = { themeColor: '#15141a', width: 'device-width', initialScale: 1 };
 
 export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ lang: string }> }) {
   const { lang } = await params as { lang: Lang };

@@ -91,7 +91,11 @@ export default async function Home({ params }: P) {
         </section>
 
         {/* THREE SIDES */}
-        <section className="section">
+        {/* The one spread that goes electric. It earns it: this is the section
+            where the whole model is stated — three parties, one transaction —
+            and a page needs a second anchor after the hero or it reads as one
+            good screen followed by documentation. */}
+        <section className="section tone-ink tone-volt">
           <div className="wrap">
             <Head label={h.sides.label} title={h.sides.title} wide />
             <div className="sec-body"><Split s={h.sides.split} /></div>

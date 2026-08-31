@@ -10,10 +10,20 @@
 - **等高线场**（Wash.tsx）：用户点名保留——"非常好这个等高线"。单色墨线、发丝、每五条一根
   计曲线、指针处地面隆起、CSS .lit 为回退。它成立的原因是**和全站同一支笔**（规线／套准十字／
   描边字／空心零），并呼应产品的街区语义。
-- **acid `#d6f930` = 唯一的饱和色**：荧光笔墨水，职务是"标记"。定律：**只做底，不做字**
-  （白底上 acid 文字 1.2:1；ink 压 acid 15.1:1，acid 压 ink 11.9:1，所以深色区可当字）。
-  一屏最多两处。落点：hero eyebrow（静态）、hero payoff 行（常亮）、`.hl:hover`、
-  `.btn-primary:hover`、`::selection`、`.tone-ink .label`。禁止渐变、禁止发光。
+- **两支蓝，职务不同，不许混**：`--volt #0b5cff` = 行动（按钮、label、标记条、section 编号）；
+  `--sky #52b6dd` = 信息（结算卡里的金额、wordmark 面）。混了卡片就会看起来可点。
+  volt 是 brandD/brandInk/brandP 的来源，不是新增色相——是旧蓝开到满。
+  实测：snow 压 volt 5.25:1；volt 压 snow 5.25:1；**volt 压 ink 只有 3.5:1**，所以深底
+  一律留 sky，不跟着 volt 走。落点：hero eyebrow、hero payoff 行（常亮）、`.hl:hover`、
+  `.btn-primary`（静止态）、`::selection`、`.lbl::before`。禁止渐变、禁止发光。
+- **`.tone-volt` = `.tone-ink` 的修饰类，不是第三个 tone**：markup 两个 class 一起挂，
+  35 条深底规则自动继承，只重写地面和必须不同的几处。首页只有"三方，同一笔交易"用它——
+  一页需要 hero 之后的第二个锚点，否则读起来就是"一屏好设计 + 一堆文档"。
+- **入场是扫，不是淡入**：`.rise` 用 clip-path 左→右揭开，全程不透明度不变，对齐全站硬切
+  语汇。必须 `backwards` 不能 `both`——`both` 会把 clip-path 永久留在元素上，
+  `.cta-row` 里按钮的 focus ring 会被裁掉。
+- **顶栏是墨色实心 masthead**，不是毛玻璃（globals.css 头部第一行规则就写着 no glass）。
+  不加 blur：底下内容滚过去时颜色会变，会闪的横条不叫 masthead。
 - **彩色流体渐变已被否决——"太古早"**：2019 的语言，和本站描边/hairline/硬切语汇冲突。
   three.js 判据 = **"有职务 + 同笔触"，两条缺一不可**。历史拆除：隐形点阵场、开盒粒子、
   线框日々展品、彩色 wash。
