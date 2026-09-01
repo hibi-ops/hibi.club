@@ -53,7 +53,17 @@
   --s5:32px; --s6:48px; --s7:64px; --s8:96px;
 
   /* type scale — fluid */
-  --t-hero:clamp(35px, 9.2vw, 168px);
+  /* The ceiling is set by the container, not by taste. The headline is three
+     hand-broken lines and they must never re-wrap — a wrapped line turns
+     .line's fit-content box into the full column width, and the accent line's
+     background then paints a 976x302 slab instead of hugging its words.
+     Measured against --max 1200 (content 1104) at the widest viewport:
+       "Every walk-in"    5.67em, 1114px free -> 196px
+       "is a transaction" 6.58em, 1040px free -> 157px
+       "you can settle."  6.26em,  976px free -> 155px   <- binding
+     168px was over both of the last two. 148px keeps ~5% headroom for font
+     fallback and platform metric differences. */
+  --t-hero:clamp(35px, 9.2vw, 148px);
   --t-h1:clamp(26px, 3.4vw, 44px);
   --t-h2:clamp(22px, 2.4vw, 32px);
   --t-h3:clamp(16px, 1.2vw, 18px);
@@ -143,7 +153,11 @@ html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1{font-weight:600;}
 /* CJK glyphs are full-width, so a line that fits in Latin at 84px runs off at
    the same size in Chinese. Drop the display sizes one rung; the hand-broken
    lines then hold without folding a second time. */
-html[lang="zh-Hans"] .hero-title{font-size:clamp(29px,7vw,124px);line-height:1.1;}
+/* Same measurement for Han: "每一位进门的客人，" is 9.12em against 1111px free,
+   so 121px is the ceiling and 124px overflowed. It did not wrap the way the
+   Latin did — keep-all leaves that run unbreakable, so it simply stuck 20px
+   out past the column, which is the quieter and easier-to-miss failure. */
+html[lang="zh-Hans"] .hero-title{font-size:clamp(29px,7vw,116px);line-height:1.1;}
 html[lang="zh-Hans"] .h1{font-size:clamp(27px,3.4vw,44px);line-height:1.24;}
 html[lang="zh-Hans"] .h2{font-size:clamp(22px,2.4vw,32px);line-height:1.3;}
 html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1,html[lang="zh-Hans"] .h2{letter-spacing:0;}
@@ -1359,10 +1373,17 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .lbl,.hd,.sec-body{animation:wipe linear both;animation-timeline:view();}
-    .lbl     {animation-range:entry 6%  cover 20%;}
-    .hd      {animation-range:entry 10% cover 26%;}
-    .sec-body{animation-range:entry 14% cover 32%;}
+    /* :not(.hero *) rather than a plain selector. The hero is above the fold,
+       and a view() timeline can leave an element parked mid-range at load —
+       which is exactly how the hero's second CTA ended up sliced in half on a
+       wide screen: .cta-row carries both .rise and .sec-body, and this block
+       being later in the file took the animation away from .rise. Everything
+       inside .hero belongs to the load-time .rise. */
+    .lbl:not(.hero *),.hd:not(.hero *),.sec-body:not(.hero *){
+      animation:wipe linear both;animation-timeline:view();}
+    .lbl:not(.hero *)     {animation-range:entry 6%  cover 20%;}
+    .hd:not(.hero *)      {animation-range:entry 10% cover 26%;}
+    .sec-body:not(.hero *){animation-range:entry 14% cover 32%;}
 
     /* the split bar draws itself as it comes into view — the one place where
        motion carries meaning, because the bar IS a measurement */
