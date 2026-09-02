@@ -2,10 +2,13 @@
 import { useEffect, useState } from 'react';
 import type { Dict } from '@/content/types';
 
+/* every figure carries cents: the product's claim is that each dollar reads
+   back to a person at the counter, so its own calculator does not round */
 const money = (n: number) =>
-  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-/* a unit price carries cents: rounding $6.75 to $7 is a 4% lie about the rate */
-const unit = (n: number) => '$' + n.toFixed(2);
+  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const whole = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+/* half-up on the half-cent, not toFixed's binary truncation */
+const unit = (n: number) => '$' + (Math.round(n * 100 + 1e-6) / 100).toFixed(2);
 
 /* Defaults are a typical first-cohort store, not zeroes. An empty calculator
    asks the visitor to invent two numbers before it will tell them anything;
@@ -18,7 +21,9 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
 
   const perVisit = bill * 0.15;
   const monthly = perVisit * visits;
-  const cap = Math.max(50, Math.round(monthly / 25) * 25);
+  /* the cap is a ceiling, so it rounds UP to the next $25 — never below the
+     estimate it came from. The CTA says so. */
+  const cap = Math.max(50, Math.ceil(monthly / 25) * 25);
 
   /* The walk-ins figure drives the contour field behind this section: fixed
      contour interval, so more traffic is literally steeper ground. Published
@@ -66,8 +71,9 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
       {/* query string BEFORE the fragment — `#access?cap=1` puts the pair inside
           the hash, where location.search never sees it */}
       <a className="btn btn-primary btn-lg est-cta" href={`?cap=${cap}${formHref}`}>
-        {c.cta} · {money(cap)} <span className="arr" aria-hidden="true">→</span>
+        {c.cta} · {whole(cap)} <span className="arr" aria-hidden="true">→</span>
       </a>
+      <span className="est-sub">{c.capNote}</span>
       <span className="est-cap-note k-head">{c.capLabel}</span>
     </div>
   );

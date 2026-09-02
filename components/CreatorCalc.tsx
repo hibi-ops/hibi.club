@@ -2,16 +2,19 @@
 import { useEffect, useState } from 'react';
 import type { Dict } from '@/content/types';
 
+/* every figure carries cents: the product's claim is that each dollar reads
+   back to a person at the counter, so its own calculator does not round */
 const money = (n: number) =>
-  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-/* a unit price carries cents: rounding $4.73 to $5 is a 6% lie about the rate */
-const unit = (n: number) => '$' + n.toFixed(2);
+  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/* half-up on the half-cent, not toFixed's binary truncation (4.725 → 4.73) */
+const unit = (n: number) => '$' + (Math.round(n * 100 + 1e-6) / 100).toFixed(2);
 
 /* Pilot terms, stated once here so the arithmetic is auditable:
    the merchant pays 15% of a first-visit bill and 8% of a return visit;
-   the creator keeps 70% of whichever commission was charged. */
+   the creator keeps 70% of a first-visit commission and 55% of a repeat one
+   (PRICING-MODEL-SPEC §1.2). */
 const FIRST = 0.15 * 0.70;   // 10.5% of a first-visit bill
-const REPEAT = 0.08 * 0.70;  // 5.6% of a return-visit bill
+const REPEAT = 0.08 * 0.55;  // 4.4% of a return-visit bill
 const RETURNS = 2;           // assumed returns per customer inside the window
 
 /**

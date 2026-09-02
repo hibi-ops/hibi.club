@@ -46,16 +46,16 @@ export const en: Dict = {
       period: 'Mar 2 – Mar 8',
       rows: [
         { who: '@mika.eats', meta: 'Thu 19:24 · first visit', amt: '$68.00', fee: '$10.20' },
-        { who: '@bk.noodles', meta: 'Fri 12:05 · returning', amt: '$41.50', fee: '$3.32' },
+        { who: '@bk.noodles', meta: 'Fri 12:05 · repeat', amt: '$41.50', fee: '$3.32' },
         { who: '@queens.list', meta: 'Sat 20:11 · first visit', amt: '$96.00', fee: '$14.40' },
-        { who: '@mika.eats', meta: 'Sun 13:40 · regular', amt: '$28.00', fee: '$1.12' },
+        { who: '@mika.eats', meta: 'Sun 13:40 · long-term', amt: '$28.00', fee: '$1.12' },
       ],
       pool: [
         { who: '@fort.greene', meta: 'Mon 12:31 · first visit', amt: '$54.00', fee: '$8.10' },
-        { who: '@bk.noodles', meta: 'Mon 18:47 · returning', amt: '$33.00', fee: '$2.64' },
-        { who: '@queens.list', meta: 'Tue 13:02 · returning', amt: '$61.50', fee: '$4.92' },
+        { who: '@bk.noodles', meta: 'Mon 18:47 · repeat', amt: '$33.00', fee: '$2.64' },
+        { who: '@queens.list', meta: 'Tue 13:02 · repeat', amt: '$61.50', fee: '$4.92' },
         { who: '@mika.eats', meta: 'Tue 20:15 · first visit', amt: '$88.00', fee: '$13.20' },
-        { who: '@fort.greene', meta: 'Wed 11:58 · regular', amt: '$24.00', fee: '$0.96' },
+        { who: '@fort.greene', meta: 'Wed 11:58 · long-term', amt: '$24.00', fee: '$0.96' },
         { who: '@bk.noodles', meta: 'Wed 19:33 · first visit', amt: '$47.50', fee: '$7.13' },
       ],
       totalLabel: '23 walk-ins · 4 creators',
@@ -133,7 +133,7 @@ export const en: Dict = {
         { label: 'Jan 2026', title: 'Claim is acquired', body: 'Wonder, Grubhub’s parent, acquires Claim — pay-per-new-customer cashback, live in New York and expanding nationally.' },
         { label: 'Today', title: 'One layer is missing', body: 'Claim counts visits but has no creators: origins stay unknown, and whoever drove the traffic is not paid.' },
       ],
-      close: 'QR redemption has no learning curve in North America. The open layer is Hibi’s entry point.',
+      close: 'Showing a code at a counter needs no explaining. The open layer is Hibi’s entry point.',
     },
     ai: {
       label: 'Roadmap',
@@ -141,7 +141,7 @@ export const en: Dict = {
       lead: 'Source, store, time, amount, repeat visit — joined at every redemption. It exists nowhere else, and it is the training input for everything below.',
       items: [
         { label: 'Matching', title: 'Which creator for which store', body: 'Redemption history selects the creators most likely to convert for each store — by category, audience, and daypart.' },
-        { label: 'Content', title: 'What to post, when', body: 'A trend agent tracks local platform signals and drafts topics and shooting notes, shortening booking-to-post.' },
+        { label: 'Content', title: 'What to post, when', body: 'A trend model tracks local platform signals and drafts topics and shooting notes, shortening booking-to-post.' },
         { label: 'Risk', title: 'What not to pay for', body: 'Outlier detection across timing, amounts, device and location signals; high-risk transactions go to manual review.' },
       ],
       close: 'Precision grows with every transaction.',
@@ -162,7 +162,7 @@ export const en: Dict = {
     },
     eyebrow: 'For merchants',
     title: 'Marketing becomes a cost of goods.',
-    lead: 'You set a price per walk-in and a monthly cap. Local creators bring customers to your counter. You are billed only for the ones who show up — priced like inventory, not gambled like ad spend.',
+    lead: 'You set the reward and a monthly cap; the commission is a fixed rate on the bill. Local creators bring customers to your counter. You are billed only for the ones who show up — priced like inventory, not gambled like ad spend.',
     heroCard: {
       label: 'What you pay',
       rows: [
@@ -175,7 +175,7 @@ export const en: Dict = {
     },
     set: {
       label: 'What you set',
-      title: 'Three numbers, ten minutes, no contract.',
+      title: 'Two numbers, one rate, no contract.',
       rows: [
         { k: 'The reward', v: 'What a first-time customer gets when they redeem — a mystery-box reward you fund from your own menu, capped at the full bill.' },
         { k: 'The commission', v: 'A percentage of the customer’s bill, paid only on redemption. 15% first visit, 8% repeat, 4% long-term during the pilot.' },
@@ -235,7 +235,7 @@ export const en: Dict = {
       label: 'What you earn',
       rows: [
         { k: 'Per first visit', v: '10.5%', u: 'of the bill — 70% of a 15% commission' },
-        { k: 'Per return visit', v: '5.6%', u: 'of the bill — 70% of 8%, for 12 months' },
+        { k: 'Per return visit', v: '4.4%', u: 'of the bill — 55% of the 8% repeat rate, for 12 months' },
         { k: 'Paid out', v: 'Weekly', u: 'no invoicing, no chasing' },
         { k: 'Follower minimum', v: 'None', u: 'delivered customers count' },
       ],
@@ -263,7 +263,7 @@ export const en: Dict = {
     split: {
       label: 'The split',
       title: 'On a $100 first-visit bill',
-      body: 'The merchant pays a 15% commission on a first visit. You keep 70% of it. On repeat visits the merchant pays 8%, and your share continues inside the 12-month window.',
+      body: 'The merchant pays a 15% commission on a first visit. You keep 70% of it. On repeat visits the merchant pays 8% (4% once the customer is a regular) and you keep 55% of that, inside the 12-month window.',
       s: {
         total: '$15.00',
         totalLabel: 'the commission on a $100 first visit',
@@ -284,14 +284,14 @@ export const en: Dict = {
       perVisitLabel: 'per first visit',
       trailLabel: 'Then, over the next 12 months',
       trailNote: 'If each of them comes back twice inside the window, at the 8% repeat rate. Return visits keep paying you without a new post.',
-      note: 'You keep 70% of the merchant’s commission: 15% on a first visit, 8% on returns inside 12 months. Pilot terms.',
+      note: 'You keep 70% of the first-visit commission (15% of the bill) and 55% of the repeat commission (8%, or 4% once the customer is a regular) inside 12 months. Pilot terms.',
       cta: 'Apply as a creator',
     },
     faq: {
       label: 'Questions',
       title: 'What creators ask first',
       items: [
-        { q: 'How many followers do I need?', a: 'There is no threshold. Most creators in the first cohort have 3K to 100K followers. What matters is whether the people who follow you go where you go.' },
+        { q: 'How many followers do I need?', a: 'There is no threshold. We are looking for creators with 3K to 100K followers on Instagram or Xiaohongshu. What matters is whether the people who follow you go where you go.' },
         { q: 'Is it exclusive?', a: 'No. Post for whichever stores you like, on whichever platforms you like. Hibi never asks for exclusivity.' },
         { q: 'When and how do I get paid?', a: 'Weekly, to your bank account, once your delivered customers have been confirmed at the counter.' },
         { q: 'What counts as a delivered customer?', a: 'A customer who shows your code at the store, has the amount confirmed by staff, and passes automated risk checks. One code per creator, one use per customer.' },
@@ -304,15 +304,15 @@ export const en: Dict = {
   about: {
     meta: {
       title: 'About Hibi',
-      description: 'Hibi (日々, “day by day”) is a New York company building pay-per-visit local marketing: merchants pay one commission per walk-in, creators are paid per customer they deliver.',
+      description: 'Hibi (日々, “day by day”) is a New York company building settlement for walk-in customers: merchants pay one commission per walk-in, creators are paid per customer they deliver.',
     },
     eyebrow: 'About',
     title: 'Hibi — 日々, day by day.',
-    lead: 'A small team in New York building the missing layer of local marketing: the one where a store pays for the customer who walked in, and the person who sent them gets paid.',
+    lead: 'A small team in New York building settlement for walk-in customers: a store pays for the customer who walked in, and the person who sent them gets paid.',
     heroCard: {
       label: 'The facts',
       rows: [
-        { k: 'Based in', v: 'New York', u: 'one neighbourhood at a time' },
+        { k: 'Based in', v: 'New York', u: 'one neighborhood at a time' },
         { k: 'First cohort', v: '2026', u: 'merchants and creators, forming now' },
         { k: 'Reach us', v: 'Directly', u: 'hello@hibi.club — every message is read' },
       ],
@@ -320,7 +320,7 @@ export const en: Dict = {
     },
     what: {
       label: 'What we are building',
-      title: 'The billing unit of local advertising should be a customer walking through the door.',
+      title: 'The unit a store pays for should be a customer walking through the door.',
       paras: [
         'A local store spends hundreds to thousands of dollars a month on Instagram, Google and Yelp, and cannot say which dollar brought which customer. Local creators send customers to those same stores every week, and because nobody counts it, they are not paid for it.',
         'Hibi counts it. A creator posts with a code, a customer redeems at the counter, and that single event becomes one line on the merchant’s bill and one commission for the creator. The merchant’s marketing spend is set by the number of new customers who came in and paid — not by impressions.',
@@ -331,7 +331,7 @@ export const en: Dict = {
       label: 'How we work',
       title: 'Four commitments',
       cols: [
-        { label: '01', title: 'No numbers before data', body: 'We publish pilot results, not projections. No scale narrative before the first cohort has produced its three numbers.' },
+        { label: '01', title: 'No numbers before data', body: 'We publish pilot results, not projections. No scale narrative before the first cohort has produced its three numbers: merchants who top up again, net new return visits, creators who stay without subsidy.' },
         { label: '02', title: 'Consumers are never charged', body: 'Redeeming a code is claiming a discount. Nothing more is asked of the customer.' },
         { label: '03', title: 'No selling of personal data', body: 'What leaves the system is anonymous and aggregated. Merchants see their customers; nobody else does.' },
         { label: '04', title: 'No exclusivity, no rankings, no paid reviews', body: 'Creators post where they like. Merchants buy customers, not praise.' },
@@ -362,7 +362,7 @@ export const en: Dict = {
     },
     eyebrow: 'Pricing',
     title: 'You pay when someone walks in.',
-    lead: 'There is one line on the invoice: a commission on bills that were actually redeemed at your counter. No subscription, no setup fee, and a monthly cap you set.',
+    lead: 'There is one kind of charge on the invoice: a commission on bills that were actually redeemed at your counter. No subscription, no setup fee, and a monthly cap you set.',
     rates: {
       label: 'The rates',
       title: 'One commission. Three rates.',
@@ -381,6 +381,7 @@ export const en: Dict = {
       youPayLabel: 'You would pay',
       perVisitLabel: 'per walk-in',
       capLabel: 'Set this as your monthly cap',
+      capNote: 'Rounded up to the nearest $25.',
       compareLabel: 'The same month on ad spend',
       compareValue: '$300–3,000',
       compareNote: 'Prepaid, whether or not anyone walks in.',

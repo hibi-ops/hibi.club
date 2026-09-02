@@ -32,6 +32,7 @@ export default function Footer({ lang, t }: { lang: Lang; t: Dict }) {
             <span>{SITE.city}</span>
             {SITE.social.instagram && <a href={SITE.social.instagram} rel="noopener">Instagram</a>}
             {SITE.social.xiaohongshu && <a href={SITE.social.xiaohongshu} rel="noopener">小红书</a>}
+            {SITE.social.linkedin && <a href={SITE.social.linkedin} rel="noopener">LinkedIn</a>}
           </div>
           <div>
             <span className="label gray">{t.footer.legal}</span>

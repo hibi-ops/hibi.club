@@ -149,7 +149,7 @@ export type Dict = {
     calc: {
       label: string; title: string; lead: string;
       spendLabel: string; visitsLabel: string;
-      youPayLabel: string; perVisitLabel: string; capLabel: string;
+      youPayLabel: string; perVisitLabel: string; capLabel: string; capNote: string;
       compareLabel: string; compareValue: string; compareNote: string;
       note: string; cta: string;
     };

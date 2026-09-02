@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
+import LedgerLive from '@/components/LedgerLive';
 import JsonLd from '@/components/JsonLd';
 import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
@@ -73,6 +74,9 @@ export default async function Merchants({ params }: P) {
               </div>
               <div className="c7 stack">
                 <p className="lead">{m.bill.body}</p>
+                {/* the same sample week the home page settles, live: this is the
+                    section that says "every line is a customer", so it shows the lines */}
+                <div className="sec-body"><LedgerLive c={t.home.ledgerCard} /></div>
                 <p className="ledger sec-body hairline-top">{m.bill.ledger}</p>
                 <p className="small muted">{m.bill.note}</p>
               </div>

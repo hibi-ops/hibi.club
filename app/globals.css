@@ -456,8 +456,11 @@ main{counter-reset:sec;}
      on their side, and a rotated index is a decoration, whereas an upright one
      is a number you can read. Sized to be the anchor of the section — at 11px
      it was a footnote to a heading it is supposed to be indexing. */
-  .label.lbl::before{writing-mode:horizontal-tb;display:block;text-align:center;
-    font-size:3.4em;line-height:1;letter-spacing:-.03em;margin:0 0 .34em -.1em;}
+  /* inline-block, not block: in a vertical-rl label a block child stacks
+     sideways and the name ran under the numeral. An atomic inline sits in
+     the vertical line, so the number leads and the name follows below it. */
+  .label.lbl::before{writing-mode:horizontal-tb;display:inline-block;text-align:center;
+    font-size:3.4em;line-height:1;letter-spacing:-.03em;margin:0 0 .5em 0;}
 }
 /* set on the left edge, reading downward — the Japanese editorial habit the
    brand name comes from. Wide screens only; it needs the gutter to stand in. */
@@ -465,8 +468,8 @@ main{counter-reset:sec;}
   .wrap{position:relative;}
   .label.lbl{position:absolute;left:calc(var(--s6) * -1 + 7px);top:6px;margin:0;
     writing-mode:vertical-rl;letter-spacing:.22em;}
-  .rail-head .label.lbl{position:static;writing-mode:horizontal-tb;letter-spacing:.12em;
-    margin-bottom:var(--s2);}
+  /* rail sections keep the same vertical label as every other section: one
+     numbering system down the whole gutter, not two */
 }
 .sec-lead{margin-top:var(--s3);max-width:56ch;}
 
@@ -594,6 +597,10 @@ html[lang="zh-Hans"] .hero-sub:has(> :only-child) .lead{max-width:34em;}
 /* both hero artifacts rise into the headline's air space — the overlap is
    what closes the dead corner under the short copy column */
 @media(min-width:901px){.hero-sub .ledger-card,.hero-sub .spec-card{margin-top:-40px;}}
+/* at 1296+ the third title line is indented far enough to reach the card
+   column, so the card only shoulders the copy there — it no longer touches
+   the highlighted line */
+@media(min-width:1296px){.hero-sub .ledger-card,.hero-sub .spec-card{margin-top:-16px;}}
 .hero .lead{max-width:46ch;}
 html[lang="zh-Hans"] .hero .lead{max-width:30em;}
 /* measure for section headings. `ch` is the width of a zero — in Han text a
@@ -1006,7 +1013,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* ===== steps ============================================================= */
 /* typeset, not boxed: the lead cell opens on an ink rule, the rest on
    hairlines — the same table grammar as the rates and the walk-in stage */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;align-items:stretch;}
+.steps{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:0;align-items:stretch;}
 @media(max-width:768px){.steps{grid-template-columns:1fr;}}
 .step{padding:var(--s3) var(--s4) 0 0;border-top:1px solid var(--ink);}
 .step+.step{border-top:var(--edge);padding-left:var(--s4);border-left:var(--edge-2);}
@@ -1368,7 +1375,9 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
      side. The end state must clip NOTHING: with fill-mode both it persists,
      and a permanent clipping context eats the focus rings of any control
      inside — which .sec-body is full of. */
-  92% {clip-path:inset(-100% 0 -100% -100%);}
+  /* 1em of slack on the right: a flush edge shaved the trailing period off a
+     tight-tracked h2 while the element sat parked at this frame */
+  92% {clip-path:inset(-100% -1em -100% -100%);}
   to  {clip-path:inset(-100% -100% -100% -100%);}
 }
 @supports (animation-timeline: view()) {

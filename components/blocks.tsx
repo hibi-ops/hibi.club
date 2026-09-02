@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import AccessForm from './AccessForm';
 import Icon from './Icon';
+import type { CSSProperties } from 'react';
 import type { Col, Step, QA, Dict, HeroCard } from '@/content/types';
 import type { Lang } from '@/content/site';
 
@@ -33,8 +34,10 @@ export function Cols({ items, n }: { items: Col[]; n?: number }) {
 }
 
 export function Steps({ items }: { items: Step[] }) {
+  /* a custom property, not an inline grid-template: an inline declaration
+     outranks the mobile media query and four columns would overflow 390px */
   return (
-    <div className="steps" style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)` }}>
+    <div className="steps" style={{ '--n': items.length } as CSSProperties}>
       {items.map((s, i) => (
         <div className="step" key={s.title}>
           <span className="step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>

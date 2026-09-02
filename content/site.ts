@@ -10,9 +10,9 @@ export const SITE = {
   // Leave empty → the form falls back to a prefilled email.
   formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? '',
   social: {
-    instagram: '',   // e.g. https://instagram.com/hibi.nyc
+    instagram: 'https://www.instagram.com/hibi_club/',
     xiaohongshu: '', // e.g. https://www.xiaohongshu.com/user/profile/…
-    linkedin: '',
+    linkedin: 'https://linkedin.com/company/hibi-club',
   },
 } as const;
 
