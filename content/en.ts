@@ -81,7 +81,7 @@ export const en: Dict = {
       stats: { spark: [2, 3, 4, 3, 5, 2, 4], walkins: 23, walkinsLabel: 'walk-ins', postsLabel: '6 posts · 4 creators', fee: 190.40, feeLabel: 'commission, all week' },
       demo: {
         label: 'Run a walk-in',
-        hint: 'The mystery box is real odds — most visits win a slice, a rare one wins the whole bill.',
+        hint: 'The mystery box is real odds: most visits win part of the bill, a rare one wins all of it.',
         code: 'HIBI-M4K2',
         amount: '$68.00',
         redeem: 'Redeem',
@@ -315,7 +315,7 @@ export const en: Dict = {
         { k: 'Based in', v: 'New York', u: 'one neighbourhood at a time' },
         { k: 'Team', v: 'Three', u: 'plus part-time contributors' },
         { k: 'First cohort', v: '2026', u: 'merchants and creators, forming now' },
-        { k: 'Reach us', v: 'Directly', u: 'hello@hibi.club — every reply is read' },
+        { k: 'Reach us', v: 'Directly', u: 'hello@hibi.club — every message is read' },
       ],
       foot: 'Everything above is current. We publish pilot results, not projections.',
     },
@@ -341,7 +341,7 @@ export const en: Dict = {
     team: {
       label: 'Team',
       title: 'Founder-led, New York based',
-      founder: { name: 'Jiaming Wang', role: 'Founder', bio: 'Leads product, strategy and the first merchant cohort. Writes to hello@hibi.club and reads every reply.' },
+      founder: { name: 'Jiaming Wang', role: 'Founder', bio: 'Leads product, strategy and the first merchant cohort. Reads every message sent to hello@hibi.club.' },
       body: 'A core team of three plus a circle of part-time contributors across product, design and community outreach. We are adding senior people for the pilot — see the open roles.',
     },
     hiring: {
@@ -476,7 +476,7 @@ export const en: Dict = {
       note: 'This site itself sets no tracking cookies and runs no third-party advertising scripts.',
     },
     stage: {
-      label: 'Honest about the stage',
+      label: 'Where we are',
       title: 'What we have not done yet.',
       body: 'Hibi is pre-launch. We would rather say what is missing than imply a maturity we have not earned:',
       items: [
@@ -484,7 +484,7 @@ export const en: Dict = {
         'No published uptime history, because there is no production traffic to report on',
         'Pilot terms are contracts we can still change with the first cohort',
       ],
-      cta: 'Ask us anything about this',
+      cta: 'Ask us about any of this',
     },
   },
 
