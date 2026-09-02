@@ -65,7 +65,7 @@ export const en: Dict = {
       label: 'The problem',
       title: 'Local advertising is prepaid — and impossible to account for.',
       a: { label: 'What one store prepays / month', num: '$300–3,000', body: 'Instagram, Google, Yelp — spent before a single customer shows up. Which dollar produced which customer: no record exists.' },
-      b: { label: 'What a creator earns per walk-in', num: '$0', body: 'Paid per post — flat fees, with agency and MCN cuts off the top. The customers they actually deliver earn them nothing.' },
+      b: { label: 'What a creator earns per walk-in', num: '$0', body: 'Paid per post — flat fees, with agency cuts off the top. The customers they actually deliver earn them nothing.' },
       close: 'Merchants overpay for attention; creators are underpaid for outcomes. That spread is the business.',
     },
     how: {
@@ -77,7 +77,7 @@ export const en: Dict = {
         { title: 'The bill', body: 'One customer on the merchant’s bill, one commission for the creator. Settled weekly.' },
       ],
       recordTag: 'The record',
-      record: 'Every visit writes one line — source, time, amount, commission. The merchant’s month-end bill is that record, added up.',
+      record: 'Every visit writes one line — source, time, amount, commission. The merchant’s weekly bill is that record, added up.',
       stats: { spark: [2, 3, 4, 3, 5, 2, 4], walkins: 23, walkinsLabel: 'walk-ins', postsLabel: '6 posts · 4 creators', fee: 190.40, feeLabel: 'commission, all week' },
       demo: {
         label: 'Run a walk-in',
@@ -100,7 +100,7 @@ export const en: Dict = {
       cols: [
         { label: 'Merchants', title: 'Marketing becomes a cost of goods', body: 'A unit price per walk-in, a monthly cap, billed only on delivery. Customer acquisition is priced like inventory — not gambled like ad spend.' },
         { label: 'Creators', title: 'Influence becomes a sales force', body: 'Every walk-in a creator sends is counted at the counter and paid as commission. Follower counts stop mattering; delivered customers do.' },
-        { label: 'Consumers', title: 'Discounts become a game', body: 'Every first visit wins a mystery-box reward, up to the full bill. Return visits enter a sealed draw that keeps them coming back.' },
+        { label: 'Consumers', title: 'Discounts become a game', body: 'Every first visit wins a mystery-box reward, up to the full bill. Every return visit enters a draw for another one.' },
       ],
       split: {
         total: '$100.00',
@@ -110,7 +110,7 @@ export const en: Dict = {
           { k: 'Creator earns', v: '$10.50', pct: 10.5 },
           { k: 'Hibi', v: '$4.50', pct: 4.5 },
         ],
-        note: 'Pilot terms: 15% on a first visit, of which the creator keeps 70%. Nothing is charged to the customer.',
+        note: 'Pilot terms: 15% on a first visit, of which the creator keeps 70%. The mystery-box reward is separate and funded by the merchant. Nothing is charged to the customer.',
       },
     },
     marquee: 'Counted at the counter · 日々 · settled weekly · ',
@@ -120,14 +120,14 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the customer’s bill, the first time they redeem at your store.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'On return visits inside the 12-month window opened by the first redemption.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'Once a customer has become a regular. The rate steps down as the relationship matures.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
       ],
       foot: 'No subscription. No setup fee. You set the monthly cap and can pause anytime. Pilot pricing; final rates are set with the first cohort.',
       cta: 'See how it works for merchants',
     },
     now: {
       label: 'Why now',
-      title: 'The model was validated at the top of the market — minus one layer.',
+      title: 'The market has already validated the model. One layer is missing.',
       items: [
         { label: '2024–25', title: 'Trust erodes', body: 'Merchant confidence in impression advertising is exhausted; “I paid and saw no customers” has become the default complaint.' },
         { label: 'Jan 2026', title: 'Claim is acquired', body: 'Wonder, Grubhub’s parent, acquires Claim — pay-per-new-customer cashback, live in New York and expanding nationally.' },
@@ -136,7 +136,7 @@ export const en: Dict = {
       close: 'QR redemption has no learning curve in North America. The open layer is Hibi’s entry point.',
     },
     ai: {
-      label: 'Models',
+      label: 'Roadmap',
       title: 'Three models trained on the redemption record',
       lead: 'Source, store, time, amount, repeat visit — joined at every redemption. It exists nowhere else, and it is the training input for everything below.',
       items: [
@@ -193,10 +193,10 @@ export const en: Dict = {
       ],
     },
     bill: {
-      label: 'Month-end',
+      label: 'The bill',
       title: 'One bill. Every line is a customer.',
-      body: 'Each redemption writes one line: which creator, which post, what time, what amount, what commission. Your month-end bill is that record, added up — you can read every dollar back to a person at your counter.',
-      ledger: 'Illustrative: 23 new customers · 6 posts by 4 creators · $1,725 in bills · $190 total commission',
+      body: 'Each redemption writes one line: which creator, which post, what time, what amount, what commission. Your weekly bill is that record, added up — you can read every dollar back to a person at your counter.',
+      ledger: 'One illustrative week: 23 walk-ins · 6 posts by 4 creators · $1,725 in bills · $190 in commission',
       note: 'Figures are illustrative. Actual numbers come from the first cohort of stores.',
     },
     pricing: {
@@ -205,7 +205,7 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the bill, on a customer’s first redemption.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'Inside the 12-month window opened by the first visit.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'Once the customer is a regular.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
       ],
       foot: 'Pilot pricing. Final rates are set together with the first cohort and published here.',
     },
@@ -234,8 +234,8 @@ export const en: Dict = {
     heroCard: {
       label: 'What you earn',
       rows: [
-        { k: 'Per first visit', v: '15%', u: "of the customer's bill" },
-        { k: 'Per return visit', v: '8%', u: 'for 12 months after' },
+        { k: 'Per first visit', v: '10.5%', u: 'of the bill — 70% of a 15% commission' },
+        { k: 'Per return visit', v: '5.6%', u: 'of the bill — 70% of 8%, for 12 months' },
         { k: 'Paid out', v: 'Weekly', u: 'no invoicing, no chasing' },
         { k: 'Follower minimum', v: 'None', u: 'delivered customers count' },
       ],
@@ -243,7 +243,7 @@ export const en: Dict = {
     },
     why: {
       label: 'Why creators join',
-      title: 'No flat fees. No agency cut. Nothing capped.',
+      title: 'No flat fees. No agency cut. No follower minimum.',
       cols: [
         { label: 'Uncapped earnings', title: 'No flat fees, no agency cut', body: 'Commission on every walk-in delivered, with no flat-fee ceiling. Earnings scale with delivered customers — not follower counts, not negotiated rates.' },
         { label: 'Trailing income', title: 'Past work keeps paying', body: 'Every delivered customer pays repeat commissions inside a 12-month window. A post from March is still paying in December.' },
@@ -376,7 +376,7 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the bill, on a customer’s first redemption at your store.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'Inside the 12-month window opened by the first visit.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'Once the customer is a regular.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
       ],
     },
     calc: {
@@ -389,7 +389,7 @@ export const en: Dict = {
       perVisitLabel: 'per walk-in',
       capLabel: 'Set this as your monthly cap',
       compareLabel: 'The same month on ad spend',
-      compareValue: '$300 – $3,000',
+      compareValue: '$300–3,000',
       compareNote: 'Prepaid, whether or not anyone walks in.',
       note: 'First visits at 15%. Repeat visits are 8% and long-term 4%, so a real month costs less than this once customers start coming back.',
       cta: 'Apply with this cap',
@@ -443,7 +443,7 @@ export const en: Dict = {
     title: 'A redemption is a claim about money.',
     lead: 'So it is treated like one. Every code is single-use, every redemption is confirmed by your own staff at the counter, and anything that looks unlike the rest goes to a person before it is ever billed.',
     pillars: {
-      label: 'Four commitments',
+      label: 'Safeguards',
       title: 'What we hold ourselves to',
       cols: [
         { label: 'Verification', title: 'The counter is the source of truth', body: 'A code is only worth something once your staff confirms the amount on the spot. Nothing bills off a screenshot, a link, or a claim made after the fact.' },
