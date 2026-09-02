@@ -55,7 +55,7 @@ Rules that are not negotiable (from `06-Design/AGENT-DESIGN-GUIDE.md` and `04-St
 
 ## Forms
 
-`AccessForm` posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` if set (Formspree, Tally, Basin, your own API). If not set, it opens a prefilled email to `hibi.nyc@gmail.com` — nothing is stored on the site. Set the variable in Vercel → Project → Environment Variables and redeploy.
+`AccessForm` posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` if set (Formspree, Tally, Basin, your own API). If not set, it opens a prefilled email to `hello@hibi.club` — nothing is stored on the site. Set the variable in Vercel → Project → Environment Variables and redeploy.
 
 ## Deploy & multi-person management
 

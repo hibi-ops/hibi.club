@@ -25,9 +25,9 @@ export const en: Dict = {
     progress: 'Step 2 of 2 — you have already set your cap',
     capPrefix: 'Monthly cap',
     hoodDefault: 'New York',
-    fallbackNote: 'This opens a prefilled email to hibi.nyc@gmail.com. Nothing is stored on this site.',
-    done: { title: 'Received.', body: 'Thank you — we read every request and reply from hibi.nyc@gmail.com.' },
-    error: 'Something went wrong. Email us directly at hibi.nyc@gmail.com.',
+    fallbackNote: 'This opens a prefilled email to hello@hibi.club. Nothing is stored on this site.',
+    done: { title: 'Received.', body: 'Thank you — we read every request and reply from hello@hibi.club.' },
+    error: 'Something went wrong. Email us directly at hello@hibi.club.',
   },
 
   home: {
@@ -315,7 +315,7 @@ export const en: Dict = {
         { k: 'Based in', v: 'New York', u: 'one neighbourhood at a time' },
         { k: 'Team', v: 'Three', u: 'plus part-time contributors' },
         { k: 'First cohort', v: '2026', u: 'merchants and creators, forming now' },
-        { k: 'Reach us', v: 'Directly', u: 'hibi.nyc@gmail.com — every reply is read' },
+        { k: 'Reach us', v: 'Directly', u: 'hello@hibi.club — every reply is read' },
       ],
       foot: 'Everything above is current. We publish pilot results, not projections.',
     },
@@ -341,7 +341,7 @@ export const en: Dict = {
     team: {
       label: 'Team',
       title: 'Founder-led, New York based',
-      founder: { name: 'Jiaming Wang', role: 'Founder', bio: 'Leads product, strategy and the first merchant cohort. Writes to hibi.nyc@gmail.com and reads every reply.' },
+      founder: { name: 'Jiaming Wang', role: 'Founder', bio: 'Leads product, strategy and the first merchant cohort. Writes to hello@hibi.club and reads every reply.' },
       body: 'A core team of three plus a circle of part-time contributors across product, design and community outreach. We are adding senior people for the pilot — see the open roles.',
     },
     hiring: {
@@ -499,8 +499,8 @@ export const en: Dict = {
       sections: [
         { h: 'What this site collects', p: ['This website does not set tracking cookies and does not run third-party advertising scripts. If you submit the early-access form, we receive the fields you typed (name, email, business or account name, neighborhood, note) and use them only to contact you about Hibi.'] },
         { h: 'Product data (pilot)', p: ['When the Hibi product is live, a redemption records the store, the creator code, the time, the bill amount and the commission. This record is used to bill merchants, pay creators, and detect fraud. Merchants see redemptions at their own store. Creators see their own deliveries. Consumers are identified only as needed to prevent duplicate redemptions.', 'We do not sell personal data. Anything shared outside the system is anonymous and aggregated.'] },
-        { h: 'Retention and your rights', p: ['We keep form submissions until you ask us to delete them. Email hibi.nyc@gmail.com to access, correct or delete anything we hold about you.'] },
-        { h: 'Contact', p: ['Hibi, New York. hibi.nyc@gmail.com'] },
+        { h: 'Retention and your rights', p: ['We keep form submissions until you ask us to delete them. Email hello@hibi.club to access, correct or delete anything we hold about you.'] },
+        { h: 'Contact', p: ['Hibi, New York. hello@hibi.club'] },
       ],
     },
     terms: {

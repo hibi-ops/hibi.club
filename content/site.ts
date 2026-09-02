@@ -3,7 +3,7 @@ export const SITE = {
   name: 'Hibi',
   domain: 'hibi.club',
   url: 'https://hibi.club',
-  email: 'hibi.nyc@gmail.com',
+  email: 'hello@hibi.club',
   city: 'New York',
   founded: 2026,
   // Optional form endpoint (Formspree / Tally / Basin / your own API).

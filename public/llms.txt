@@ -2,7 +2,7 @@
 
 > Hibi (日々, "day by day") is a New York company building pay-per-visit local marketing. A local creator posts about a store with a unique redemption code; a customer redeems it at the counter; the merchant pays one commission on that walk-in and the creator receives most of it. Merchants pay no subscription and no setup fee. Consumers are never charged.
 
-Site: https://hibi.club · Contact: hibi.nyc@gmail.com · Languages: English (/en/), 简体中文 (/zh/)
+Site: https://hibi.club · Contact: hello@hibi.club · Languages: English (/en/), 简体中文 (/zh/)
 
 ## Pages
 - [Home](https://hibi.club/en/): the problem (prepaid, unaccountable local ads), how a redemption works, three sides, pilot pricing, why now, models, where we start.

@@ -25,9 +25,9 @@ export const zh: Dict = {
     progress: '第 2 步，共 2 步——上限你已经定好了',
     capPrefix: '每月上限',
     hoodDefault: '纽约',
-    fallbackNote: '点击后会打开你的邮件软件，收件人是 hibi.nyc@gmail.com。本网站不保存任何内容。',
-    done: { title: '收到了。', body: '每一封我们都会看，回复来自 hibi.nyc@gmail.com。' },
-    error: '提交没成功。请直接发邮件到 hibi.nyc@gmail.com。',
+    fallbackNote: '点击后会打开你的邮件软件，收件人是 hello@hibi.club。本网站不保存任何内容。',
+    done: { title: '收到了。', body: '每一封我们都会看，回复来自 hello@hibi.club。' },
+    error: '提交没成功。请直接发邮件到 hello@hibi.club。',
   },
 
   home: {
@@ -315,7 +315,7 @@ export const zh: Dict = {
         { k: '所在地', v: '纽约', u: '一个街区一个街区做' },
         { k: '团队', v: '三个人', u: '外加一圈兼职伙伴' },
         { k: '第一批', v: '2026', u: '商家和创作者，正在组建' },
-        { k: '联系', v: '直接写信', u: 'hibi.nyc@gmail.com，每封都会看' },
+        { k: '联系', v: '直接写信', u: 'hello@hibi.club，每封都会看' },
       ],
       foot: '以上都是当下的实际情况。我们只公布试点结果，不做预测。',
     },
@@ -341,7 +341,7 @@ export const zh: Dict = {
     team: {
       label: '团队',
       title: '创始人主导，常驻纽约',
-      founder: { name: 'Jiaming Wang', role: '创始人', bio: '负责产品、战略和第一批商家。写信到 hibi.nyc@gmail.com，他会亲自看每一封。' },
+      founder: { name: 'Jiaming Wang', role: '创始人', bio: '负责产品、战略和第一批商家。写信到 hello@hibi.club，他会亲自看每一封。' },
       body: '核心三人，外加一圈产品、设计和社区推广方向的兼职伙伴。试点期正在引入更资深的人，见下方空缺。',
     },
     hiring: {
@@ -499,8 +499,8 @@ export const zh: Dict = {
       sections: [
         { h: '本网站收集什么', p: ['本网站不设置追踪 cookie，不运行第三方广告脚本。如果你提交了申请表，我们会收到你填写的内容（姓名、邮箱、店名或账号、街区、补充说明），只用于就 Hibi 与你联系。'] },
         { h: '产品数据（试点期）', p: ['Hibi 产品上线后，每次核销会记录门店、创作者口令、时间、消费金额和佣金。这份记录用于给商家出账、给创作者付款、以及识别作弊。商家看到的是自己店里的核销，创作者看到的是自己带来的客人，消费者只在防止重复核销所需的范围内被识别。', '我们不卖个人数据。离开系统的只有匿名汇总。'] },
-        { h: '保存期限与你的权利', p: ['表单内容会一直保存，直到你要求删除。发邮件到 hibi.nyc@gmail.com，可以查看、更正或删除我们持有的关于你的任何信息。'] },
-        { h: '联系', p: ['Hibi，纽约。hibi.nyc@gmail.com'] },
+        { h: '保存期限与你的权利', p: ['表单内容会一直保存，直到你要求删除。发邮件到 hello@hibi.club，可以查看、更正或删除我们持有的关于你的任何信息。'] },
+        { h: '联系', p: ['Hibi，纽约。hello@hibi.club'] },
       ],
     },
     terms: {
