@@ -340,7 +340,7 @@ export const en: Dict = {
     },
     team: {
       label: 'Team',
-      title: 'Founder-led, New York based',
+      title: 'Three people, New York.',
       body: 'A core team of three plus a circle of part-time contributors across product, design and community outreach. We are adding senior people for the pilot — see the open roles.',
     },
     hiring: {
