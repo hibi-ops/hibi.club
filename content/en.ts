@@ -313,7 +313,6 @@ export const en: Dict = {
       label: 'The facts',
       rows: [
         { k: 'Based in', v: 'New York', u: 'one neighbourhood at a time' },
-        { k: 'Team', v: 'Three', u: 'plus part-time contributors' },
         { k: 'First cohort', v: '2026', u: 'merchants and creators, forming now' },
         { k: 'Reach us', v: 'Directly', u: 'hello@hibi.club — every message is read' },
       ],
@@ -337,11 +336,6 @@ export const en: Dict = {
         { label: '03', title: 'No selling of personal data', body: 'What leaves the system is anonymous and aggregated. Merchants see their customers; nobody else does.' },
         { label: '04', title: 'No exclusivity, no rankings, no paid reviews', body: 'Creators post where they like. Merchants buy customers, not praise.' },
       ],
-    },
-    team: {
-      label: 'Team',
-      title: 'Three people, New York.',
-      body: 'A core team of three plus a circle of part-time contributors across product, design and community outreach. We are adding senior people for the pilot — see the open roles.',
     },
     hiring: {
       label: 'Open roles',

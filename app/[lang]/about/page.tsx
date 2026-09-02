@@ -56,15 +56,6 @@ export default async function About({ params }: P) {
           </div>
         </section>
 
-        <section className="section" id="team">
-          <div className="wrap">
-            <Head label={a.team.label} title={a.team.title} />
-            <div className="sec-body">
-              <p className="lead" style={{ fontSize: 'var(--t-body)' }}>{a.team.body}</p>
-            </div>
-          </div>
-        </section>
-
         <section className="section tone-ink" id="hiring">
           <div className="wrap">
             <Head label={a.hiring.label} title={a.hiring.title} />
