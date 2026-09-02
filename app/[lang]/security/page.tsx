@@ -47,7 +47,11 @@ export default async function Security({ params }: P) {
           </div>
         </section>
 
-        <section className="section tone-paper">
+        {/* the ground behind "the check" is kept smooth; every few seconds one
+            isolated spike stands up and is held — the record that does not fit
+            the store's own history, drawn as the copy describes it */}
+        <section className="section tone-paper relief">
+          <Wash variant="outlier" seed={10} />
           <div className="wrap">
             <Head label={s.redemption.label} title={s.redemption.title} />
             <div className="sec-body"><Steps items={s.redemption.steps} /></div>

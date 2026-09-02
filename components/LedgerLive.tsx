@@ -25,7 +25,12 @@ export default function LedgerLive({ c }: { c: Dict['home']['ledgerCard'] }) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     setLive(true);
     const id = setInterval(() => {
-      if (!hover.current && !document.hidden) setHead(h => (h + 1) % all.current.length);
+      if (!hover.current && !document.hidden) {
+        setHead(h => (h + 1) % all.current.length);
+        /* the hero's contour field hears this: a row on the ledger is a rise
+           on the sheet. Nobody else listens; the card keeps no handle on it. */
+        window.dispatchEvent(new CustomEvent('hibi:ledger'));
+      }
     }, 3200);
     return () => clearInterval(id);
   }, []);

@@ -33,7 +33,7 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
     timers.current.push(setTimeout(() => setPhase('opening'), 460));
     timers.current.push(setTimeout(() => {
       setPhase('done');                                    // box opens, dot walks on
-      window.dispatchEvent(new CustomEvent('hibi:redeem'));
+      window.dispatchEvent(new CustomEvent('hibi:redeem', { detail: { jackpot: p.jackpot } }));
     }, 1150));
   };
   const reset = () => {

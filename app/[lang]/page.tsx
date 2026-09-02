@@ -77,8 +77,12 @@ export default async function Home({ params }: P) {
           </div>
         </section>
 
-        {/* HOW */}
-        <section className="section tone-paper">
+        {/* HOW — the walk-in stage stands on the survey sheet too, and here the
+            sheet answers the stage: a redemption raises the ground under the
+            counter node (Wash 'counter' hears hibi:redeem, the event WeekStats
+            already counts). */}
+        <section className="section tone-paper relief">
+          <Wash variant="counter" seed={9} />
           <div className="wrap">
             <Head label={h.how.label} title={h.how.title} />
             <div className="sec-body"><WalkIn steps={h.how.steps} d={h.how.demo} /></div>
