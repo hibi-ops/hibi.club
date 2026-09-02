@@ -134,7 +134,7 @@ export type Dict = {
     eyebrow: string; title: string; lead: string; heroCard: HeroCard;
     what: { label: string; title: string; paras: string[] };
     principles: { label: string; title: string; cols: Col[] };
-    team: { label: string; title: string; founder: { name: string; role: string; bio: string }; body: string };
+    team: { label: string; title: string; body: string };
     hiring: { label: string; title: string; roles: Col[]; cta: string };
     investors: { label: string; title: string; body: string; cta: string };
   };

@@ -59,18 +59,8 @@ export default async function About({ params }: P) {
         <section className="section" id="team">
           <div className="wrap">
             <Head label={a.team.label} title={a.team.title} />
-            <div className="rows sec-body">
-              <div className="row">
-                <div>
-                  <h3 className="h2">{a.team.founder.name}</h3>
-                  <span className="label gray">{a.team.founder.role}</span>
-                </div>
-                <p className="lead" style={{ fontSize: 'var(--t-body)' }}>{a.team.founder.bio}</p>
-              </div>
-              <div className="row">
-                <span className="label gray">{a.team.label}</span>
-                <p>{a.team.body}</p>
-              </div>
+            <div className="sec-body">
+              <p className="lead" style={{ fontSize: 'var(--t-body)' }}>{a.team.body}</p>
             </div>
           </div>
         </section>

@@ -8,7 +8,7 @@ Site: https://hibi.club · Contact: hello@hibi.club · Languages: English (/en/)
 - [Home](https://hibi.club/en/): the problem (prepaid, unaccountable local ads), how a redemption works, three sides, pilot pricing, why now, models, where we start.
 - [For merchants](https://hibi.club/en/merchants/): what a merchant sets (reward, commission, monthly cap), the counter procedure, the month-end bill, pilot pricing (15% first visit / 8% repeat / 4% long-term), FAQ.
 - [For creators](https://hibi.club/en/creators/): uncapped commission, trailing income for 12 months, Creator Passport, the split (creator keeps 70% of commission), FAQ.
-- [About](https://hibi.club/en/about/): what we are building, commitments, team (Jiaming Wang, Founder), open roles, investors.
+- [About](https://hibi.club/en/about/): what we are building, commitments, team, open roles, investors.
 - [Legal](https://hibi.club/en/legal/): privacy and terms (pilot draft).
 
 ## Facts

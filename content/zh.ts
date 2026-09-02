@@ -341,7 +341,6 @@ export const zh: Dict = {
     team: {
       label: '团队',
       title: '创始人主导，常驻纽约',
-      founder: { name: 'Jiaming Wang', role: '创始人', bio: '负责产品、战略和第一批商家。发到 hello@hibi.club 的每一封信都会亲自阅读。' },
       body: '核心团队三人，另有产品、设计和社区推广方向的兼职协作者。试点期正在引入资深成员，见下方职位。',
     },
     hiring: {

@@ -341,7 +341,6 @@ export const en: Dict = {
     team: {
       label: 'Team',
       title: 'Founder-led, New York based',
-      founder: { name: 'Jiaming Wang', role: 'Founder', bio: 'Leads product, strategy and the first merchant cohort. Reads every message sent to hello@hibi.club.' },
       body: 'A core team of three plus a circle of part-time contributors across product, design and community outreach. We are adding senior people for the pilot — see the open roles.',
     },
     hiring: {
