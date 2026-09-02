@@ -120,7 +120,7 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the customer’s bill, the first time they redeem at your store.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'On return visits inside the 12-month window opened by the first redemption.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'From the fourth return visit inside the 12-month window — the customer is a regular by then.', unit: 'of the bill' },
       ],
       foot: 'No subscription. No setup fee. You set the monthly cap and can pause anytime. Pilot pricing; final rates are set with the first cohort.',
       cta: 'See how it works for merchants',
@@ -205,7 +205,7 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the bill, on a customer’s first redemption.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'Inside the 12-month window opened by the first visit.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'From the fourth return visit inside the 12-month window — the customer is a regular by then.', unit: 'of the bill' },
       ],
       foot: 'Pilot pricing. Final rates are set together with the first cohort and published here.',
     },
@@ -376,7 +376,7 @@ export const en: Dict = {
       tiers: [
         { num: '15%', title: 'First visit', body: 'Of the bill, on a customer’s first redemption at your store.', unit: 'of the bill' },
         { num: '8%', title: 'Repeat visit', body: 'Inside the 12-month window opened by the first visit.', unit: 'of the bill' },
-        { num: '4%', title: 'Long-term', body: 'On visits after the 12-month window has closed.', unit: 'of the bill' },
+        { num: '4%', title: 'Long-term', body: 'From the fourth return visit inside the 12-month window — the customer is a regular by then.', unit: 'of the bill' },
       ],
     },
     calc: {
