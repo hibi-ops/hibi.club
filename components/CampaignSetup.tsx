@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
+import Tile from './Tile';
 import type { Dict } from '@/content/types';
 import { RATE, money, whole } from '@/lib/model';
 
@@ -83,7 +84,17 @@ export default function CampaignSetup({ c }: { c: Dict['merchants']['set'] }) {
       </fieldset>
 
       <div className="est-out est-out-rate">
-        <div className="est-primary">
+        {/* THE ANSWER TAKES THE COLOUR; THE CONTROLS KEEP THE PAPER.
+            Everything in this panel used to sit at one weight — two sliders, a
+            segmented control, the headcount and a paragraph, all on the same
+            white. Squinting at it, nothing came forward, and the one thing the
+            section exists to say ("your cap is a number of PEOPLE") was the
+            middle item in a list. The field marks the answer and nothing else.
+            The bars stay on white beside it: figures on gradients were tried
+            in the tiles and removed for reading as science fiction, and that
+            verdict holds here — a number is not a diagram. */}
+        <div className="est-primary est-lit">
+          <Tile n={3} className="est-lit-bg" />
           <span className="k-head">{c.peopleLabel}</span>
           <output className="est-total est-rate">{first.toLocaleString('en-US')}</output>
           <span className="est-sub">{c.perNote.replace('{each}', money(bill * RATE.first))}</span>

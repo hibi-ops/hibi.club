@@ -4,6 +4,7 @@ import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import CampaignSetup from '@/components/CampaignSetup';
 import Panel from '@/components/Panel';
+import Tile from '@/components/Tile';
 import Footer from '@/components/Footer';
 import LedgerLive from '@/components/LedgerLive';
 import JsonLd from '@/components/JsonLd';
@@ -105,6 +106,11 @@ export default async function Merchants({ params }: P) {
               <div className="rail-head">
                 <span className="label lbl">{m.faq.label}</span>
                 <h2 className="h2"><span className="hl">{m.faq.title}</span></h2>
+                {/* the column stopped under the heading and trailed two hundred
+                    pixels into white beside a tall accordion — the void
+                    .rail-tile exists for. Home already closes its rail this
+                    way; this page did not. */}
+                <Tile n={7} className="rail-tile" />
               </div>
               <Faq items={m.faq.items} />
             </div>

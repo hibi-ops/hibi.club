@@ -172,8 +172,12 @@ button{font:inherit;}
 /* the display figures, and only these: the pair in section 01, the split
    total, the estimator total, the counter amount and the rate ladder. Small
    figures in rows and tables stay on the text face, where a second grotesque
-   would read as a mistake rather than as a device. */
-.num,.split-total,.est-total,.wi-amt,.rate .rn{font-family:'Hibi Figures','Schibsted Grotesk',sans-serif;}
+   would read as a mistake rather than as a device.
+   .est-year-v joins them: at 32px, outlined, it is the same object as the
+   creator's hollow $0 — its own CSS says so — and it was the one display
+   figure still set on the text face. Two grotesques a section apart in the
+   same page is exactly the mistake this list exists to prevent. */
+.num,.split-total,.est-total,.est-year-v,.wi-amt,.rate .rn{font-family:'Hibi Figures','Schibsted Grotesk',sans-serif;}
 
 /* CJK: trim the half-em that full-width punctuation carries on the side that
    meets a Latin glyph or a line edge, and never break a line before a closing
@@ -1439,6 +1443,27 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-total{display:block;font-size:clamp(44px,6vw,76px);font-weight:700;letter-spacing:-.04em;
   line-height:1;font-variant-numeric:proportional-nums lining-nums;}
 .est-sub{display:block;font-size:13px;color:var(--gray-s);margin-top:var(--s1);line-height:1.5;max-width:38ch;}
+/* --- the answer, on a field ----------------------------------------------
+   One gradient object in this panel and it is on the readout, because the
+   readout is the section's whole sentence. The controls stay on paper: colour
+   here means "this is the answer", and a coloured slider would only mean
+   "this is a slider".
+   The tile is a background, not a lid, so it loses the height and the
+   top-only radius the .tile class gives it and takes the box instead. */
+/* THE FIELD NEEDS ROOM TO BE A FIELD. At content height the box was ~110px
+   and showed only the dark end of the ramp — the blobs are inset -22% and
+   blurred 24px, so on a small box they merge into one flat dark zone, which is
+   the "luminous but flat" failure the palette comments warn about. The floor
+   gives the ramp somewhere to travel, and the number sits at the foot of it,
+   the same way the record cards print their caption at the foot. */
+.est-lit{position:relative;isolation:isolate;overflow:hidden;
+  border-radius:var(--r-lg);padding:var(--s5) var(--s4) var(--s4);
+  min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;}
+.est-lit>.est-lit-bg{position:absolute;inset:0;height:auto;border-radius:inherit;z-index:0;}
+.est-lit>:not(.est-lit-bg){position:relative;z-index:1;}
+.est-lit .k-head{color:rgba(255,255,255,.74);}
+.est-lit .est-total{color:#fff;}
+.est-lit .est-sub{color:rgba(255,255,255,.84);}
 .est-note{margin-top:var(--s4);padding-top:var(--s3);border-top:var(--edge-2);
   font-size:13.5px;line-height:1.6;color:var(--gray-s);max-width:64ch;}
 .est-cta{margin-top:var(--s4);}

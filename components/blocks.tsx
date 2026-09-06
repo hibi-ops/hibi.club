@@ -34,6 +34,14 @@ export function Cols({ items, n }: { items: Col[]; n?: number }) {
   );
 }
 
+/* NO TILES ON THE STEPS. Built twice — one palette across three bands at 84px,
+   then three palettes at 132 — and cut both times for the same reason. The
+   grain is inset -22% and blurred 24px, so the blur is a fraction of the BOX:
+   7% of the width on a 357px record card, 18-29% of the height on a band. What
+   comes out is a soft grey-green smear, three of them in a row, and no amount
+   of palette fixes a box that is too small for the instrument. The colour on
+   this page went where it has room instead — the readout in 01 and the rail
+   tile under the questions. */
 export function Steps({ items }: { items: Step[] }) {
   /* a custom property, not an inline grid-template: an inline declaration
      outranks the mobile media query and four columns would overflow 390px */
