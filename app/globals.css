@@ -557,9 +557,19 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
   .nav-right .btn-nav{display:none;}
   .hero .cta-row .btn-primary{display:none;}
   /* with the primary action in the thumb bar, a bordered button here reads as
-     a competing CTA; it steps down to a link */
+     a competing CTA; it steps down to a link.
+     height:auto took the tap target down to the line box — measured 24px on a
+     touch screen, against the 44 a finger needs. The box comes back and only
+     the paint goes away: no ground, no border, no side padding, so it still
+     reads as a link and sits on the text's own left edge. */
   .hero .cta-row .btn-second{background:none;border-color:transparent;box-shadow:none;
-    padding:0;height:auto;color:var(--brandInk);}
+    padding:0;height:44px;color:var(--brandInk);}
+  /* Once the primary is gone the row is a single de-emphasised cross-link, and
+     the 32px .sec-body interval left it floating between the paragraph above
+     and the card below. Half of that reads as attached to the copy it
+     qualifies. (home and security already wrote .tight inline; this makes all
+     six heroes agree.) */
+  .hero .cta-row{margin-top:var(--s3);}
 }
 
 /* ===== type ==============================================================
@@ -1157,13 +1167,23 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .spec-card{background:var(--snow);border:var(--edge);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-pop);}
 .spec-card>.k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
   color:var(--gray-s);padding:var(--s2) var(--s3);border-bottom:var(--edge);background:var(--paper);}
-.srow{display:grid;grid-template-columns:1fr auto;gap:var(--s3);align-items:baseline;padding:var(--s2) var(--s3);}
+.srow{display:grid;grid-template-columns:1fr auto;grid-template-areas:'k v' '. u';gap:0 var(--s3);align-items:baseline;padding:var(--s2) var(--s3);}
 .srow+.srow{border-top:var(--edge-2);}
 .srow{transition:background var(--t1) var(--ease);}
 @media(hover:hover){.srow:hover{background:var(--paper);}}
-.srow .sk{font-size:13.5px;font-weight:600;}
-.srow .sv{font-size:15px;font-weight:600;text-align:right;font-variant-numeric:proportional-nums;letter-spacing:-.01em;}
-.srow .su{display:block;font-size:11.5px;font-weight:400;color:var(--gray-s);letter-spacing:0;margin-top:2px;}
+.srow .sk{grid-area:k;font-size:13.5px;font-weight:600;}
+.srow .sv{grid-area:v;font-size:15px;font-weight:600;text-align:right;font-variant-numeric:proportional-nums;letter-spacing:-.01em;}
+/* The unit line is a sibling, not a child of the value, so the grid can move it.
+   Wide: it stays under the value and the row reads label ....... 10.5%. Narrow:
+   the caption is a 40-character sentence and an `auto` right column sized to it
+   squeezed "Per return visit" into two lines — so below 560 it drops to its own
+   full-width row and the right column shrinks back to the number. */
+.srow .su{grid-area:u;font-size:11.5px;font-weight:400;color:var(--gray-s);letter-spacing:0;
+  margin-top:2px;text-align:right;}
+@media(max-width:559px){
+  .srow{grid-template-areas:'k v' 'u u';}
+  .srow .su{text-align:left;margin-top:4px;}
+}
 .spec-foot{font-size:12px;line-height:1.5;color:var(--gray-s);padding:var(--s2) var(--s3);
   border-top:var(--edge);background:var(--paper);}
 
@@ -1557,12 +1577,6 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .field{display:flex;flex-direction:column;gap:var(--s0);}
 .field.full{grid-column:1/-1;}
 .field label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gray-s);}
-@media(pointer:coarse){
-  .btn{height:44px;padding:0 var(--s4);}
-  .btn-nav{height:36px;}
-  .field input,.field select{height:44px;}
-  .seg button{height:38px;}
-}
 /* Ruled fields, not boxes. Five bordered rectangles were the last place on
    the site still drawing containers, against this stylesheet's own rule that
    a surface is DRAWN rather than lifted — and against the page's whole
@@ -1836,3 +1850,45 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    The plate now begins and ends on a hard edge, which is what everything else
    here does.
    ========================================================================= */
+
+/* ===== touch sizes =======================================================
+   LAST IN THE FILE ON PURPOSE. A media query adds no specificity, so these
+   only win by source order — and this block used to sit above the rules it
+   was meant to override. `.field input` was set to 44 here and then back to
+   36 forty lines later; `.seg button` the same, 38 then 30. Both measured at
+   their small values on a touch layout with (pointer:coarse) matching, which
+   is the kind of bug that reads as "the rule doesn't work" when the rule was
+   simply outvoted. Anything added here must stay below the base definitions.
+
+   44px is the finger. The visual size of these controls does not change on a
+   pointer device — this is hit area only, and where a control is styled as a
+   link the paint stays flat and only the box grows. */
+@media(pointer:coarse){
+  .btn{height:44px;padding:0 var(--s4);}
+  .btn-nav{height:36px;}
+  .field input,.field select{height:44px;}
+  .field textarea{min-height:88px;}
+  .seg button{height:44px;}
+  /* the language switch was a 22x30 target, the smallest thing on the page */
+  .lang a{padding:14px var(--s2);}
+  /* a column of 30px links is a column of mis-taps. The gap between them does
+     not grow — the box does, so the rows keep their rhythm. */
+  .footer-cols a{display:inline-flex;align-items:center;min-height:44px;}
+  /* the wordmark is the way back to the home page and it was a 29px target */
+  .nav .brand,.nav a:has(> .wordmark){display:inline-flex;align-items:center;min-height:44px;}
+  /* THE SLIDERS. 16px tall on a touch screen, and they are the one control on
+     this site you have to DRAG rather than tap — the calculators are the whole
+     argument on two of these pages. The box grows to 44 and the track and thumb
+     do not: the runnable track stays 4px and the negative margin on the thumb
+     is re-derived from the new height so it still sits centred on the line.
+     Nothing about the drawing changes, only what a finger can grab. */
+  .est-field input[type=range]{height:44px;}
+  .est-field input[type=range]::-webkit-slider-runnable-track{height:4px;}
+  .est-field input[type=range]::-webkit-slider-thumb{width:20px;height:20px;margin-top:-8px;}
+  .est-field input[type=range]::-moz-range-thumb{width:20px;height:20px;}
+  /* /legal's table of contents: nine links 29px tall and 2px apart, and on a
+     phone that list IS the navigation for the page. Same treatment as the
+     footer column — the box grows, the 5px of padding that draws the hover
+     ground stays where it is. */
+  .doc-nav a{display:flex;align-items:center;min-height:44px;}
+}

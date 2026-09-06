@@ -301,7 +301,14 @@
    Three framed panels side by side, each headed by a tile.
    ========================================================================= */
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
-.trio>.panel{display:flex;flex-direction:column;overflow:hidden;}
+/* min-width:0 is load-bearing, not boilerplate. A grid item defaults to
+   min-width:auto, i.e. its min-content width — and in Chinese, keep-all makes
+   the longest clause between two punctuation marks unbreakable, so min-content
+   here was 462px against a 342px track. The item won and pushed 96px of
+   horizontal scroll onto every /zh/ page. With the track back in charge,
+   overflow-wrap:break-word (globals.css) handles the clause that still will
+   not fit. */
+.trio>.panel{display:flex;flex-direction:column;overflow:hidden;min-width:0;}
 /* NO MIN-HEIGHT. There was a floor here (--trio-h, 330 and 420) from when
    every card carried a colour block: the block needed room, so the card was
    given some. The blocks are gone from this trio and the floor was left
@@ -403,8 +410,26 @@
     rgba(0,0,0,0) 70.8%);}
 @media(max-width:900px){
   /* one column: 3:4 on a full-width card is a 500px tall slab you have to
-     scroll past, so the shape goes wide instead of tall */
-  .trio-wash>.panel{min-height:260px;aspect-ratio:16 / 9;}}
+     scroll past, so the shape goes wide instead of tall.
+     width:100% IS THE LOAD-BEARING HALF. The row is auto-height, so the card's
+     height is content-derived — and an aspect-ratio with an indefinite height
+     runs BACKWARDS: 16/9 of a 342px track is 192px, the Chinese caption needs
+     260, so the box grew in height and the ratio dragged the WIDTH to 462
+     against a 342px track. That was 96px of horizontal scroll on every /zh/
+     page. (English is a couple of lines shorter and squeaked under it, which is
+     why it only ever showed up in Chinese.) Making the width explicitly
+     definite fixes the direction of the constraint: the ratio now sets the
+     height from the width, and a caption too tall for it grows the height
+     alone. */
+  .trio-wash>.panel{min-height:260px;aspect-ratio:16 / 9;width:100%;}}
+/* AND BACK TO TALL ON A PHONE. 16/9 is the right answer while one column is
+   still 700px across. At 342 it is a 192px stripe, and the floor that stopped
+   it from being one left the field at 73px under a 187px caption — which is
+   the lid this trio exists not to be. The card is narrow again down here, so
+   it takes the same 15/16 it has when there are three of them: 365 tall, and
+   the field gets its half back. */
+@media(max-width:640px){
+  .trio-wash>.panel{aspect-ratio:15 / 16;min-height:0;}}
 
 /* the one line that follows the three cards. It used to sit in the rail's
    text column; on its own under a full-width row it needs a measure and some

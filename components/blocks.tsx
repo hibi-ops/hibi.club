@@ -201,7 +201,8 @@ export function SpecCard({ c }: { c: HeroCard }) {
         {c.rows.map(r => (
           <div className="srow" key={r.k}>
             <span className="sk">{r.k}</span>
-            <span className="sv">{r.v}{r.u && <span className="su">{r.u}</span>}</span>
+            <span className="sv">{r.v}</span>
+            {r.u && <span className="su">{r.u}</span>}
           </div>
         ))}
       </div>
