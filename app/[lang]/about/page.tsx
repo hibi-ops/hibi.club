@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
-import { Head, Cols, Access, ThumbBar, Feats, SpecCard } from '@/components/blocks';
+import { Head, Cols, Access, ThumbBar, SpecCard } from '@/components/blocks';
 import { getDict, SITE, type Lang } from '@/content';
 import { pageMetadata } from '@/lib/seo';
 
@@ -52,14 +52,21 @@ export default async function About({ params }: P) {
         <section className="section tone-paper">
           <div className="wrap">
             <Head label={a.principles.label} title={a.principles.title} />
-            <div className="sec-body"><Feats items={a.principles.cols} /></div>
+            {/* Four items in a three-up feat grid left an orphan on row two,
+                and the run-in clause was swallowing the 01-04 numbering these
+                commitments are written to carry. Cols at two columns: 2x2, the
+                numbers visible, each cell ruled. */}
+            <div className="sec-body"><Cols items={a.principles.cols} n={2} /></div>
           </div>
         </section>
 
         <section className="section tone-ink" id="hiring">
           <div className="wrap">
             <Head label={a.hiring.label} title={a.hiring.title} />
-            <div className="sec-body"><Cols items={a.hiring.roles} /></div>
+            {/* the terms come before the list on purpose: a role is only worth
+                reading once you know these are pre-funding seats */}
+            <div className="sec-body"><p className="lead" style={{ maxWidth: '62ch' }}>{a.hiring.note}</p></div>
+            <div className="sec-body"><Cols items={a.hiring.roles} n={3} /></div>
             <div className="sec-body">
               <a className="btn btn-primary" href={mail('Hibi — role')}>{a.hiring.cta} <span className="arr" aria-hidden="true">→</span></a>
             </div>

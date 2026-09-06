@@ -1,51 +1,51 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Dict } from '@/content/types';
+import { series, money, whole } from '@/lib/model';
 
-/* every figure carries cents: the product's claim is that each dollar reads
-   back to a person at the counter, so its own calculator does not round */
-const money = (n: number) =>
-  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-/* half-up on the half-cent, not toFixed's binary truncation (4.725 → 4.73) */
-const unit = (n: number) => '$' + (Math.round(n * 100 + 1e-6) / 100).toFixed(2);
+/* ===========================================================================
+   THE CROSSOVER — the creator calculator.
+   ---------------------------------------------------------------------------
+   A creator's real question is not "how much per customer". It is "is this
+   better than the flat fee I already get". So the figure answers that one,
+   with the creator's own rate as an input.
 
-/* Pilot terms, stated once here so the arithmetic is auditable:
-   the merchant pays 15% of a first-visit bill and 8% of a return visit;
-   the creator keeps 70% of a first-visit commission and 55% of a repeat one
-   (PRICING-MODEL-SPEC §1.2). */
-const FIRST = 0.15 * 0.70;   // 10.5% of a first-visit bill
-const REPEAT = 0.08 * 0.55;  // 4.4% of a return-visit bill
-const RETURNS = 2;           // assumed returns per customer inside the window
+   Two things race across twelve months: a flat fee, paid once and flat forever
+   after, and Hibi's line, which climbs every month because the customers from
+   March keep coming back in December. The month they cross is printed.
 
-/**
- * The creator's side of the merchant estimator: the same two sliders, the same
- * pre-filled defaults, the other end of the same transaction.
- *
- * The second figure is the one that makes this product different from a flat
- * fee — a post keeps paying for twelve months — so it is shown beside the
- * first, and the assumption behind it is printed rather than buried.
- */
+   THE FLAT FEE IS A SLIDER, and it goes to $2,000. Put a big number in and the
+   crossover moves out or stops happening, and the figure says so in plain
+   words. That is the only version of this comparison worth showing: a creator
+   with a real rate card will test it against their real rate within about four
+   seconds, and a chart that cannot lose is a chart they stop trusting.
+   =========================================================================== */
+
 export default function CreatorCalc({ c, href }: { c: Dict['creators']['calc']; href: string }) {
   const [bill, setBill] = useState(45);
-  const [visits, setVisits] = useState(20);
+  const [perMonth, setPerMonth] = useState(20);
+  const [flat, setFlat] = useState(300);
 
-  const perVisit = bill * FIRST;
-  const month = perVisit * visits;
-  const trailing = bill * REPEAT * RETURNS * visits;
+  const rows = useMemo(() => series(bill, perMonth, 2), [bill, perMonth]);
 
-  /* The walk-ins figure drives the contour field behind this section: fixed
-     contour interval, so more traffic is literally steeper ground. Published
-     as an event rather than a prop so the renderer stays decoupled — the same
-     shape as hibi:redeem. */
+  /* cumulative creator earnings, month by month */
+  const cume = useMemo(() => {
+    let s = 0;
+    return rows.map(r => (s += r.earn));
+  }, [rows]);
+
+  const total = cume[cume.length - 1];
+  const peak = Math.max(total, flat);
+  const crossIdx = cume.findIndex(v => v >= flat);        // -1 = never, inside a year
+  const crossed = crossIdx >= 0;
+
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('hibi:relief', {
-      detail: { level: (visits - 5) / 115 },
-    }));
-  }, [visits]);
+    window.dispatchEvent(new CustomEvent('hibi:relief', { detail: { level: (perMonth - 5) / 115 } }));
+  }, [perMonth]);
 
   return (
     <div className="est">
-      <div className="est-controls">
+      <div className="est-controls est-controls-3">
         <label className="est-field">
           <span className="k-head">{c.billLabel}</span>
           <output className="est-val">{money(bill)}</output>
@@ -54,25 +54,59 @@ export default function CreatorCalc({ c, href }: { c: Dict['creators']['calc']; 
         </label>
         <label className="est-field">
           <span className="k-head">{c.visitsLabel}</span>
-          <output className="est-val">{visits}</output>
-          <input type="range" min={5} max={120} step={5} value={visits}
-            onChange={e => setVisits(+e.target.value)} aria-label={c.visitsLabel} />
+          <output className="est-val">{perMonth}</output>
+          <input type="range" min={5} max={120} step={5} value={perMonth}
+            onChange={e => setPerMonth(+e.target.value)} aria-label={c.visitsLabel} />
+        </label>
+        {/* the reader's own rate card, against us */}
+        <label className="est-field est-field-alt">
+          <span className="k-head">{c.flatLabel}</span>
+          <output className="est-val">{whole(flat)}</output>
+          <input type="range" min={50} max={2000} step={50} value={flat}
+            onChange={e => setFlat(+e.target.value)} aria-label={c.flatLabel} />
         </label>
       </div>
 
-      <div className="est-out">
+      <div className="est-out est-out-rate">
         <div className="est-primary">
-          <span className="k-head">{c.firstLabel}</span>
-          <output className="est-total">{money(month)}</output>
-          <span className="est-sub">{unit(perVisit)} {c.perVisitLabel}</span>
+          <span className="k-head">{crossed ? c.crossLabel : c.crossNeverLabel}</span>
+          <output className="est-total">
+            {crossed ? c.crossMonth.replace('{n}', String(crossIdx + 1)) : c.crossNever}
+          </output>
+          <span className="est-sub">
+            {c.yearLabel.replace('{hibi}', whole(total)).replace('{flat}', whole(flat))}
+          </span>
         </div>
-        {/* the trailing figure is the argument; it is set smaller because it is
-            an estimate resting on a stated assumption, not a rate */}
-        <div className="est-compare">
-          <span className="k-head">{c.trailLabel}</span>
-          <span className="est-alt est-alt-earn">+{money(trailing)}</span>
-          <span className="est-sub">{c.trailNote}</span>
-        </div>
+
+        {/* twelve columns, cumulative. The flat fee is one horizontal rule
+            across the whole plot, because that is exactly what it is: paid
+            once, then never again. */}
+        <figure className="fig">
+          <div className="fig-plot" role="img"
+            aria-label={`${c.hibiLabel}: ${whole(total)} · ${c.flatSeriesLabel}: ${whole(flat)}`}>
+            <span className="fig-flat" style={{ bottom: `${(flat / peak) * 100}%` }}>
+              <em>{c.flatSeriesLabel} · {whole(flat)}</em>
+            </span>
+            {/* Three states, one mark. Below the flat fee the bars are set back
+                — climbing, but not there yet. The crossover month alone takes
+                the sky ground, because it is the month being named in the
+                headline. Everything after it is full ink. Ten sky bars would
+                have been a colour field, and the site's rule is that volume
+                comes from area, not from saturation. */}
+            {rows.map((r, i) => (
+              <span key={r.m} className="fig-col"
+                data-state={cume[i] < flat ? 'under' : i === crossIdx ? 'cross' : 'over'}>
+                <span className="fig-bar" style={{ height: `${(cume[i] / peak) * 100}%` }}>
+                  <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {whole(cume[i])}</span>
+                </span>
+              </span>
+            ))}
+          </div>
+          <figcaption className="fig-axis">
+            <span>{c.monthAxis.replace('{n}', '1')}</span>
+            <span>{c.hibiLabel} · {whole(total)}</span>
+          </figcaption>
+        </figure>
       </div>
 
       <p className="est-note">{c.note}</p>

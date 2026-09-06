@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
+import CampaignSetup from '@/components/CampaignSetup';
 import Footer from '@/components/Footer';
 import LedgerLive from '@/components/LedgerLive';
 import JsonLd from '@/components/JsonLd';
@@ -45,17 +46,13 @@ export default async function Merchants({ params }: P) {
           </div>
         </section>
 
-        <section className="section">
+        {/* The contour field's third job: same instrument as the two
+            calculators, relief driven by the headcount this one produces. */}
+        <section className="section relief">
+          <Wash variant="field" seed={11} />
           <div className="wrap">
             <Head label={m.set.label} title={m.set.title} />
-            <div className="rows sec-body">
-              {m.set.rows.map(r => (
-                <div className="row" key={r.k}>
-                  <h3 className="h2">{r.k}</h3>
-                  <p className="lead" style={{ fontSize: 'var(--t-body)' }}>{r.v}</p>
-                </div>
-              ))}
-            </div>
+            <div className="sec-body"><CampaignSetup c={m.set} /></div>
           </div>
         </section>
 

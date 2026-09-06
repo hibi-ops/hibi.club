@@ -102,10 +102,23 @@ export function Feats({ items }: { items: Col[] }) {
   );
 }
 
-export function Checks({ items }: { items: string[] }) {
+/* Two states, because two lists here mean opposite things and were wearing the
+   same tick. "No subscription" under Everything else is zero is a confirmed
+   absence — a tick is right. "No SOC 2 audit yet" under What we have not done
+   yet is an OPEN item, and a green tick beside it reads as though not being
+   audited were an accomplishment. An unticked box says the true thing: on the
+   list, not done. */
+export function Checks({ items, pending }: { items: string[]; pending?: boolean }) {
   return (
-    <ul className="checks">
-      {items.map(x => <li key={x}><Icon name="check" size={16} />{x}</li>)}
+    <ul className="checks" data-pending={pending ? '' : undefined}>
+      {items.map(x => (
+        <li key={x}>
+          {pending
+            ? <span className="checks-box" aria-hidden="true" />
+            : <Icon name="check" size={16} />}
+          {x}
+        </li>
+      ))}
     </ul>
   );
 }
@@ -145,38 +158,6 @@ export function TextLink({ href, children }: { href: string; children: React.Rea
   );
 }
 
-/* The artefact the product produces, rendered as itself. Not a screenshot:
-   real text scales, translates, and stays readable to a screen reader. */
-export function LedgerCard({ c }: { c: Dict['home']['ledgerCard'] }) {
-  return (
-    <figure className="ledger-card sheen">
-      <div className="ledger-head">
-        <span className="k">{c.label}</span>
-        <span className="v">{c.period}</span>
-      </div>
-      <div className="ledger-rows">
-        {c.rows.map((r, i) => (
-          <div className="lrow" key={i}>
-            <span className="lsrc">
-              <span className="src">{r.who}</span>
-              <span className="meta">{r.meta}</span>
-            </span>
-            <span className="lamt">
-              <span className="amt">{r.amt}</span>
-              <span className="fee">{r.fee}</span>
-            </span>
-          </div>
-        ))}
-      </div>
-      <figcaption className="ledger-foot">
-        <span className="t">{c.totalLabel}</span>
-        <span className="n">{c.total}</span>
-      </figcaption>
-    </figure>
-  );
-}
-
-/* The number, beside the headline, without a click. */
 export function SpecCard({ c }: { c: HeroCard }) {
   return (
     <aside className="spec-card sheen">

@@ -1,39 +1,49 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Dict } from '@/content/types';
+import { series, sum, money, whole, pct1, RATE } from '@/lib/model';
 
-/* every figure carries cents: the product's claim is that each dollar reads
-   back to a person at the counter, so its own calculator does not round */
-const money = (n: number) =>
-  '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const whole = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
-/* half-up on the half-cent, not toFixed's binary truncation */
-const unit = (n: number) => '$' + (Math.round(n * 100 + 1e-6) / 100).toFixed(2);
+/* ===========================================================================
+   THE RATE, FALLING — the merchant estimator.
+   ---------------------------------------------------------------------------
+   The old one multiplied a bill by 15% by a visit count and printed a monthly
+   figure, then apologised underneath: "a real month costs less than this once
+   customers come back." That apology is the product. It should be the figure.
 
-/* Defaults are a typical first-cohort store, not zeroes. An empty calculator
-   asks the visitor to invent two numbers before it will tell them anything;
-   a pre-filled one has already answered the question and invites a correction.
-   The result is then handed to the form, so the visitor confirms rather than
-   re-enters. */
+   So this prices a YEAR, and draws the blend coming down: month one is 15%
+   because every customer is new, and every month after it there are returns
+   underneath at 8% and then 4%. The headline number is the rate you actually
+   end up paying, which is the only rate that matters and the one no ad
+   platform can quote you.
+
+   The third control is the honest one. "How often does a customer come back"
+   includes "never" — set it there and the figure sits flat at 15% all year.
+   A calculator that cannot produce a bad answer is a poster.
+   =========================================================================== */
+
+/* months between return visits; 0 = they never come back */
+const CADENCE = [0, 6, 2, 1];
+
 export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc']; formHref: string }) {
   const [bill, setBill] = useState(45);
-  const [visits, setVisits] = useState(25);
+  const [perMonth, setPerMonth] = useState(25);
+  const [cad, setCad] = useState(2);            // default: every other month
 
-  const perVisit = bill * 0.15;
-  const monthly = perVisit * visits;
-  /* the cap is a ceiling, so it rounds UP to the next $25 — never below the
-     estimate it came from. The CTA says so. */
-  const cap = Math.max(50, Math.ceil(monthly / 25) * 25);
+  const rows = useMemo(() => series(bill, perMonth, CADENCE[cad]), [bill, perMonth, cad]);
+  const last = rows[rows.length - 1];
+  const yearSales = sum(rows, 'sales');
+  const yearFee = sum(rows, 'fee');
+  const blended = yearSales ? yearFee / yearSales : RATE.first;
+  /* the cap is a ceiling on the most expensive month — month one, when every
+     customer is new — so it never sits under the estimate it came from */
+  const cap = Math.max(50, Math.ceil(rows[0].fee / 25) * 25);
 
-  /* The walk-ins figure drives the contour field behind this section: fixed
-     contour interval, so more traffic is literally steeper ground. Published
-     as an event rather than a prop so the renderer stays decoupled — the same
-     shape as hibi:redeem. */
+  /* the contour field behind this section reads the traffic: fixed contour
+     interval, so more walk-ins is literally steeper ground. An event, not a
+     prop — the same decoupling as hibi:redeem. */
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('hibi:relief', {
-      detail: { level: (visits - 5) / 195 },
-    }));
-  }, [visits]);
+    window.dispatchEvent(new CustomEvent('hibi:relief', { detail: { level: (perMonth - 5) / 195 } }));
+  }, [perMonth]);
 
   return (
     <div className="est">
@@ -46,25 +56,65 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
         </label>
         <label className="est-field">
           <span className="k-head">{c.visitsLabel}</span>
-          <output className="est-val">{visits}</output>
-          <input type="range" min={5} max={200} step={5} value={visits}
-            onChange={e => setVisits(+e.target.value)} aria-label={c.visitsLabel} />
+          <output className="est-val">{perMonth}</output>
+          <input type="range" min={5} max={200} step={5} value={perMonth}
+            onChange={e => setPerMonth(+e.target.value)} aria-label={c.visitsLabel} />
         </label>
       </div>
 
-      <div className="est-out">
+      {/* A choice, not a dial: the cadence is a fact about your category, and
+          the reader either knows it or is about to find out they should.
+          Reuses the form's own .seg control rather than inventing a second
+          segmented control with opposite manners — the wrapper is named
+          .cadence because .seg was already taken (see globals.css). */}
+      <fieldset className="cadence">
+        <legend className="k-head">{c.returnLabel}</legend>
+        <div className="seg" role="group">
+          {c.returnOpts.map((o, i) => (
+            <button key={o} type="button" aria-pressed={i === cad}
+              onClick={() => setCad(i)}>{o}</button>
+          ))}
+        </div>
+      </fieldset>
+
+      <div className="est-out est-out-rate">
         <div className="est-primary">
-          <span className="k-head">{c.youPayLabel}</span>
-          <output className="est-total">{money(monthly)}</output>
-          <span className="est-sub">{unit(perVisit)} {c.perVisitLabel}</span>
+          <span className="k-head">{c.blendedLabel}</span>
+          <output className="est-total est-rate">{pct1(blended)}</output>
+          <span className="est-sub">{c.blendedNote}</span>
         </div>
-        {/* The comparison is never shown alone — a number only means something
-            against the number the reader already lives with. */}
-        <div className="est-compare">
-          <span className="k-head">{c.compareLabel}</span>
-          <span className="est-alt">{c.compareValue}</span>
-          <span className="est-sub">{c.compareNote}</span>
-        </div>
+
+        {/* twelve months, height = that month's blended rate against 15%.
+            No axes, no gridlines: a baseline rule and the two months that
+            need naming. The staircase is the argument. */}
+        <figure className="fig">
+          <div className="fig-plot" role="img"
+            aria-label={`${c.blendedLabel}: ${pct1(rows[0].rate)} → ${pct1(last.rate)}`}>
+            {/* the ceiling the bars fall away from. Without it the staircase is
+                twelve bars of similar height; with it, the growing gap between
+                the rule and the bar is the thing being sold. */}
+            <span className="fig-flat fig-ceil" style={{ bottom: '100%' }}>
+              <em>{c.ceilLabel}</em>
+            </span>
+            {rows.map(r => (
+              <span key={r.m} className="fig-col" data-last={r.m === rows.length ? '' : undefined}>
+                <span className="fig-bar" style={{ height: `${(r.rate / RATE.first) * 100}%` }}>
+                  <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {pct1(r.rate)}</span>
+                </span>
+              </span>
+            ))}
+          </div>
+          <figcaption className="fig-axis">
+            <span>{c.monthAxis.replace('{n}', '1')} · {pct1(rows[0].rate)}</span>
+            <span>{c.monthAxis.replace('{n}', '12')} · {pct1(last.rate)}</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div className="est-year">
+        <span className="k-head">{c.yearLabel}</span>
+        <span className="est-year-v">{whole(yearFee)}</span>
+        <span className="est-sub">{c.yearNote.replace('{sales}', whole(yearSales))}</span>
       </div>
 
       <p className="est-note">{c.note}</p>

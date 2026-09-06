@@ -4,9 +4,9 @@ import Nav from '@/components/Nav';
 import LedgerLive from '@/components/LedgerLive';
 import Wash from '@/components/Wash';
 import WalkIn from '@/components/WalkIn';
-import WeekStats from '@/components/WeekStats';
+import ChainMatrix from '@/components/ChainMatrix';
 import Footer from '@/components/Footer';
-import { Head, PriceTiers, Access, TextLink, ThumbBar, Split, Chrono, Feats, Ticker, BigMarquee } from '@/components/blocks';
+import { Head, PriceTiers, Access, TextLink, ThumbBar, Split, Chrono, Cols, Feats, Ticker, BigMarquee } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
 import { pageMetadata } from '@/lib/seo';
 
@@ -79,8 +79,12 @@ export default async function Home({ params }: P) {
 
         {/* HOW — the walk-in stage stands on the survey sheet too, and here the
             sheet answers the stage: a redemption raises the ground under the
-            counter node (Wash 'counter' hears hibi:redeem, the event WeekStats
-            already counts). */}
+            counter node (Wash 'counter' hears hibi:redeem).
+            A week-summary strip used to sit under this (24 walk-ins / $200.60,
+            ticking up with the demo). It was cut: those figures arrive from
+            nowhere, and the hero's own ledger card already shows the same week.
+            The demo's result belongs in the demo — the third column IS the
+            settled line. */}
         <section className="section tone-paper relief">
           <Wash variant="counter" seed={9} />
           <div className="wrap">
@@ -90,7 +94,6 @@ export default async function Home({ params }: P) {
               <span className="tag">{h.how.recordTag}</span>
               <p>{h.how.record}</p>
             </div>
-            <WeekStats s={h.how.stats} />
           </div>
         </section>
 
@@ -107,7 +110,12 @@ export default async function Home({ params }: P) {
           <div className="wrap">
             <Head label={h.sides.label} title={h.sides.title} wide />
             <div className="sec-body"><Split s={h.sides.split} /></div>
-            <div className="sec-body"><Feats items={h.sides.cols} /></div>
+            {/* Cols, not Feats, in this one section: the bar directly above
+                names three parties, so the three blocks under it have to be
+                labelled with the same three or the reader has to infer which
+                is whose from the prose. Everywhere else the run-in clause is
+                enough because the category is not the point. */}
+            <div className="sec-body"><Cols items={h.sides.cols} n={3} /></div>
           </div>
         </section>
 
@@ -136,6 +144,10 @@ export default async function Home({ params }: P) {
               </div>
               <Chrono items={h.now.items} />
             </div>
+            {/* The evidence for the sentence directly above. The rail ends on
+                "the layer nobody owns"; this is the layer, drawn, with every
+                competitor's bar stopping short of it. */}
+            <ChainMatrix c={h.chain} />
           </div>
         </section>
 
