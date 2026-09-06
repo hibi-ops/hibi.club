@@ -99,19 +99,20 @@ export type Dict = {
     /* one giant outline phrase crawling between acts — the brand speaking in
        its own mixed tongue (NY English × 日々), once per page */
     marquee: string;
-    pricing: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[]; foot: string; cta: string };
+    pricing: { label: string; title: string; tiers: { num: string; title: string; body: string; unit?: string }[]; foot: string };
     now: { label: string; title: string; items: Col[]; close: string };
     /* The deck's competitive matrix, drawn as reach along one chain rather
        than as a grid of ticks. `has` is ordered like `links`. */
     chain: {
       label: string; title: string;
-      links: string[];
+      links: string[];                 // the deck's eight criteria, in its order
       rows: { who: string; what: string; has: boolean[]; us?: boolean }[];
-      none: string;   // stacked layout only: a row that reaches no link at all
+      rowHead: string;                 // screen-reader name for the corner cell
+      heldHead: string;                // screen-reader name for the tally column
+      yes: string; no: string;         // screen-reader reading of a tick / dash
       caption: string;
     };
     ai: { label: string; title: string; lead: string; items: Col[]; close: string };
-    start: { label: string; title: string; body: string; ctaMerchant: string; ctaCreator: string };
   };
 
   merchants: {

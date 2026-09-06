@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import CampaignSetup from '@/components/CampaignSetup';
+import Panel from '@/components/Panel';
 import Footer from '@/components/Footer';
 import LedgerLive from '@/components/LedgerLive';
 import JsonLd from '@/components/JsonLd';
@@ -52,7 +53,11 @@ export default async function Merchants({ params }: P) {
           <Wash variant="field" seed={11} />
           <div className="wrap">
             <Head label={m.set.label} title={m.set.title} />
-            <div className="sec-body"><CampaignSetup c={m.set} /></div>
+            <div className="sec-body">
+              <Panel>
+                <CampaignSetup c={m.set} />
+              </Panel>
+            </div>
           </div>
         </section>
 

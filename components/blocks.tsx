@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import AccessForm from './AccessForm';
 import Icon from './Icon';
+import Tile, { type Pattern } from './Tile';
 import type { CSSProperties } from 'react';
 import type { Col, Step, QA, Dict, HeroCard } from '@/content/types';
 import type { Lang } from '@/content/site';
@@ -88,6 +89,39 @@ export function PriceTiers({ tiers }: { tiers: Dict['home']['pricing']['tiers'] 
 }
 
 /* A dense benefit grid — six items readable without scrolling past three cards */
+/* Three panels, each marked by a colour tile. The card-thumbnail pattern:
+   the tile gives the block an identity you can point at, and because it sits
+   ABOVE the type rather than behind it, nothing has to be read off a gradient.
+   `tiles` and `pats` name the palette and the pattern for each column, and
+   `ar` the rough shape of a tile in this trio — measured, because the two
+   trios sit at different widths (a full-width card runs about 3:2, the same
+   card in a rail runs closer to square) and the pattern is generated at that
+   shape rather than cropped to it. All props and not derived: the page has two
+   trios, and derived values made the second a repeat of the first. */
+export function Trio({ items, tiles, pats, flows, ar, wash }:
+  { items: Col[]; tiles: number[]; pats?: Pattern[]; flows?: string[]; ar?: number; wash?: boolean }) {
+  return (
+    <div className={wash ? 'trio trio-wash' : 'trio'}>
+      {items.map((c, i) => (
+        <div className="panel" key={c.title}>
+          {pats ? (
+            <Tile n={tiles[i % tiles.length]} pat={pats[i % pats.length]}
+              flow={flows?.[i % flows.length]} ar={ar} fill={wash} />
+          ) : null}
+          <div className="panel-body">
+            <span className="tl-k">{c.label}</span>
+            <h3 className="tl-t">{c.title}</h3>
+            {/* wrapped so the record cards can fold it away at rest — the
+                collapse is a grid-template-rows transition on this element and
+                needs a single child to clip. Everywhere else it is inert. */}
+            <div className="tl-more"><p className="tl-p">{c.body}</p></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function Feats({ items }: { items: Col[] }) {
   return (
     <div className="feat">
@@ -138,10 +172,11 @@ export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchan
     <section className="section tone-paper access" id="access">
       <div className="wrap">
         <div className="grid">
-          <div className="c5 stack">
+          <div className="c5 stack access-side">
             <span className="label">{t.nav.cta}</span>
             <h2 className="h1">{t.form.title}</h2>
             <p className="lead">{t.form.lead}</p>
+            <Tile n={9} className="access-tile" />
           </div>
           <div className="c7">
             <AccessForm t={t.form} lang={lang} initialRole={role} />

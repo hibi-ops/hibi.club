@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Estimator from '@/components/Estimator';
+import Panel from '@/components/Panel';
 import Wash from '@/components/Wash';
 import { Head, PriceTiers, Checks, Faq, Access, ThumbBar } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
@@ -54,7 +55,11 @@ export default async function Pricing({ params }: P) {
           <Wash variant="field" seed={7} />
           <div className="wrap">
             <Head label={p.calc.label} title={p.calc.title} lead={p.calc.lead} />
-            <div className="sec-body"><Estimator c={p.calc} formHref="#access" /></div>
+            <div className="sec-body">
+              <Panel>
+                <Estimator c={p.calc} formHref="#access" />
+              </Panel>
+            </div>
           </div>
         </section>
 

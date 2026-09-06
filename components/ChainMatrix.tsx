@@ -1,77 +1,114 @@
+import type { CSSProperties } from 'react';
 import type { Dict } from '@/content/types';
 
 /* ===========================================================================
-   THE CHAIN — the deck's competitive matrix, rebuilt for a page.
+   COMPETITIVE LANDSCAPE — the deck's matrix, with the moat drawn in it.
    ---------------------------------------------------------------------------
-   The slide is 6 rows x 8 columns of ticks. Forty-eight glyphs is a thing you
-   narrate, not a thing anyone reads on a website: the eye has nowhere to land
-   and the conclusion never arrives.
+   The plain tick table was right and dull: correct, conventional, and saying
+   nothing a reader could not have got from a spreadsheet. The device that
+   earns its place here is not decoration, it is arithmetic already sitting in
+   the data and never shown.
 
-   FIRST ATTEMPT, AND WHY IT WAS WRONG. It drew each row as a bar whose length
-   was "reach" — how many links you hold before the first gap — with a dot per
-   column on top. Claim holds links 3 and 5 but not 1, so its reach was zero:
-   the row rendered a zero-width bar underneath two solid dots. A reader sees a
-   competitor marked as having two of the five things and simultaneously as
-   reaching nothing, and the honest reading of that is that we cooked the bar.
-   A competitive chart that understates a competitor is the fastest way to lose
-   the person checking it, and the person checking it is the investor.
+   The caption claims "three of these columns are not features a competitor
+   can ship". That is checkable, so it is checked — in code, at render, not by
+   hand in the copy. A column where the only dot belongs to us is marked, and
+   the count comes out at three: post → visit traced, creator paid per visit,
+   dynamic rewards. If a competitor's row ever gains one of those, the mark
+   disappears on its own and the sentence stops being true out loud rather
+   than quietly.
 
-   WHAT IT IS NOW. The chain is five links, drawn as five segments of one
-   track, per row. Held links are solid; missing links are the site's outline —
-   the same mark of absence the creator's $0 wears in the problem section. No
-   score, no derived number, nothing to dispute: every cell says exactly what
-   the deck's tick said, and the shape does the arguing.
+   So the figure reads as one horizontal band (our row) crossing three vertical
+   ones (the columns only we hold). Where they meet is the argument.
 
-   Hibi is the only row with no gaps in it, so it is the only row that reads as
-   one continuous bar. You see that before you have read a single label, which
-   is the whole job. Everyone else is islands.
+   Dots, not ticks: solid for held, a hollow ring for absent — the site's own
+   mark of absence, the same one the creator's $0 wears.
+
+   ON A PHONE IT STAYS A MATRIX. It used to break into six stacked blocks,
+   each listing its held criteria down the page — six lists where the whole
+   point is a comparison you make with your eyes across a grid. Nine hundred
+   pixels of vertical text that answered a question nobody asked one row at a
+   time.
+
+   Squeezing the desktop grid down was not the answer either: eight dot columns
+   crammed into 60% of a phone while each row stood 110px tall is the worst of
+   both — cramped across, wasteful down.
+
+   So on a phone it is a list, the shape phones are built out of. One block per
+   player: name and tally on the first line, the eight dots spread across the
+   FULL width underneath. The dots still line up column-for-column between
+   blocks, so it is still a matrix you read by sweeping down — it just stops
+   pretending to be a table. Headers are 1–8 over the same eight positions and
+   the words sit in a legend below.
    =========================================================================== */
 export default function ChainMatrix({ c }: { c: Dict['home']['chain'] }) {
+  const us = c.rows.find(r => r.us);
+  /* a column is ours alone when we hold it and nobody else does */
+  const only = c.links.map((_, i) =>
+    !!us?.has[i] && c.rows.every(r => r.us || !r.has[i]));
+
   return (
-    <figure className="chain">
-      {/* the header is built from the SAME two-part grid as a row, with the
-          five labels in their own nested track. Laid out as one flat 6-column
-          grid it used a different gap budget from the rows and the labels
-          drifted off their segments by 12px at the left edge, closing to 3px
-          at the right — the kind of misalignment you feel before you find. */}
-      <div className="chain-head" aria-hidden="true">
-        <span />
-        <span className="chain-head-links">
-          {c.links.map(l => <span key={l} className="chain-link">{l}</span>)}
-        </span>
-      </div>
-
-      <ol className="chain-rows">
-        {c.rows.map(r => {
-          const held = r.has.filter(Boolean).length;
-          return (
-            <li key={r.who} className="chain-row" data-us={r.us ? '' : undefined}>
-              <span className="chain-who">
-                <b>{r.who}</b><em>{r.what}</em>
-              </span>
-              <span className="chain-track"
-                role="img"
-                aria-label={`${r.who}: ${held ? r.has.map((on, i) => on ? c.links[i] : null).filter(Boolean).join(', ') : c.none}`}>
-                {/* A row that holds nothing drew five empty boxes AND a label
-                    reading "none of it" — the same fact stated twice, with the
-                    label sitting inside the first box as though that link were
-                    the one being denied. It says it once now. */}
-                {held === 0
-                  ? <span className="chain-none">{c.none}</span>
-                  : r.has.map((on, i) => (
-                    <span key={i} className="chain-seg" data-on={on ? '' : undefined}>
-                      {/* the link name rides inside the segment on small
-                          screens, where the header row is gone */}
-                      <span className="chain-seg-k">{c.links[i]}</span>
-                    </span>
-                  ))}
-              </span>
-            </li>
-          );
-        })}
-      </ol>
-
-      <figcaption className="chain-cap">{c.caption}</figcaption>
+    <figure className="cmatrix-fig">
+    <table className="cmatrix">
+      <thead>
+        <tr>
+          <th scope="col"><span className="sr">{c.rowHead}</span></th>
+          {c.links.map((l, i) => (
+            <th key={l} scope="col" data-col={i} data-only={only[i] ? '' : undefined}>
+              <span className="cm-h">{l}</span>
+              <span className="cm-i" aria-hidden="true">{i + 1}</span>
+              {only[i] && <i className="cm-only" aria-hidden="true" />}
+            </th>
+          ))}
+          <th scope="col" className="cm-total-h"><span className="sr">{c.heldHead}</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {/* Ordered by coverage, not by the deck's slide order. Down the right
+            edge the numerals then step 8 → 3 → 3 → 2 → 2 → 2 instead of
+            bouncing 8 → 2 → 3 → 2 → 3 → 2, and a staircase is the rhythm this
+            block was missing. Claim keeps its billing in the sentence above,
+            which is where "closest" is a judgement rather than a count. */}
+        {[...c.rows]
+          .map((r, i) => ({ r, i, n: r.has.filter(Boolean).length }))
+          .sort((a, b) => b.n - a.n || a.i - b.i)
+          .map(({ r }) => (
+          <tr key={r.who} data-us={r.us ? '' : undefined}>
+            <th scope="row"><b>{r.who}</b><em>{r.what}</em></th>
+            {/* Three spans per cell: the stacked layout needs the criterion
+                NAMED beside the dot, while the wide layout gets it from the
+                column header. The yes/no word is for screen readers only — it
+                must never surface next to a dot that already says it. */}
+            {r.has.map((on, i) => (
+              <td key={i} data-col={i} data-on={on ? '' : undefined} data-only={only[i] ? '' : undefined}>
+                <span className="cm-mark" aria-hidden="true" />
+                <span className="sr">{on ? c.yes : c.no}</span>
+                <span className="cm-name" aria-hidden="true">{c.links[i]}</span>
+              </td>
+            ))}
+            {/* THE TALLY IS THE HEADLINE, and its SIZE is the score.
+                Same device as the rate staircase elsewhere on this site: the
+                numeral's area encodes the value, on a square root because the
+                eye compares areas rather than heights. Eight out of eight is
+                twice the type size of two out of eight, so the ranking is read
+                before a single dot is. A figure that has to be tallied by the
+                reader is a table; one that states its own answer at four
+                different sizes is a chart. */}
+            <td className="cm-total" aria-hidden="true"
+              style={{ '--n': Math.sqrt(r.has.filter(Boolean).length / c.links.length).toFixed(3) } as CSSProperties}>
+              <b>{r.has.filter(Boolean).length}</b><i>/{c.links.length}</i>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+      {/* the words the numbered headers stand in for, narrow widths only */}
+      <figcaption className="cmatrix-key" aria-hidden="true">
+        {c.links.map((l, i) => (
+          <span key={l} data-only={only[i] ? '' : undefined}>
+            <b>{i + 1}</b>{l}
+          </span>
+        ))}
+      </figcaption>
     </figure>
   );
 }

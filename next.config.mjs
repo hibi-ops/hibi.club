@@ -8,6 +8,9 @@ const nextConfig = {
   trailingSlash: true,       // /en/merchants/ → out/en/merchants/index.html (works on every static host)
   images: { unoptimized: true },
   reactStrictMode: true,
+  // the little round dev badge bottom-left. Development only — it never ships
+  // in the static export — but it sits on top of the page while reviewing.
+  devIndicators: false,
   poweredByHeader: false,
   outputFileTracingRoot: root,
   webpack: (config) => {

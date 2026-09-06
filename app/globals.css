@@ -13,9 +13,33 @@
 
 @font-face { font-family:'FoodDelicious'; src:url('/fonts/FoodDelicious-Regular.otf') format('opentype'); font-display:swap; }
 @font-face { font-family:'FoodDelicious Extrude'; src:url('/fonts/FoodDelicious-Extrude.otf') format('opentype'); font-display:swap; }
-@font-face { font-family:'General Sans'; src:url('/fonts/GeneralSans-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
-@font-face { font-family:'General Sans'; src:url('/fonts/GeneralSans-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
-@font-face { font-family:'General Sans'; src:url('/fonts/GeneralSans-600.woff2') format('woff2'); font-weight:600; font-display:swap; }
+/* One variable face, 400 to 700, replacing three static General Sans files.
+   Why the change: General Sans shipped here at 400/500/600 with no bold, so
+   anything asking for 700 got a synthesised smear — and a site whose smallest
+   type carries the money needed a real one. Schibsted Grotesk is a newspaper
+   grotesque; its numerals are the reason it won over the other candidates
+   tested (Instrument Sans, Manrope, Figtree), since almost every figure on
+   this site is a price.
+   THE HERO WAS RE-MEASURED, which CLAUDE.md requires on any change that moves
+   the metrics. The widest English line is `is a transaction`; General Sans set
+   it at 6.516em and Schibsted at 6.368, so it is NARROWER and the three
+   hand-broken lines cannot rewrap at the current 148px cap. Do not swap in a
+   wider face without redoing that measurement — a rewrap turns the accent
+   line's blue band from a fitted mark into a slab.
+   46KB for the variable latin subset, against 69KB for the three statics. */
+@font-face { font-family:'Schibsted Grotesk'; src:url('/fonts/SchibstedGrotesk-var.woff2') format('woff2');
+  font-weight:400 700; font-display:swap; }
+/* THE BIG FIGURES KEEP THE OLD FACE. General Sans is gone from the text but
+   the display numerals are its own look and were not up for swapping — the
+   $3,000 / $0 pair, the $100.00, the rate ladder. Same principle as
+   FoodDelicious: a display face used for one job and nothing else.
+   It points at GeneralSans-500.woff2 and declares it 700, which is honest
+   rather than a bug — that file is the heavy cut of the family; the three
+   originals were mislabelled (see the weights note further down) and the one
+   marked 500 is the bold. Declaring it as what it actually is means
+   font-weight:700 on a figure gets a real face instead of a synthesised one. */
+@font-face { font-family:'Hibi Figures'; src:url('/fonts/GeneralSans-500.woff2') format('woff2');
+  font-weight:700; font-display:swap; }
 
 :root{
   /* palette — closed set (DESIGN.md §0.4 + §5.1) */
@@ -109,11 +133,11 @@
   --ease:cubic-bezier(.32,.72,.28,1);
 
   --nav-h:52px;
-  --rule:rgba(21,20,26,.07);
+  --rule:rgba(21,20,26,.13);
   --edge-c:rgba(21,20,26,.12);
-  --rule-ink:rgba(255,255,255,.10);
+  --rule-ink:rgba(255,255,255,.16);
   --max:1200px;
-  --font-sans:'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-sans:'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -129,10 +153,27 @@ button{font:inherit;}
 :focus-visible{outline:2px solid var(--brandD);outline-offset:2px;border-radius:var(--r-sm);}
 .btn:focus-visible{outline-offset:3px;}
 
-/* Numerals: lining + tabular everywhere a figure can change (money, dates,
+/* Numerals: lining + PROPORTIONAL everywhere.
+   This said "tabular" until the font changed, and tabular is the wrong call
+   for this site with this face. Schibsted Grotesk implements tnum properly:
+   the comma, the full stop and the colon are all widened to a whole digit
+   advance so columns line up. General Sans, which the site used to run, did
+   not, so nothing showed. After the swap "$3,000" set as "$3 , 000", "$100.00"
+   as "$100 . 00" and "Thu 19:24" as "Thu 19 : 24" — measured, tnum adds 53px
+   to "$3,000 $100.00" at 58px.
+   And tabular was buying nothing: every money figure here is right-aligned
+   with exactly two decimals, so the decimal points already line up on their
+   own. Do not put tnum back without a left-aligned column of figures whose
+   integer parts differ in length — there isn't one on this site. */
+/* (was: lining + tabular everywhere a figure can change — money, dates,
    counts), so a column does not reflow as digits change width. */
 .num,.rn,.amt,.fee,.sv,.meta,.ledger-head .v,.ledger-foot .n,.step-n{
-  font-variant-numeric:tabular-nums lining-nums;}
+  font-variant-numeric:proportional-nums lining-nums;}
+/* the display figures, and only these: the pair in section 01, the split
+   total, the estimator total, the counter amount and the rate ladder. Small
+   figures in rows and tables stay on the text face, where a second grotesque
+   would read as a mistake rather than as a device. */
+.num,.split-total,.est-total,.wi-amt,.rate .rn{font-family:'Hibi Figures','Schibsted Grotesk',sans-serif;}
 
 /* CJK: trim the half-em that full-width punctuation carries on the side that
    meets a Latin glyph or a line edge, and never break a line before a closing
@@ -148,8 +189,14 @@ html[lang="zh-Hans"]{text-spacing-trim:trim-start;line-break:strict;overflow-wra
     border:3px solid transparent;background-clip:content-box;}
   ::-webkit-scrollbar-thumb:hover{background:rgba(21,20,26,.34);background-clip:content-box;}
 }
-html[lang="zh-Hans"] body{line-height:1.75;font-family:'General Sans','PingFang SC','Hiragino Sans GB','Noto Sans SC','Microsoft YaHei',sans-serif;}
-html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1{font-weight:600;}
+html[lang="zh-Hans"] body{line-height:1.75;font-family:'Schibsted Grotesk','PingFang SC','Hiragino Sans GB','Noto Sans SC','Microsoft YaHei',sans-serif;}
+/* 600 and not the 700 the Latin headings now use: the CJK face is Noto Sans
+   SC, which ships real 400 and 600 subsets and nothing above. Asking for 700
+   would synthesise, and faux bold on Chinese at display size fills the
+   counters of a dense character solid. .h2 is in this list for that reason —
+   it was left out and inherited the Latin 700. */
+html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .h1,
+html[lang="zh-Hans"] .h2{font-weight:600;}
 /* CJK glyphs are full-width, so a line that fits in Latin at 84px runs off at
    the same size in Chinese. Drop the display sizes one rung; the hand-broken
    lines then hold without folding a second time. */
@@ -167,7 +214,15 @@ html[lang="zh-Hans"] .label,html[lang="zh-Hans"] .field label,html[lang="zh-Hans
 html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spacing:.04em;}
 
 /* ===== layout ===== */
-.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--s6);}
+/* position:relative belongs on the base rule, not inside a breakpoint. The
+   register marks (.section > .wrap::before/::after) are drawn from 1024px up
+   and place themselves with negative left/right against .wrap. It used to be
+   set only inside the 1280px block with the vertical section label, so between
+   1024 and 1280 the marks resolved against .section instead — a full-viewport
+   box — and right:calc(-48px - 28.5px) pushed one of them 76.5px past the
+   right edge. That was a horizontal scrollbar on every page at those widths,
+   measured at exactly 76px. */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--s6);position:relative;}
 @media(max-width:768px){.wrap{padding:0 var(--s4);}}
 /* One rhythm for every section. Two neighbours each paid full padding, so the
    gap between one idea and the next ran to 176px on a wide window — the page
@@ -175,7 +230,8 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
 .section{padding:clamp(36px,4vw,56px) 0;}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--s5);row-gap:var(--s6);}
 @media(max-width:768px){.grid{grid-template-columns:repeat(4,1fr);column-gap:var(--s2);row-gap:var(--s4);}}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}.c3{grid-column:span 3}
-@media(max-width:768px){.c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 4}}
+.c-end{justify-self:end;}
+@media(max-width:768px){.c8,.c7,.c6,.c5,.c4,.c3{grid-column:span 4}.c-end{justify-self:start;}}
 .tone-paper{background:var(--paper);}
 .tone-ink{background:var(--ink);color:var(--snow);}
 /* sky on ink is 7.95:1 — a dark ground is the one place the wordmark's own
@@ -194,8 +250,26 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
    over; that repetition is what reads as generated. The rail variant gives
    the page a second, quieter anatomy for its reading sections.
    ========================================================================= */
-.rail{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:var(--s6) var(--s7);align-items:start;}
-@media(max-width:900px){.rail{grid-template-columns:1fr;gap:var(--s4);}}
+/* Two columns with a rule down the middle. The split was already here; the
+   line was not, so the heading and its evidence read as two things that
+   happened to be side by side rather than as one spread. The rule runs the
+   full height of the taller column, which is what makes it a division of the
+   page instead of a border on a box. It is withdrawn on the stack, where
+   there is no middle to divide. */
+.rail{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:var(--s6) var(--s5);align-items:stretch;}
+.rail>*+*{padding-left:var(--s6);border-left:var(--edge);}
+.rail>*{min-width:0;}
+@media(max-width:900px){
+  .rail{grid-template-columns:1fr;gap:var(--s4);align-items:start;}
+  .rail>*+*{padding-left:0;border-left:none;padding-top:var(--s4);border-top:var(--edge);}
+}
+/* THE COLUMN RUNS TO THE FOOT OF THE SECTION. The rail stretches both columns
+   to the same height already; what did not stretch was the tile inside the
+   short one, which sat at a fixed 176px and stopped in mid-air with white
+   under it. A flex column with the tile growing puts its bottom edge level
+   with the last line of the chronology beside it — the two columns now end
+   together, which is the only reason to rule a line between them. */
+.rail-head{display:flex;flex-direction:column;}
 .rail-head .h2{max-width:16em;}
 .rail-head .lead{margin-top:var(--s3);font-size:15px;max-width:38ch;}
 .rail-head .muted{margin-top:var(--s3);font-size:14px;max-width:38ch;}
@@ -203,7 +277,19 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
 .rail .feat{grid-template-columns:1fr;gap:var(--s3);}
 .rail .feat p{max-width:56ch;}
 .rail .feat{gap:0;}
-.rail .chrono{border-top:none;margin-top:calc(var(--s2) * -1);}
+.rail .chrono{border-top:none;}
+/* Mirrored rail: evidence in the wide column on the left, the heading that
+   names it on the right. The divider has to move with it — otherwise the rule
+   sits between the wrong pair and the wide column loses its left edge. */
+.rail-flip{grid-template-columns:minmax(0,7fr) minmax(0,4fr);}
+.rail-flip>*+*{padding-left:var(--s6);border-left:var(--edge);}
+@media(max-width:900px){
+  /* stacked, the heading comes first again — reading order beats symmetry */
+  .rail-flip{grid-template-columns:1fr;}
+  .rail-flip>.rail-head{order:-1;padding-top:0;border-top:none;}
+  .rail-flip>*+*{padding-top:var(--s4);border-top:var(--edge);}
+}
+
 /* Same anatomy as .rail .feat above — when | (title over body). Three columns
    inside half a rail left the body on a 300px measure, five lines deep, while
    the .feat rows in the next section ran to 56ch: two adjacent sections built
@@ -215,30 +301,89 @@ html[lang="zh-Hans"] .spec-card>.k,html[lang="zh-Hans"] .record .tag{letter-spac
   .rail .chrono li .h3,.rail .chrono li p{grid-column:auto;}}
 
 /* ===== column rules =====================================================
-   Two hairlines at the content edge, running the whole height of the page
-   through section padding and all. They are what makes a page read as
-   *typeset* rather than as a stack of centred blocks: every heading, panel and
-   paragraph visibly starts on the same line. Drawn per-section rather than as
-   one overlay so they inherit each section's ground colour, and withdrawn
-   below 1296px, where the gutter is too narrow for a rule to sit outside the
-   text without touching it.
+   Two hairlines flanking the content column, running the full height of the
+   page. They are what makes a page read as *typeset* rather than as a stack
+   of centred blocks: every heading, panel and paragraph visibly starts on the
+   same line.
+
+   THEY WERE INVISIBLE. Sitting at 50% ± (--max/2 + --s6) put them 648px from
+   the centre, which needs a 1296px viewport before they are on screen at all,
+   and at exactly that width they touch the two edges of the display. They sit
+   on the wrap boundary now — the content's own column — and clamp to a 14px
+   inset on anything narrower, so they are drawn at every width.
+
+   Not on the hero and not on the footer: the rules bracket the body of the
+   page, and a frame that also boxed the masthead and the sign-off would be
+   ruling the paper rather than the content on it. Drawn per-section so each
+   inherits its own ground colour.
    ========================================================================= */
-@media(min-width:1296px){
-  .section,.hero,.footer,.access{position:relative;}
-  .section::before,.hero::before,.footer::before,.access::before,
-  .section::after,.hero::after,.footer::after,.access::after{
-    content:'';position:absolute;top:0;bottom:0;width:1px;background:var(--rule);pointer-events:none;}
-  .section::before,.hero::before,.footer::before,.access::before{left:calc(50% - var(--max) / 2 - var(--s6));}
-  .section::after,.hero::after,.footer::after,.access::after{left:calc(50% + var(--max) / 2 + var(--s6));}
-  .tone-ink::before,.tone-ink::after{background:var(--rule-ink);}
-  /* a fine + where each section's top edge crosses the rules — the register
-     mark of a printed sheet. */
+.section,.access{position:relative;}
+.section::before,.access::before,
+.section::after,.access::after{
+  content:'';position:absolute;top:0;bottom:0;width:1px;
+  background:var(--rule);pointer-events:none;z-index:0;}
+.section::before,.access::before{left:max(14px, calc(50% - var(--max) / 2 - 24px));}
+.section::after,.access::after{right:max(14px, calc(50% - var(--max) / 2 - 24px));}
+.tone-ink::before,.tone-ink::after{background:var(--rule-ink);}
+/* AND A RULE ACROSS THE TOP OF EACH ONE, so the frame closes. The two vertical
+   rules ran the whole page uninterrupted and nothing crossed them; a section
+   was a stretch of that corridor rather than a box in it.
+   It is a background-image and not a border-top for one reason: a border spans
+   the element, and the element is the full viewport while the vertical rules
+   sit inset. The line has to start and stop exactly on them or the corners do
+   not meet. background-position and background-size repeat the same
+   max(14px, ...) expression the rules use, so the three always agree.
+   EVERY SECTION GETS IT AND THE FIRST ONE OPTS OUT, rather than the line being
+   handed out by `.section + .section`: the marquee band sits between two
+   sections, so the one after it has no section for a previous sibling and was
+   silently missing its rule. A line under the hero would read as a lid on the
+   page rather than as a division between chapters, so that one is removed by
+   name. */
+.section,.access{
+  background-image:linear-gradient(var(--rule),var(--rule));
+  background-repeat:no-repeat;
+  background-position:max(14px, calc(50% - var(--max) / 2 - 24px)) 0;
+  background-size:calc(100% - 2 * max(14px, calc(50% - var(--max) / 2 - 24px))) 1px;}
+.hero + .section{background-image:none;}
+/* the toned sections set `background` as a shorthand, which wipes the image
+   above; they have to restate it alongside their colour */
+.section.tone-paper{
+  background:var(--paper) linear-gradient(var(--rule),var(--rule)) no-repeat
+    max(14px, calc(50% - var(--max) / 2 - 24px)) 0 /
+    calc(100% - 2 * max(14px, calc(50% - var(--max) / 2 - 24px))) 1px;}
+.section.tone-ink{
+  background:var(--ink) linear-gradient(var(--rule-ink),var(--rule-ink)) no-repeat
+    max(14px, calc(50% - var(--max) / 2 - 24px)) 0 /
+    calc(100% - 2 * max(14px, calc(50% - var(--max) / 2 - 24px))) 1px;}
+.hero + .section.tone-paper{background:var(--paper);}
+.hero + .section.tone-ink{background:var(--ink);}
+/* a fine + where each section's top edge crosses the rules — the register
+   mark of a printed sheet.
+
+   TWO BUGS LIVED HERE AND BOTH ARE WORTH KNOWING.
+   1. The offset double-counted the padding. An absolutely positioned child is
+      placed against its containing block's PADDING box, so .wrap's 48px of
+      padding is already inside the reference edge; subtracting --s6 again put
+      the mark 76.5px outside .wrap instead of 28.5px. At 1440 that landed it
+      52px clear of the rule it is supposed to sit on — wrong but invisible —
+      and below about 1353px it landed outside the viewport, which is a
+      horizontal scrollbar on every page. Measured at exactly 76px.
+   2. It ran from 1024px while `.wrap{position:relative}` was set only inside
+      the 1280px block, so between those widths the marks resolved against
+      .section — a full-viewport box — and missed by even more. .wrap is
+      positioned at every width now, and this is scoped to 1280 to match the
+      gutter it draws in: below that the rules sit on their 14px floor hard
+      against the screen edge and there is no room for a mark beside them.
+
+   28.5px = the rules' 24px offset from .wrap plus half the glyph, so the two
+   cross exactly. Verified at 1280 and 1440: the mark's centre lands on the
+   rule's x and its outer edge stays inside the viewport. */
+@media(min-width:1280px){
   .section>.wrap::before,.section>.wrap::after{content:'+';position:absolute;
     top:calc(clamp(40px,4.4vw,64px) * -1 - 8px);font-size:13px;font-weight:400;
     color:rgba(21,20,26,.22);line-height:1;pointer-events:none;}
-  .section>.wrap::before{left:calc(var(--s6) * -1 - 4.5px);}
-  .section>.wrap::after{right:calc(var(--s6) * -1 - 4.5px);}
-  .tone-ink>.wrap::before,.tone-ink>.wrap::after{color:rgba(255,255,255,.22);}
+  .section>.wrap::before{left:-28.5px;}
+  .section>.wrap::after{right:-28.5px;}
 }
 
 /* ===== sheen =============================================================
@@ -345,8 +490,10 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
    Name, scope, and the rate with its unit — the reason this reads as pricing
    and not as three decorative numbers. */
 .rates{border-top:1px solid var(--ink);border-bottom:var(--edge);}
+/* padding down from --s4 with the numeral: at 118px the figure set the row
+   height on its own and the 24s just added to a row that was already tall. */
 .rate{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,4fr);gap:var(--s4);
-  align-items:center;padding:var(--s4) 0;}
+  align-items:center;padding:var(--s3) 0;}
 .rate+.rate{border-top:var(--edge-2);}
 .rate{padding-left:0;padding-right:0;}
 .rate{transition:background var(--t1) var(--ease);}
@@ -373,9 +520,9 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
    8% and 4% to 29px and 28px — near-identical, which does not merely lose the
    code, it lies about the rates. And the rows stack there, so the three
    numerals are never in one eyeful to be compared anyway. */
-.rate .rn{font-size:calc(var(--rw,1) * clamp(40px,8.2vw,124px));
+.rate .rn{font-size:calc(var(--rw,1) * clamp(38px,6.9vw,104px));
   font-weight:600;letter-spacing:-.035em;
-  font-variant-numeric:tabular-nums lining-nums;line-height:.92;}
+  font-variant-numeric:proportional-nums lining-nums;line-height:.92;}
 .rate .ru{display:block;font-size:12px;color:var(--gray-s);margin-top:var(--s0);line-height:1.4;}
 
 
@@ -429,22 +576,55 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brandInk);}
 .label.gray{color:var(--gray-s);}
 .k-head{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gray-s);}
-.hero-title{font-size:var(--t-hero);font-weight:500;letter-spacing:-.052em;line-height:.9;text-wrap:balance;}
+/* ===========================================================================
+   WEIGHTS — read this before touching any font-weight on this page.
+   ---------------------------------------------------------------------------
+   The three GeneralSans woff2 files this site shipped with were MISLABELLED.
+   Measured ink coverage of the same string, at 16, 32 and 96px, all agreeing:
+
+       GeneralSans-400  14.1%      <- middle
+       GeneralSans-500  17.8%      <- the heaviest file, labelled 500
+       GeneralSans-600  10.5%      <- the lightest file, labelled 600
+
+   So on the old site every `font-weight:500` — the hero, h1, h2, the big
+   numbers, the nav — was rendering BOLD, and every `font-weight:600` — card
+   titles, kickers, table heads — was rendering LIGHTER THAN REGULAR. The type
+   looked deliberate and it was an accident of two swapped files.
+
+   That is also why an earlier note in this file claimed the site "sets its
+   largest type at its lightest display weight, size carries it". It never
+   did. Do not reason from that.
+
+   Schibsted Grotesk is a real variable face, so 500 is a real medium and the
+   headings lost the weight they had been getting by accident. They are set to
+   700 here, which is where the measurement puts the old 500: 17.5% against
+   17.8%, matched at all three sizes.
+   =========================================================================== */
+.hero-title{font-size:var(--t-hero);font-weight:700;letter-spacing:-.052em;line-height:.9;text-wrap:balance;}
 @media(max-width:640px){.hero-title{letter-spacing:-.035em;line-height:.96;}}
-.h1{font-size:var(--t-h1);font-weight:500;letter-spacing:-.028em;line-height:1.08;text-wrap:balance;}
-.h2{font-size:var(--t-h2);font-weight:500;letter-spacing:-.02em;line-height:1.18;text-wrap:balance;}
+.h1{font-size:var(--t-h1);font-weight:700;letter-spacing:-.028em;line-height:1.08;text-wrap:balance;}
+.h2{font-size:var(--t-h2);font-weight:700;letter-spacing:-.02em;line-height:1.18;text-wrap:balance;}
 .h3{font-size:var(--t-h3);font-weight:600;letter-spacing:-.008em;line-height:1.35;}
 .lead{font-size:clamp(16px,1.15vw,18px);line-height:1.55;color:var(--ink-2);text-wrap:pretty;}
 .muted{color:var(--gray-s);}
+/* a standalone note is not a banner: 68ch, the same measure the
+   record strip settles on */
+.sec-body.muted,p.muted.sec-body{max-width:68ch;}
 .small{font-size:var(--t-small);line-height:1.5;}
-.num{font-size:var(--t-num);font-weight:500;letter-spacing:-.045em;line-height:.95;
-  font-variant-numeric:tabular-nums lining-nums;white-space:nowrap;}
+.num{font-size:var(--t-num);font-weight:700;letter-spacing:-.045em;line-height:.95;
+  font-variant-numeric:proportional-nums lining-nums;white-space:nowrap;}
 /* the zero is an empty shell: outline only, the 日々 graphic language.
    Solid money spent, hollow money earned — the argument drawn, not stated.
    Under the pointer the pair TRADES states, hard: point at the spend and it
    hollows (gone); point at the zero and it fills (made real). */
+/* SAME SIZE AS THE NUMBER IT ANSWERS. It ran clamp(64px,13vw,190px) against
+   the pair's clamp(56px,10vw,148px) — 30% bigger, measured 187px against 144.
+   The pairing is one size, two fills: solid money spent, hollow money earned.
+   Making one physically larger states a second thing that is not true, and the
+   $3,000 already reads bigger on its own because it has six glyphs to the
+   zero's two. */
 .num-void{color:transparent;-webkit-text-stroke:2px var(--ink);font-weight:600;
-  font-size:clamp(64px,13vw,190px);}
+  font-size:var(--t-num);}
 @media(max-width:768px){.num-void{-webkit-text-stroke:1.4px var(--ink);}}
 @media(hover:hover){
   .numpair>div:hover .num:not(.num-void){color:transparent;-webkit-text-stroke:2px var(--ink);transition:none;}
@@ -462,26 +642,37 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 main{counter-reset:sec;}
 .lbl::before{content:counter(sec,decimal-leading-zero);color:var(--brandD);
   font-size:1.5em;letter-spacing:.02em;margin-right:.7em;
-  font-variant-numeric:tabular-nums lining-nums;vertical-align:-.06em;}
+  font-variant-numeric:proportional-nums lining-nums;vertical-align:-.06em;}
 .tone-ink .lbl::before{color:var(--snow);}
-@media(min-width:1296px){
-  /* Running down the gutter the number leads and the name follows — the two
-     halves of a catalogue line, stacked rather than set side by side.
-     `horizontal-tb` on the pseudo-element only: vertical-rl lays Latin digits
-     on their side, and a rotated index is a decoration, whereas an upright one
-     is a number you can read. Sized to be the anchor of the section — at 11px
-     it was a footnote to a heading it is supposed to be indexing. */
-  /* inline-block, not block: in a vertical-rl label a block child stacks
-     sideways and the name ran under the numeral. An atomic inline sits in
-     the vertical line, so the number leads and the name follows below it. */
+/* 1280, THE SAME NUMBER AS THE RULE THAT TURNS THE LABEL VERTICAL, and it has
+   to stay tied to it. This sat at 1296 while the label switched at 1280, so in
+   that 16px band the label went vertical and the numeral did not get its
+   upright treatment — it was laid on its side inside the vertical-rl flow and
+   ran straight into the name, "01THE PROBLEM" as one rotated string. The two
+   rules are one gesture; if the breakpoint moves, move both.
+
+   Running down the gutter the number leads and the name follows — the two
+   halves of a catalogue line, stacked rather than set side by side.
+   `horizontal-tb` on the pseudo-element only: vertical-rl lays Latin digits on
+   their side, and a rotated index is a decoration, whereas an upright one is a
+   number you can read. Sized to be the anchor of the section — at 11px it was
+   a footnote to a heading it is supposed to be indexing.
+   inline-block, not block: in a vertical-rl label a block child stacks
+   sideways and the name ran under the numeral. An atomic inline sits in the
+   vertical line, so the number leads and the name follows below it. */
+@media(min-width:1280px){
   .label.lbl::before{writing-mode:horizontal-tb;display:inline-block;text-align:center;
     font-size:3.4em;line-height:1;letter-spacing:-.03em;margin:0 0 .5em 0;}
 }
 /* set on the left edge, reading downward — the Japanese editorial habit the
-   brand name comes from. Wide screens only; it needs the gutter to stand in. */
-@media(min-width:1296px){
-  .wrap{position:relative;}
-  .label.lbl{position:absolute;left:calc(var(--s6) * -1 + 7px);top:6px;margin:0;
+   brand name comes from. It lives in the gutter *between* the left frame rule
+   and the text column, so the breakpoint is arithmetic, not taste: the rule is
+   24px outside .wrap, the label 10px inside the rule (left:-14px), and the rule
+   itself stops tracking at its 14px floor below 1276px. Under 1280 there is no
+   gutter to stand in and the label would hang off the viewport, so it goes back
+   into the flow. Do not lower this number without re-deriving it. */
+@media(min-width:1280px){
+  .label.lbl{position:absolute;left:-14px;top:6px;margin:0;
     writing-mode:vertical-rl;letter-spacing:.22em;}
   /* rail sections keep the same vertical label as every other section: one
      numbering system down the whole gutter, not two */
@@ -543,7 +734,7 @@ main{counter-reset:sec;}
   border-bottom:var(--edge);}
 @supports not (backdrop-filter:blur(1px)){.nav{background:rgba(250,250,248,.98);}}
 .nav-in{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:var(--s4);}
-.nav-links{display:flex;align-items:center;gap:var(--s0);font-size:14px;font-weight:500;}
+.nav-links{display:flex;align-items:center;gap:var(--s0);font-size:14px;font-weight:600;}
 /* nav items get a hover plate, the way a toolbar item does */
 .nav-links a{color:var(--ink-2);padding:6px var(--s2);border-radius:var(--r-sm);
   transition:background var(--t1) var(--ease),color var(--t1) var(--ease);}
@@ -724,7 +915,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    two scripts wear their own faces, which is the brand's whole geography.
    The display face is a single weight: no bold, no synthesis. */
 .bigmq-run{flex:none;white-space:nowrap;font-size:clamp(56px,8.4vw,120px);font-weight:400;
-  font-family:'FoodDelicious','General Sans','PingFang SC','Hiragino Sans GB','Noto Sans SC',sans-serif;
+  font-family:'FoodDelicious','Schibsted Grotesk','PingFang SC','Hiragino Sans GB','Noto Sans SC',sans-serif;
   line-height:1.15;letter-spacing:.02em;color:transparent;
   -webkit-text-stroke:1.5px rgba(21,20,26,.18);user-select:none;
   padding-right:.6em;}
@@ -747,7 +938,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .ticker-run{display:flex;flex:none;}
 .tk{display:inline-block;padding:9px var(--s4);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:12px;letter-spacing:.02em;color:var(--gray-s);white-space:nowrap;
-  border-right:var(--edge-2);font-variant-numeric:tabular-nums;}
+  border-right:var(--edge-2);font-variant-numeric:proportional-nums;}
 @keyframes crawl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.ticker-in{animation:none;}}
 
@@ -780,7 +971,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .ledger-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);
   padding:var(--s2) var(--s3);border-bottom:var(--edge);background:var(--paper);}
 .ledger-head .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gray-s);}
-.ledger-head .v{font-size:12px;color:var(--gray-s);font-variant-numeric:tabular-nums;}
+.ledger-head .v{font-size:12px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
 .lrow{display:grid;grid-template-columns:1fr auto;gap:var(--s3);align-items:baseline;padding:var(--s2) var(--s3);}
 .lsrc,.lamt{display:flex;flex-direction:column;gap:2px;min-width:0;}
 .lamt{align-items:flex-end;}
@@ -790,13 +981,13 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   .lrow:hover .fee{color:var(--gGreen);font-weight:600;}}
 .lrow .fee{transition:color var(--t1) var(--ease);}
 .lrow .src{font-size:13.5px;font-weight:600;color:var(--ink);}
-.lrow .meta{font-size:12px;color:var(--gray-s);font-variant-numeric:tabular-nums;}
-.lrow .amt{font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);}
-.lrow .fee{font-size:12px;color:var(--okT);font-variant-numeric:tabular-nums;}
+.lrow .meta{font-size:12px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
+.lrow .amt{font-size:13.5px;font-weight:600;font-variant-numeric:proportional-nums;color:var(--ink);}
+.lrow .fee{font-size:12px;color:var(--okT);font-variant-numeric:proportional-nums;}
 .ledger-foot{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
   padding:var(--s2) var(--s3);border-top:var(--edge);background:var(--paper);}
 .ledger-foot .t{font-size:12px;color:var(--gray-s);}
-.ledger-foot .n{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+.ledger-foot .n{font-size:17px;font-weight:600;font-variant-numeric:proportional-nums;letter-spacing:-.02em;}
 
 /* ===== live ledger ======================================================= */
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--okT);display:inline-block;
@@ -893,12 +1084,12 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* the creator's running total sits with the creator, not in the ledger: this
    column is the only place the reader is looking at a person */
 .wi-credit{display:block;margin-top:var(--s2);font-size:12px;color:var(--gray-s);
-  font-variant-numeric:tabular-nums;}
+  font-variant-numeric:proportional-nums;}
 
 /* 2 · the amount is the artifact; a jackpot hollows it */
 .wi-ticket{display:flex;flex-direction:column;}
 .wi-amt{display:block;font-size:clamp(34px,3.6vw,52px);font-weight:600;letter-spacing:-.03em;
-  line-height:1;font-variant-numeric:tabular-nums lining-nums;}
+  line-height:1;font-variant-numeric:proportional-nums lining-nums;}
 .wi-amt[data-void]{color:transparent;-webkit-text-stroke:2px var(--ink);}
 .wi-act{display:flex;align-items:center;gap:var(--s2);margin-top:var(--s3);min-height:34px;flex-wrap:wrap;}
 .wi-btn{height:32px;padding:0 var(--s3);font-size:13px;}
@@ -916,7 +1107,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   font-size:12.5px;color:var(--gray-s);font-style:normal;
   animation:land var(--t3) var(--ease) both;animation-delay:calc(var(--i) * 130ms);}
 .wi-rline em{font-style:normal;}
-.wi-rline b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums lining-nums;}
+.wi-rline b{color:var(--ink);font-weight:600;font-variant-numeric:proportional-nums lining-nums;}
 .wi-loyal{font-weight:500!important;font-size:11.5px;color:var(--gray-s)!important;}
 /* the settled figure is ruled off, the way a total is */
 .wi-rpays{border-top:var(--edge);padding-top:5px;margin-top:3px;}
@@ -941,16 +1132,16 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    discovered rather than read. */
 .wi-ltier{grid-row:span 2;align-self:center;font-size:13px;font-weight:600;
   letter-spacing:-.01em;padding:2px 5px;border-radius:var(--r-xs);min-width:34px;text-align:center;
-  background:var(--sky);color:var(--ink);font-variant-numeric:tabular-nums;}
+  background:var(--sky);color:var(--ink);font-variant-numeric:proportional-nums;}
 .wi-ltier[data-t="regular"]{background:transparent;color:var(--gray-s);
   box-shadow:inset 0 0 0 1px rgba(21,20,26,.18);}
 .wi-lwho{grid-column:2;font-size:12px;color:var(--ink);}
-.wi-lbill{grid-column:2;font-size:11.5px;color:var(--gray-s);font-variant-numeric:tabular-nums;}
+.wi-lbill{grid-column:2;font-size:11.5px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
 .wi-lfee{grid-column:3;grid-row:span 2;align-self:center;font-size:14px;font-weight:600;
-  color:var(--okT);font-variant-numeric:tabular-nums;text-align:right;}
+  color:var(--okT);font-variant-numeric:proportional-nums;text-align:right;}
 .wi-lfoot{display:flex;justify-content:space-between;align-items:baseline;
   padding:8px 0 0;font-size:12px;color:var(--gray-s);}
-.wi-lfoot b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.wi-lfoot b{font-size:15px;color:var(--ink);font-variant-numeric:proportional-nums;}
 
 .wi-foot{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-top:var(--s4);}
 .wi-again,.wi-over{color:var(--gray-s);font-size:13px;}
@@ -962,57 +1153,6 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   .wi-box[data-wait]{animation:none;}
 }
 
-/* ===== the chain ==========================================================
-   Five links of one chain per row. Held links are solid, missing links are
-   outline — the site's own mark of absence. No bar, no score, no derived
-   number: each cell is the deck's own tick, and Hibi is the only row without
-   a gap in it, so it is the only one that reads as a continuous bar.
-   ========================================================================= */
-.chain{margin-top:var(--s6);}
-.chain-head{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);
-  gap:var(--s3);padding-bottom:var(--s2);}
-.chain-head-links{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;}
-.chain-link{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-  color:var(--gray-s);line-height:1.3;}
-.chain-rows{list-style:none;border-top:1px solid var(--ink);}
-.chain-row{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);
-  gap:var(--s3);align-items:center;padding:var(--s2) 0;border-bottom:var(--edge-2);}
-.chain-who b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em;}
-.chain-who em{display:block;font-style:normal;font-size:11.5px;color:var(--gray-s);margin-top:1px;}
-
-.chain-track{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;}
-/* absent: an empty rule, the same language as the outline $0. Present: solid.
-   Four pixels of gap is enough to read five segments and small enough that an
-   unbroken row still reads as one bar. */
-.chain-seg{height:10px;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(21,20,26,.16);}
-.chain-seg[data-on]{background:var(--ink);box-shadow:none;}
-.chain-seg-k{display:none;}
-/* the one row that runs the full width takes the mark */
-.chain-row[data-us]{border-bottom:1px solid var(--ink);}
-.chain-row[data-us] .chain-seg[data-on]{background:var(--sky);}
-.chain-row[data-us] .chain-who b{background:var(--ink);color:var(--snow);
-  display:inline-block;padding:1px 6px;margin-left:-6px;}
-@media(hover:hover){
-  .chain-row{transition:background var(--t1) var(--ease);}
-  .chain-row:hover{background:var(--paper);}
-}
-.chain-track:has(.chain-none){grid-template-columns:1fr;}
-.chain-none{font-size:11px;color:var(--gray-s);align-self:center;}
-.chain-cap{margin-top:var(--s3);font-size:12.5px;line-height:1.6;color:var(--gray-s);max-width:74ch;}
-
-@media(max-width:860px){
-  .chain-head{display:none;}
-  .chain-row{grid-template-columns:1fr;gap:var(--s2);align-items:start;padding:var(--s3) 0;}
-  /* stacked, five segments lose their header, so the held links name
-     themselves and the missing ones simply are not there */
-  .chain-track{grid-template-columns:1fr;gap:2px;}
-  .chain-seg{height:auto;border-radius:0;box-shadow:none;background:none!important;}
-  .chain-seg:not([data-on]){display:none;}
-  .chain-seg-k{display:block;font-size:11.5px;color:var(--ink);font-weight:600;
-    padding-left:var(--s2);border-left:3px solid var(--ink);}
-  .chain-row[data-us] .chain-seg-k{border-left-color:var(--sky);}
-  .chain-none{position:static;transform:none;padding:0;}
-}
 /* ===== spec card (sub-page hero) ===== */
 .spec-card{background:var(--snow);border:var(--edge);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-pop);}
 .spec-card>.k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
@@ -1022,7 +1162,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .srow{transition:background var(--t1) var(--ease);}
 @media(hover:hover){.srow:hover{background:var(--paper);}}
 .srow .sk{font-size:13.5px;font-weight:600;}
-.srow .sv{font-size:15px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.srow .sv{font-size:15px;font-weight:600;text-align:right;font-variant-numeric:proportional-nums;letter-spacing:-.01em;}
 .srow .su{display:block;font-size:11.5px;font-weight:400;color:var(--gray-s);letter-spacing:0;margin-top:2px;}
 .spec-foot{font-size:12px;line-height:1.5;color:var(--gray-s);padding:var(--s2) var(--s3);
   border-top:var(--edge);background:var(--paper);}
@@ -1070,10 +1210,16 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    One bar, three segments, one hue in three steps — a rainbow here would
    suggest three unrelated categories rather than three shares of one payment.
    ========================================================================= */
-.split{max-width:760px;}
+/* FULL MEASURE, not 760. The cap was a reading-measure habit applied to a
+   figure: the bar is a proportion, not prose, and there is nothing to read
+   across it. At 760 inside a 1084 column it left a third of the section empty
+   to the right of a heading that is also short, and the whole block hugged the
+   left edge for no reason anyone could see. Wider also makes the smallest
+   share legible — Hibi's 4.5% goes from 34px to 49px. */
+.split{max-width:none;}
 .split-head{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin-bottom:var(--s3);}
-.split-total{font-size:clamp(40px,5vw,64px);font-weight:500;letter-spacing:-.04em;line-height:1;
-  font-variant-numeric:tabular-nums lining-nums;}
+.split-total{font-size:clamp(40px,5vw,64px);font-weight:700;letter-spacing:-.04em;line-height:1;
+  font-variant-numeric:proportional-nums lining-nums;}
 .split-cap{font-size:13.5px;color:var(--gray-s);}
 .split-bar{display:flex;height:44px;border-radius:var(--r-md);overflow:hidden;gap:2px;background:var(--paper-2);}
 /* selection by dimming the others — the chosen pair keeps its true colour,
@@ -1099,9 +1245,9 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 }
 .split-keys div{display:flex;flex-direction:column;gap:2px;}
 .split-keys dt{display:flex;align-items:center;gap:var(--s1);font-size:13px;color:var(--gray-s);}
-.split-keys dd{font-size:19px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums lining-nums;}
+.split-keys dd{font-size:19px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:proportional-nums lining-nums;}
 .sk-dot{width:9px;height:9px;border-radius:2px;display:inline-block;flex:none;}
-.split-note{margin-top:var(--s4);padding-top:var(--s3);border-top:var(--edge-2);
+.split-note{margin-top:var(--s3);padding-top:var(--s3);border-top:var(--edge-2);
   font-size:13.5px;line-height:1.6;color:var(--gray-s);max-width:60ch;}
 
 /* ===== chrono (a chronology) =============================================
@@ -1117,7 +1263,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .chrono-when{padding:1px 6px;margin-left:-6px;width:fit-content;}
 @media(max-width:768px){.chrono li{grid-template-columns:1fr;gap:var(--s1);padding:var(--s3) 0;}}
 .chrono-when{font-size:13px;font-weight:600;letter-spacing:0;color:var(--ink-2);
-  font-variant-numeric:tabular-nums lining-nums;}
+  font-variant-numeric:proportional-nums lining-nums;}
 .chrono .h3{letter-spacing:-.01em;}
 .chrono p{color:var(--gray-s);font-size:14.5px;line-height:1.6;}
 .tone-ink .chrono p{color:var(--mist);}
@@ -1133,7 +1279,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* the ordinal opens the card, set as a caption — the numeral is the only
    thing that distinguishes these three panels, so it carries the weight */
 .step-n{display:block;font-size:13px;font-weight:600;color:var(--ink-2);
-  font-variant-numeric:tabular-nums lining-nums;letter-spacing:0;margin-bottom:var(--s2);}
+  font-variant-numeric:proportional-nums lining-nums;letter-spacing:0;margin-bottom:var(--s2);}
 .tone-ink .step-n{color:rgba(255,255,255,.34);}
 .step .h3{margin-bottom:var(--s1);}
 .step p{color:var(--ink-2);font-size:14px;line-height:1.55;}
@@ -1142,7 +1288,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 @media(max-width:768px){.record{grid-template-columns:1fr;gap:var(--s1);}}
 .record .tag{background:rgba(82,182,221,.14);color:var(--brandInk);font-size:11px;font-weight:600;
   letter-spacing:.07em;text-transform:uppercase;padding:4px var(--s1);border-radius:var(--r-xs);white-space:nowrap;}
-.record p{color:var(--ink-2);font-size:14.5px;}
+.record p{color:var(--ink-2);font-size:14.5px;max-width:68ch;}
 .ledger{margin-top:var(--s2);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:12.5px;color:var(--gray-s);letter-spacing:.01em;}
 
@@ -1249,7 +1395,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-field{display:block;}
 .est-field .k-head{display:block;margin-bottom:var(--s0);}
 .est-val{display:block;font-size:24px;font-weight:600;letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums lining-nums;margin-bottom:var(--s2);}
+  font-variant-numeric:proportional-nums lining-nums;margin-bottom:var(--s2);}
 .est-field input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:16px;
   background:transparent;cursor:pointer;display:block;}
 .est-field input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:var(--r-full);
@@ -1270,8 +1416,8 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   padding-top:var(--s4);border-top:var(--edge);}
 @media(max-width:768px){.est-out{grid-template-columns:1fr;gap:var(--s4);}}
 .est-primary .k-head{display:block;margin-bottom:var(--s1);}
-.est-total{display:block;font-size:clamp(44px,6vw,76px);font-weight:500;letter-spacing:-.04em;
-  line-height:1;font-variant-numeric:tabular-nums lining-nums;}
+.est-total{display:block;font-size:clamp(44px,6vw,76px);font-weight:700;letter-spacing:-.04em;
+  line-height:1;font-variant-numeric:proportional-nums lining-nums;}
 .est-sub{display:block;font-size:13px;color:var(--gray-s);margin-top:var(--s1);line-height:1.5;max-width:38ch;}
 .est-note{margin-top:var(--s4);padding-top:var(--s3);border-top:var(--edge-2);
   font-size:13.5px;line-height:1.6;color:var(--gray-s);max-width:64ch;}
@@ -1319,7 +1465,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    ------------------------------------------------------------------------- */
 .est-out-rate{grid-template-columns:minmax(0,320px) minmax(0,1fr);align-items:end;}
 @media(max-width:900px){.est-out-rate{grid-template-columns:1fr;}}
-.est-rate{font-variant-numeric:tabular-nums lining-nums;}
+.est-rate{font-variant-numeric:proportional-nums lining-nums;}
 
 .fig{margin:0;}
 .fig-plot{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;
@@ -1357,12 +1503,12 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .fig-ceil{border-top-style:solid;border-top-color:rgba(21,20,26,.28);}
 .fig-ceil em{bottom:auto;top:4px;}
 .fig-axis{display:flex;justify-content:space-between;gap:var(--s2);margin-top:var(--s1);
-  font-size:11.5px;color:var(--gray-s);font-variant-numeric:tabular-nums;}
+  font-size:11.5px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
 
 .est-year{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;
   margin-top:var(--s4);padding-top:var(--s3);border-top:var(--edge-2);}
 .est-year-v{font-size:22px;font-weight:600;letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums lining-nums;}
+  font-variant-numeric:proportional-nums lining-nums;}
 /* a ceiling that may never be touched, drawn the way the site draws money that
    is not there: outline, like the creator's $0 and a jackpotted bill */
 .est-hollow{font-size:32px;color:transparent;-webkit-text-stroke:1.25px var(--ink);}
@@ -1380,7 +1526,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .barset-track{height:12px;border-left:1px solid var(--ink);}
 .barset-bar{display:block;height:100%;background:var(--ink);min-width:2px;
   transition:width var(--t2) var(--ease);}
-.barset-n{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums lining-nums;
+.barset-n{font-size:14px;font-weight:600;font-variant-numeric:proportional-nums lining-nums;
   min-width:4ch;text-align:right;}
 /* the first row is the rate you are quoted, so it keeps full weight and the
    two cheaper rows step back — the same recession as .fig-col */

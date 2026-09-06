@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import CreatorCalc from '@/components/CreatorCalc';
+import Panel from '@/components/Panel';
 import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
@@ -72,7 +73,11 @@ export default async function Creators({ params }: P) {
           <Wash variant="field" seed={6} />
           <div className="wrap">
             <Head label={c.calc.label} title={c.calc.title} lead={c.calc.lead} />
-            <div className="sec-body"><CreatorCalc c={c.calc} href="#access" /></div>
+            <div className="sec-body">
+              <Panel>
+                <CreatorCalc c={c.calc} href="#access" />
+              </Panel>
+            </div>
           </div>
         </section>
 

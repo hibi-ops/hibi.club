@@ -1,0 +1,654 @@
+/* ===========================================================================
+   FIGURES — grain, panel, trio, competitive matrix.
+   ---------------------------------------------------------------------------
+   Split out of globals.css because it had to be. These three blocks were
+   edited a dozen times in one session by slicing strings out of a 3000-line
+   file, and every regression came from the same cause: a slice that ran past
+   its block and swallowed the rule next door. Forty-eight dots vanished once,
+   a legend leaked onto desktop, a row name lost display:block, a tally
+   rendered ink-on-ink. None of those were design decisions; they were edits
+   landing in the wrong place.
+   =========================================================================== */
+
+
+/* ===== grain =============================================================
+   The liquid colour field the tiles are made of. Two things had to be got
+   right and both were got wrong first:
+
+   1. THE GRAIN WAS INVISIBLE. It was drawn with mix-blend-mode:overlay, and
+      overlay leaves 50% grey exactly unchanged — which is the mean of an
+      feTurbulence fractalNoise. The layer was compositing to almost nothing.
+      It is plain alpha now, so what you set is what you see.
+
+   2. TWO RADIAL STOPS IS A RAMP, NOT A FIELD. Liquid comes from several
+      overlapping blobs of different size pushed through a heavy blur, so the
+      boundaries between colours bend instead of running straight. Five blobs,
+      blurred 22px, on an oversized inset so the blur never shows its own edge.
+
+   Hues stay adjacent — crossing the wheel is what turned an early attempt to
+   mud — but each tone travels far enough inside its neighbourhood to read as
+   a field rather than a tint.
+   ========================================================================= */
+.grain{position:relative;display:block;border-radius:inherit;overflow:hidden;
+  isolation:isolate;background:var(--g0);}
+.grain::before,.grain::after{content:'';position:absolute;pointer-events:none;}
+/* the liquid: five blobs, blurred into one another.
+   Sizes vary deliberately and the inset is shallow: with -45% and a 40px blur
+   the five blobs merged into one soft ramp — luminous, but flat. Structure
+   needs the shapes to stay inside the frame and the blur to stop short of
+   erasing their boundaries. */
+.grain::before{inset:-22%;filter:blur(24px) saturate(1.04);}
+/* Three flows, so the blend differs and not only the palette. The tiles run
+   3:1 to 7:1, so blobs are narrow and over-tall and stepped across x — a
+   square blob at 50% width merges into two zones on a strip and the extra
+   hues are wasted. Eight of them, not six: the count IS the complexity, and
+   dropping it is how a field stops being liquid and becomes a ramp.
+   gx-1 runs dark to light, gx-2 the other way, gx-3 keeps the dark at both
+   ends and opens in the middle. */
+.gx-1::before{background:
+  var(--fade, linear-gradient(transparent, transparent)),
+  radial-gradient(24% 108% at 3% 22%, var(--g0), transparent 60%),
+  radial-gradient(27% 117% at 16% 84%, var(--g1), transparent 63%),
+  radial-gradient(30% 126% at 30% 16%, var(--g2), transparent 66%),
+  radial-gradient(24% 135% at 43% 92%, var(--g3), transparent 60%),
+  radial-gradient(27% 108% at 57% 26%, var(--g4), transparent 63%),
+  radial-gradient(30% 117% at 70% 78%, var(--g5), transparent 66%),
+  radial-gradient(24% 126% at 84% 20%, var(--g6), transparent 60%),
+  radial-gradient(27% 135% at 97% 70%, var(--g7), transparent 63%);}
+.gx-2::before{background:
+  var(--fade, linear-gradient(transparent, transparent)),
+  radial-gradient(24% 108% at 3% 74%, var(--g7), transparent 60%),
+  radial-gradient(27% 117% at 16% 12%, var(--g6), transparent 63%),
+  radial-gradient(30% 126% at 30% 88%, var(--g5), transparent 66%),
+  radial-gradient(24% 135% at 43% 20%, var(--g4), transparent 60%),
+  radial-gradient(27% 108% at 57% 82%, var(--g3), transparent 63%),
+  radial-gradient(30% 117% at 70% 18%, var(--g2), transparent 66%),
+  radial-gradient(24% 126% at 84% 86%, var(--g1), transparent 60%),
+  radial-gradient(27% 135% at 97% 30%, var(--g0), transparent 63%);}
+.gx-3::before{background:
+  var(--fade, linear-gradient(transparent, transparent)),
+  radial-gradient(24% 108% at 3% 40%, var(--g1), transparent 60%),
+  radial-gradient(27% 117% at 16% 90%, var(--g0), transparent 63%),
+  radial-gradient(30% 126% at 30% 28%, var(--g3), transparent 66%),
+  radial-gradient(24% 135% at 43% 84%, var(--g2), transparent 60%),
+  radial-gradient(27% 108% at 57% 24%, var(--g7), transparent 63%),
+  radial-gradient(30% 117% at 70% 88%, var(--g6), transparent 66%),
+  radial-gradient(24% 126% at 84% 32%, var(--g4), transparent 60%),
+  radial-gradient(27% 135% at 97% 76%, var(--g5), transparent 63%);}
+
+/* the grain: ONE fine layer, gently stretched, soft-light.
+   · NOT TWO SCALES. A second clumping layer at ~3.5px read as salt and
+     pepper — individual specks, which is dirt, not grain. Four octaves inside
+     one turbulence already clump, at the right scale.
+   · NOT HARD, BUT NOT SMOOTH EITHER. slope 3 threw the noise to both ends of
+     the range and read as a scatter of black dots; 1.5 was clean and a little
+     too polite. 1.85 with baseFrequency .78 — slightly coarser cells, more
+     spread — is the tooth without the dirt. intercept -.425 keeps 0.5 fixed,
+     so the mean is untouched and only the variance moves. Past about 2.2 the
+     dots start reading individually again, which is the failure mode.
+   · SOFT-LIGHT, NOT FLAT ALPHA. A grey layer at 34% alpha hazes the pigment
+     toward mid-grey. Soft-light modulates luminance around the colour already
+     there, hue untouched, and does relatively more in the darks — which is
+     how real grain behaves.
+   Drawn at the SVG's natural width so one turbulence unit is one CSS pixel
+   and the grain is the same size on every screen. Halving background-size to
+   chase the device pixel looks sharper on a retina panel and dissolves on a
+   1x one, where the filter rasterises features at half a device pixel and
+   averages them back to flat grey. */
+.grain::after{inset:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.85' intercept='-.425'/%3E%3CfeFuncG type='linear' slope='1.85' intercept='-.425'/%3E%3CfeFuncB type='linear' slope='1.85' intercept='-.425'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:soft-light;
+  opacity:1;}
+
+/* NINE FIELDS, ALL DIFFERENT, ALL THE SAME WEIGHT.
+   Nine tiles on the home page used to run three palettes on a loop. Three
+   pictures shown three times reads as a template, so each tile has an arc of
+   the wheel to itself and the page walks the circle once.
+
+   Six versions are behind these numbers. Keep the list; each line is a way
+   this goes wrong:
+   1. near-black base under pale blobs — the blur pulled everything down to it
+      and the tiles read as three dark rectangles;
+   2. pale one-band pastels — a default theme, no travel;
+   3. full-chroma pigments in a narrow mid band — 0.77 mean saturation, a
+      lava lamp;
+   4. low chroma in a narrow mid band — quiet and dead. Greige;
+   5. wide value range but one hue family — depth arrived and it still was not
+      liquid: a field of one hue at six lightnesses is a gradient bar, nothing
+      meets anything;
+   6. wide hue AND value, every stop at the same high chroma — poster colour.
+      Loud, flat, unreal. Real pigment is never uniformly pure.
+
+   What is here now:
+   · ~95 DEGREES OF HUE PER TILE, EIGHT STOPS. Wide enough to show several
+     genuinely different colours meeting; not so wide that complements land in
+     one field. Red against green was the clash called out and it is the
+     general case — opposite hues at similar lightness cancel into mud. Eight
+     stops rather than six because the count IS the complexity.
+   · CHROMA DESCENDS: 34/29/30/24/21/16/13/8, rich at the dark end and nearly
+     neutral at the light one. A flat low ladder was tried and it is what made
+     the warm arc read as brown and the green one as olive — a pale tint goes
+     dirty the moment it carries chroma, while a deep one can hold plenty and
+     still be quiet. The small per-stop irregularity stays: a perfectly even
+     ladder makes every stop equally pure, and equal purity is what reads as
+     poster.
+   · THE THREE RECORD CARDS LIVE NEAR THE BRAND. 7 and 5 were a warm arc and a
+     green one, and they read as earth — a clay card and a forest card next to
+     an indigo one is a pottery studio, not this company. --sky is 196.8deg;
+     card 9 already ended there, and 7 (288->224) and 5 (202->148) now arrive
+     at the same neighbourhood from opposite sides, so the row goes violet /
+     teal / indigo. Distinct from each other, all recognisably the brand.
+     7 ALSO CARRIES ITS OWN CHROMA LADDER, rising again at the warm end
+     (36 31 33 29 27 26 30 28) where the shared one falls to 8. Yellow is the
+     single hue that stays clean at high lightness; every other hue goes dirty
+     up there, which is what the shared descending ladder is protecting against.
+     Held to the shared ladder this palette's gold came out #e3e2de — white.
+     7 IS THE ONE PALETTE WITH A HAND-LISTED HUE SEQUENCE rather than an arc:
+     212 200 190 178 158 118 80 52 — the brand blue through cyan and out to a
+     pale gold. Interpolating 210 to 50 evenly would work arithmetically and
+     park the middle of the card, at mid lightness, squarely in green; the list
+     spends almost no distance there and crosses the green band only at L 68
+     and above, where those hues read as light sage and then as gold. Any
+     blue-to-yellow field has to cross green somewhere. The choice is where.
+     Two dead ends are worth keeping: a warm arc through 2->47 is brown by
+     construction (mid-lightness orange at low chroma), and any green arc whose
+     tail reaches 78-100 BELOW L 62 is olive at every usable lightness. If a
+     warm or green card is ever wanted again those are the traps.
+     Note the wrap: an arc written 350->42 interpolates BACKWARDS round the
+     wheel and comes out violet and teal. The end point has to be 402.
+   · NO HUE BETWEEN 38 AND 102 DEGREES BELOW L 62. That box is where khaki,
+     olive and beige live; those hues appear here only near the light end,
+     where they read as gold and cream. Asserted when the palettes are
+     generated, not eyeballed.
+   · EVERY PALETTE NORMALISED TO THE SAME MEAN RELATIVE LUMINANCE, 0.335. A
+     violet and a sage at identical HSL lightness do not weigh the same on
+     screen, so three tiles side by side came out unbalanced. Each arc's
+     lightness ladder is scaled until measured luminance matches — which is
+     why these numbers look irregular. They are solved, not chosen.
+   Assignment lives in the page, not here: neighbouring tiles never draw from
+   the same family. */
+.grain-1{--g0:#693469;--g1:#7a4883;--g2:#7756a0;--g3:#8976ab;--g4:#9393b8;--g5:#b0b0c6;--g6:#cacfd6;--g7:#e3e6e7;}
+.grain-2{--g0:#442e5e;--g1:#54437a;--g2:#525898;--g3:#6f78a7;--g4:#8ea2b5;--g5:#acb9c3;--g6:#c8d4d4;--g7:#e2e6e6;}
+.grain-3{--g0:#202441;--g1:#364362;--g2:#467083;--g3:#5f8d9c;--g4:#80aca7;--g5:#a3bcb8;--g6:#c1cfc8;--g7:#dfe4e0;}
+.grain-4{--g0:#1d323a;--g1:#33575c;--g2:#447e6d;--g3:#5d9782;--g4:#7daa89;--g5:#a0baa6;--g6:#c1cebf;--g7:#dfe2dd;}
+.grain-5{--g0:#223f49;--g1:#43909c;--g2:#61bbc1;--g3:#99cdcb;--g4:#d1b06e;--g5:#dda87f;--g6:#e0d8ac;--g7:#e5dbcf;}
+.grain-6{--g0:#633145;--g1:#7e4553;--g2:#9b546c;--g3:#a97277;--g4:#b69096;--g5:#c4b1ae;--g6:#d5c9c9;--g7:#e7e4e3;}
+.grain-7{--g0:#223144;--g1:#4b7899;--g2:#70a7bb;--g3:#9dc4ca;--g4:#89b6ac;--g5:#a9c8a9;--g6:#d9dcbe;--g7:#edeadf;}
+.grain-8{--g0:#543061;--g1:#7a457c;--g2:#96539a;--g3:#a8719a;--g4:#b68fac;--g5:#c4adb6;--g6:#d5c8cd;--g7:#e7e2e3;}
+.grain-9{--g0:#2f3241;--g1:#697089;--g2:#898fa1;--g3:#a4a9b3;--g4:#b9bdc4;--g5:#ccced1;--g6:#dbdcde;--g7:#e9eaeb;}
+@media(prefers-contrast:more){.grain{display:none;}}
+
+/* ===== panel =============================================================
+   A surface, not a poster. The prototypes sit on clean white with a hairline
+   and a generous radius — no colour bleeding under live controls, because a
+   gradient behind a slider is wallpaper and it fought every figure on it.
+
+   Colour lives in `.tile` instead: a small standalone graphic that marks a
+   block, the way a card thumbnail does. Separate object, its own edges, and
+   it never has type or controls sitting on it.
+   ========================================================================= */
+:root{--r-panel:14px;}
+.panel{position:relative;border-radius:var(--r-panel);background:var(--snow);
+  border:var(--edge);overflow:hidden;}
+.panel-body,.panel-cap{position:relative;z-index:1;}
+/* --s4, not --s5. The walk-in figure inside carries its own column padding,
+   so the panel's 32 sat outside another inset and the block read loose. */
+.panel-body{padding:var(--s4);}
+.panel-cap{border-top:var(--edge);padding-top:var(--s3);margin:0 var(--s4) var(--s4);
+  max-width:60ch;}
+.panel-cap .k-head{display:block;margin-bottom:var(--s1);}
+.panel-cap p{font-size:14px;line-height:1.6;color:var(--gray-s);}
+.panel .wi{border-top:none;border-bottom:none;padding:0;}
+.panel .est{max-width:none;}
+@media(max-width:768px){.panel-body{padding:var(--s4);}
+  .panel-cap{margin:0 var(--s4) var(--s4);}}
+
+/* a fourth flow for the middle record card. gx-1..3 walk the light across the
+   x axis in three ways and all three are essentially horizontal journeys; this
+   one is a diagonal, light gathered high-left and the dark falling to the
+   bottom-right corner, with one small second light low-right so the corner is
+   not dead. It exists because the middle card asked for a different layout of
+   the light, not a different palette on the same layout. */
+.gx-4::before{background:
+  var(--fade, linear-gradient(transparent, transparent)),
+  radial-gradient(46% 78% at 12% 8%,   var(--g7), transparent 64%),
+  radial-gradient(38% 62% at 30% 26%,  var(--g6), transparent 60%),
+  radial-gradient(42% 70% at 46% 44%,  var(--g4), transparent 62%),
+  radial-gradient(36% 58% at 62% 58%,  var(--g3), transparent 58%),
+  radial-gradient(44% 74% at 78% 74%,  var(--g1), transparent 64%),
+  radial-gradient(52% 86% at 98% 96%,  var(--g0), transparent 70%),
+  radial-gradient(26% 44% at 88% 30%,  var(--g5), transparent 54%),
+  radial-gradient(22% 38% at 8% 88%,   var(--g2), transparent 52%);}
+
+/* gx-5, for the cyan-and-orange card. The palette's index order IS its hue
+   order there (g1-g3 cyan, g4-g6 warm), so a monotonic sweep keeps the two
+   families on opposite sides of the field and they only meet along one soft
+   seam — which is the whole point: cyan and orange averaged across a whole
+   card go grey, and routed through the wheel they go green. Runs bottom-right
+   to top-left so it is not gx-1 with a different palette in it. */
+.gx-5::before{background:
+  var(--fade, linear-gradient(transparent, transparent)),
+  radial-gradient(50% 84% at 96% 92%, var(--g0), transparent 68%),
+  radial-gradient(40% 66% at 80% 76%, var(--g1), transparent 62%),
+  radial-gradient(44% 72% at 62% 62%, var(--g2), transparent 64%),
+  radial-gradient(38% 62% at 46% 50%, var(--g3), transparent 60%),
+  radial-gradient(42% 70% at 32% 36%, var(--g4), transparent 62%),
+  radial-gradient(40% 66% at 18% 22%, var(--g5), transparent 62%),
+  radial-gradient(46% 76% at 4% 8%,   var(--g6), transparent 66%),
+  radial-gradient(28% 46% at 74% 14%, var(--g7), transparent 56%);}
+
+/* ===== tile ==============================================================
+   The colour object. Small, contained, and the only place the grain appears.
+   Sized by the block it marks rather than stretched behind one.
+   ========================================================================= */
+.tile{display:block;height:148px;border-radius:var(--r-panel) var(--r-panel) 0 0;}
+/* a tile used to close a column rather than head a card: it gets the frame's
+   full radius and sits at the foot of the block.
+   These were deleted once, on the reading that "too many colour panels" meant
+   fewer of them. It was the wrong reading: they are what stops the rail's left
+   column and the column beside the form from trailing into white, and taking
+   them out reopened two voids to solve a complaint about crowding. Restored. */
+.rail-tile{flex:1 1 auto;height:auto;min-height:176px;
+  border-radius:var(--r-panel);margin-top:var(--s5);}
+/* same rule as the rail: the column runs to the foot of the section rather
+   than stopping in mid-air above it. The form beside it is tall and fixed, so
+   without this the left column ended two hundred pixels short. */
+.access-side{display:flex;flex-direction:column;}
+.access-tile{flex:1 1 auto;height:auto;min-height:200px;
+  border-radius:var(--r-panel);margin-top:var(--s5);}
+/* one media block, and .tile first: same specificity, so whichever comes last
+   wins. Split across two blocks with .tile in the later one, the smaller value
+   here was dead and both tiles fell back to the card height. */
+@media(max-width:900px){
+  .tile{height:104px;}
+  .rail-tile,.access-tile{flex:0 0 auto;height:120px;min-height:0;margin-top:var(--s4);}}
+
+/* the pattern layer over a tile — see TileLines.tsx.
+   z-index 2 puts it above both pseudo-elements: ::before is the colour, ::after
+   is the grain, and a contour drawn under the grain reads as a printing fault
+   rather than as a line on the surface. Stroke is white at low alpha and it is
+   allowed to disappear into the pale end of the field — a contour fading out
+   where the ground is high is what the drawing means, not a bug to fix.
+   Non-scaling-stroke because the viewBox is stretched to a 3:1 box; without it
+   every line would be drawn three times thicker horizontally than vertically. */
+.tl-field{position:absolute;inset:0;z-index:2;pointer-events:none;
+  border-radius:inherit;overflow:hidden;}
+.tl-field svg{display:block;width:100%;height:100%;}
+/* non-scaling-stroke is not optional here. The pattern is generated in a
+   viewBox a thousand units wide and drawn into a tile a few hundred pixels
+   wide, so the scale is about 0.3 — a width set in viewBox units came out at
+   two thirds of a device pixel and the whole set looked washed out. This makes
+   the number mean pixels. preserveAspectRatio is "slice", so the scale is
+   uniform and the line is the same weight in every direction. */
+/* THE SURFACE ANSWERS AS WELL AS THE SHAPE. Bending the lines is the whole
+   interaction, and on its own it was easy to miss on a card you are reading
+   rather than staring at. The field also comes up in weight while the pointer
+   is in the card — half a second in, a second and a bit back out, so it reads
+   as the drawing waking rather than as a hover state switching. It is the one
+   transition on this page that is a fade instead of a cut; a cut here would
+   flash, and the thing being changed is light, not position. */
+.tl-field{opacity:.82;transition:opacity .55s cubic-bezier(.2,.7,.3,1);}
+.panel:hover .tl-field{opacity:1;transition-duration:1.1s;}
+.tl-field path{fill:none;stroke:rgba(255,255,255,.44);stroke-width:1.05;
+  vector-effect:non-scaling-stroke;stroke-linecap:round;}
+/* the one tile of particles. Radii are in viewBox units and there is no
+   vector-effect for a fill, so they are sized for that 0.3 scale — see Dots. */
+.tl-dots circle{fill:rgba(255,255,255,.55);}
+@media(prefers-contrast:more){.tl-field{display:none;}}
+
+/* ===== trio =============================================================
+   Three framed panels side by side, each headed by a tile.
+   ========================================================================= */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+.trio>.panel{display:flex;flex-direction:column;overflow:hidden;}
+/* NO MIN-HEIGHT. There was a floor here (--trio-h, 330 and 420) from when
+   every card carried a colour block: the block needed room, so the card was
+   given some. The blocks are gone from this trio and the floor was left
+   behind, which put a hundred and fifty pixels of text in a 420px box and
+   reopened the empty-bottom problem it was meant to solve. A card is as tall
+   as what is in it; the grid stretches the three to match. */
+/* EQUAL IMAGES, EQUAL TEXT BLOCKS, where there are images. An earlier version
+   let the tile take the slack so no card ended in dead white. It worked and it
+   was wrong: three pictures at three heights is the first thing you see, and
+   it reads as a mistake. Fixed height on the tile, the body takes the
+   difference, and the surplus sits inside a text box where it is just leading. */
+.trio .tile{flex:0 0 auto;height:190px;}
+.trio .panel-body{padding:var(--s4);flex:1 1 auto;}
+.trio .tl-k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--gray-s);margin-bottom:var(--s2);}
+/* BACK TO 16 / -.015em. It was pushed to 17 and -.022 while chasing more
+   presence in the card title; the tighter tracking is what did the damage —
+   at this size it just made the line narrow and cramped, and it was applied
+   to both trios when only one of them had the problem.
+   600 and not heavier for a hierarchy reason, not a technical one now that
+   the family is variable to 700: the section heading that owns these cards is
+   500, and this site sets its largest type at its lightest display weight —
+   size carries it. A card title heavier than the heading above it inverts
+   that. */
+.trio .tl-t{font-size:16px;font-weight:600;letter-spacing:-.015em;line-height:1.3;
+  margin-bottom:var(--s2);}
+.trio .tl-p{font-size:13.5px;line-height:1.6;color:var(--gray-s);}
+@media(max-width:900px){.trio{grid-template-columns:1fr;}
+  .trio .tile{height:104px;}}
+
+/* ===== trio-wash =========================================================
+   THE CARD IS THE FIELD. Not a white box with a coloured lid — the colour is
+   the ground, the pattern runs the full height of it, and the type is printed
+   on it in white. This is the reference's lead card, and the difference from
+   the lid version is not cosmetic: on a lid the colour is a label, and here it
+   is the surface, which is why the pattern gets to be the size of the card and
+   why the cursor works everywhere in it rather than in the top third.
+
+   Only one of the two trios does this. Six full-colour cards down one page was
+   the crowding complaint; three is a chapter.
+   ========================================================================= */
+/* 15/16, not 3/4 — a fifth shorter. At 3:4 the cards ran 400 to 470 tall and
+   the field had more room than it needed; the caption is what the reader is
+   after and it was a long way down. */
+.trio-wash>.panel{border:none;background:transparent;min-height:320px;
+  aspect-ratio:15 / 16;}
+.trio-wash .tile-fill{position:absolute;inset:0;height:auto;width:auto;
+  border-radius:inherit;z-index:0;}
+/* the caption is pushed to the foot: the field needs its own room above the
+   type or the card is a lid again, just a taller one.
+   flex:0 0 auto is the load-bearing half. The base rule gives the body flex:1
+   so it can absorb slack in the lid layout; here the tile is out of flow
+   (absolute), so a growing body filled the whole card and margin-top:auto had
+   nothing left to push against — the type sat at the top, over the light end
+   of the field, and read as washed out. It has to keep its natural height for
+   the auto margin to mean anything. */
+.trio-wash .panel-body{position:relative;z-index:1;flex:0 0 auto;margin-top:auto;
+  padding:var(--s5) var(--s4) var(--s4);}
+.trio-wash .tl-k{color:rgba(255,255,255,.72);}
+.trio-wash .tl-p{color:rgba(255,255,255,.82);}
+/* white type on a colour field loses weight to the ground under it in a way
+   dark-on-white does not, so this one set gets the size up. */
+.trio-wash .tl-t{color:#fff;font-size:17.5px;}
+/* THE FOOT IS DARKENED INSIDE THE COLOUR LAYER, NOT OVER IT.
+   This replaces a scrim element that sat at z-index 3. Painting order is the
+   whole reason: .grain::after is the grain, and it paints after ::before but
+   before any positioned child, so ANY overlay above it — however well eased —
+   erases the grain in exactly the region it covers and leaves that part of the
+   card smooth while the rest is textured. Folding the darkening into ::before
+   puts it UNDER the grain instead. Same legibility for the caption, the tooth
+   survives all the way down, and there is no second surface hazing the colour.
+
+   The stops are in ::before's space, not the tile's. ::before is inset -22%,
+   so it is 144% of the tile tall and the tile's bottom edge sits at 15.3% up
+   from its own bottom. Every stop below is a tile percentage put through
+   (22 + t) / 144: the caption's solid ground ends at tile 26%, which is 33.3%
+   here, and the fade reaches zero at tile 80%, which is 70.8%. Change the
+   inset and these all have to be recomputed. */
+/* AND THE LINES STOP BEFORE THE CAPTION. With the darkening moved down under
+   the grain, the pattern layer — which is above both — was left drawing white
+   across the type: it lightened the ground back up and put structure behind
+   the words. Masking the line layer out over the bottom third fixes both, and
+   it is the right division of labour anyway: the grain is texture and can run
+   everywhere, the lines are a drawing and a drawing should not run under a
+   sentence. The grain keeps going all the way down, which was the whole point
+   of moving the darkening in the first place. */
+.tile-fill .tl-field{
+  -webkit-mask-image:linear-gradient(to top, transparent 0 20%,
+    rgba(0,0,0,.3) 31%, rgba(0,0,0,.75) 42%, #000 54%);
+  mask-image:linear-gradient(to top, transparent 0 20%,
+    rgba(0,0,0,.3) 31%, rgba(0,0,0,.75) 42%, #000 54%);}
+.tile-fill{--fade:linear-gradient(to top,
+    var(--g0) 0 33.3%,
+    color-mix(in srgb, var(--g0) 92%, transparent) 41.7%,
+    color-mix(in srgb, var(--g0) 74%, transparent) 48.6%,
+    color-mix(in srgb, var(--g0) 50%, transparent) 54.9%,
+    color-mix(in srgb, var(--g0) 28%, transparent) 60.4%,
+    color-mix(in srgb, var(--g0) 12%, transparent) 65.3%,
+    rgba(0,0,0,0) 70.8%);}
+@media(max-width:900px){
+  /* one column: 3:4 on a full-width card is a 500px tall slab you have to
+     scroll past, so the shape goes wide instead of tall */
+  .trio-wash>.panel{min-height:260px;aspect-ratio:16 / 9;}}
+
+/* the one line that follows the three cards. It used to sit in the rail's
+   text column; on its own under a full-width row it needs a measure and some
+   air or it reads as a caption to the third card. */
+.rec-close{margin-top:var(--s4);max-width:52ch;font-size:14px;}
+
+/* ===== reading the matrix ================================================
+   Eight columns by six rows is the densest thing on the page and the one place
+   a reader has to track a cell back to two headings at once. The interaction
+   is a reading aid, not decoration: point at a row and the rest of the table
+   steps back so that row is a line you can follow; point at a column and the
+   same happens down it.
+
+   The column half is done with :has() and a CSS variable rather than
+   JavaScript — hovering any cell sets --col on the table, and every cell whose
+   data-col matches lifts. Eight selectors, no listener, no state.
+
+   Everything here is opacity and background. Nothing moves: a table that
+   shifts under the pointer is unreadable, and the site's hover rule is that
+   the element's own line or ground answers rather than its position. */
+.cmatrix tbody tr,.cmatrix tbody td,.cmatrix thead th{
+  transition:opacity .16s var(--ease), background .16s var(--ease);}
+@media(hover:hover) and (pointer:fine){
+  .cmatrix tbody:hover tr:not(:hover){opacity:.42;}
+  .cmatrix tbody tr:hover{background:rgba(21,20,26,.035);}
+  .cmatrix tbody tr[data-us]:hover{background:rgba(82,182,221,.13);}
+  .cmatrix:has(td[data-col="0"]:hover) td[data-col="0"],
+  .cmatrix:has(td[data-col="0"]:hover) th[data-col="0"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="1"]:hover) td[data-col="1"],
+  .cmatrix:has(td[data-col="1"]:hover) th[data-col="1"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="2"]:hover) td[data-col="2"],
+  .cmatrix:has(td[data-col="2"]:hover) th[data-col="2"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="3"]:hover) td[data-col="3"],
+  .cmatrix:has(td[data-col="3"]:hover) th[data-col="3"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="4"]:hover) td[data-col="4"],
+  .cmatrix:has(td[data-col="4"]:hover) th[data-col="4"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="5"]:hover) td[data-col="5"],
+  .cmatrix:has(td[data-col="5"]:hover) th[data-col="5"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="6"]:hover) td[data-col="6"],
+  .cmatrix:has(td[data-col="6"]:hover) th[data-col="6"]{background:rgba(21,20,26,.055);opacity:1;}
+  .cmatrix:has(td[data-col="7"]:hover) td[data-col="7"],
+  .cmatrix:has(td[data-col="7"]:hover) th[data-col="7"]{background:rgba(21,20,26,.055);opacity:1;}
+}
+
+/* ===== the record card's caption, at rest and open =======================
+   At rest the card shows a kicker and a title, set large, sitting on the foot
+   of the field. Point at it and the body unfolds underneath, the block grows
+   upward because it is bottom-anchored, and the title settles to reading size.
+
+   HOW THE HEIGHT ANIMATES. `grid-template-rows: 0fr -> 1fr` on a wrapper whose
+   single child has overflow:hidden and min-height:0. That is the one way to
+   transition to an intrinsic height without measuring it in JavaScript, and
+   measuring is what would otherwise be needed since the three bodies are
+   different lengths.
+
+   THE CARD ITSELF MUST NOT RESIZE, or the row would jog every time a pointer
+   crossed it. It cannot: the panel's height comes from aspect-ratio and it
+   clips, so the caption grows into space the card already had.
+
+   ONLY WHERE THERE IS A POINTER. On a touch screen there is no hover and the
+   body would never be reachable, so the collapse is inside a hover query and
+   the default everywhere else is simply the open state at reading size.
+
+   This is a fade, on a page whose rule is the cut. The rule is about arrivals
+   — how a section enters — and it is kept: nothing here wipes or slides in on
+   load. A hover state is a different act, and a caption that snapped between
+   two heights would read as a glitch rather than as a card opening. */
+@media (hover:hover) and (pointer:fine){
+  .trio-wash .tl-t{font-size:22px;letter-spacing:-.024em;
+    transition:font-size .42s cubic-bezier(.2,.8,.25,1),
+               letter-spacing .42s cubic-bezier(.2,.8,.25,1);}
+  .trio-wash .tl-more{display:grid;grid-template-rows:0fr;
+    transition:grid-template-rows .42s cubic-bezier(.2,.8,.25,1);}
+  .trio-wash .tl-more>*{overflow:hidden;min-height:0;opacity:0;
+    transform:translateY(5px);
+    transition:opacity .26s ease, transform .42s cubic-bezier(.2,.8,.25,1);}
+  .trio-wash .panel:hover .tl-t{font-size:17.5px;letter-spacing:-.015em;}
+  .trio-wash .panel:hover .tl-more{grid-template-rows:1fr;}
+  .trio-wash .panel:hover .tl-more>*{opacity:1;transform:none;
+    transition-delay:.07s;}
+  /* the field steps back while the caption comes forward. One composited
+     filter on the whole tile rather than a second overlay — the lines inside
+     dim with it, and the opacity lift already on .tl-field puts them back. */
+  .trio-wash .tile-fill{transition:filter .45s cubic-bezier(.2,.7,.3,1);}
+  .trio-wash .panel:hover .tile-fill{filter:brightness(.9);}
+}
+@media (prefers-reduced-motion:reduce){
+  .trio-wash .tl-t,.trio-wash .tl-more,.trio-wash .tl-more>*,
+  .trio-wash .tile-fill{transition:none;}
+}
+
+/* ===== competitive matrix =================================================
+   One horizontal band (our row) crossing three vertical ones (the columns
+   nobody else holds). Where they cross is the moat, and the crossing is drawn
+   rather than asserted — the component works out which columns are ours alone
+   instead of trusting a number typed into the copy.
+   Dots, not ticks: solid where held, a hollow ring where not. The ring is the
+   site's mark of absence, the same outline the $0 wears.
+   ========================================================================= */
+/* Full content width. Capping it at 920px inside a 1104px column left 184px
+   of nothing down the right-hand side — a gutter with no reason to exist,
+   which reads as a mistake rather than as restraint. With the tally column
+   holding the right edge there is enough content here to earn the width. */
+.cmatrix{width:100%;border-collapse:collapse;margin-top:var(--s4);}
+.cmatrix th,.cmatrix td{text-align:center;vertical-align:bottom;padding:0 4px var(--s2);}
+.cmatrix thead th{position:relative;font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--gray-s);line-height:1.25;width:9%;}
+.cmatrix thead th:first-child{width:23%;}
+.cm-total-h{width:58px;}
+/* a column we hold alone: named in ink, and ruled from the header down */
+/* 600, not 700. The family is variable to 700 now, so this would be a real
+   face — but at 10.5px uppercase the extra weight closes the counters and
+   reads as blur rather than emphasis. These columns are already marked by ink
+   colour against the muted rest, and by the rule underneath. */
+.cmatrix thead th[data-only]{color:var(--ink);font-weight:600;}
+.cm-only{display:block;height:2px;background:var(--brandInk);margin-top:6px;}
+.cmatrix thead th:not([data-only])::after{content:'';display:block;height:2px;
+  background:var(--edge-c,rgba(21,20,26,.09));margin-top:6px;}
+
+/* Every name starts on the same vertical, ours included. The tinted row used
+   to carry a left inset the other five did not, so the one row you compare
+   everything against was the one row out of line with them. */
+.cmatrix tbody th{text-align:left;vertical-align:middle;font-weight:400;
+  padding:var(--s2) var(--s3) var(--s2) var(--s2);}
+.cmatrix tbody th b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.01em;
+  line-height:1.3;}
+.cmatrix tbody th em{display:block;font-style:normal;font-size:11px;color:var(--gray-s);
+  margin-top:1px;line-height:1.3;}
+.cmatrix tbody td{vertical-align:middle;padding:var(--s3) 4px;}
+/* the vertical band, drawn on the cells so it stops at the last row */
+.cmatrix tbody td[data-only]{background:rgba(21,20,26,.028);}
+.cm-name{display:none;}
+.cm-i{display:none;}
+/* The tally, sized by its own value. --n is sqrt(held/total), set per row by
+   the component, so the numerals step 24 / 29 / 48px and the ranking arrives
+   before the dots do. Same encoding as the rate staircase: area, not height,
+   because that is what an eye compares. */
+.cm-total{text-align:right;white-space:nowrap;padding-right:0;line-height:.9;
+  font-variant-numeric:proportional-nums lining-nums;}
+.cm-total b{font-size:calc(52px * var(--n,1));font-weight:500;letter-spacing:-.045em;
+  color:var(--ink-2);}
+.cm-total i{font-style:normal;font-size:12px;color:var(--gray-s);letter-spacing:0;}
+
+/* the dot: solid where held, a hollow ring where not — the site's mark of
+   absence, the same outline the $0 wears */
+.cm-mark{display:inline-block;width:10px;height:10px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(21,20,26,.20);}
+.cmatrix td[data-on] .cm-mark{background:rgba(21,20,26,.52);box-shadow:none;}
+/* on the ink band the ring has to invert too */
+
+/* the legend and the numbered headers belong to narrow widths only */
+.cmatrix-key{display:none;}
+
+.cmatrix tbody tr{border-top:var(--edge-2);}
+.cmatrix tbody tr:first-child{border-top:1px solid var(--ink);}
+.cmatrix tbody tr:last-child{border-bottom:var(--edge-2);}
+
+/* our row: the horizontal band. Bigger dots in the one brand colour already
+   on the page, a tint rather than a fill, and rules top and bottom so it
+   reads as a band crossing the table rather than a highlighted line. */
+/* NOT a black band. That was tried and it was worse: the site's inversion is
+   a HOVER state on a title, and freezing it onto a table row reads as a 2010
+   highlighted row, heavy and dated, with the type fighting the ground.
+   The emphasis is typographic instead — this row is taller, its name is
+   larger, its dots are bigger and carry the one blue, and its numeral is
+   twice anyone else's. Scale does the work a fill was being asked to do. */
+.cmatrix tbody tr[data-us]{background:rgba(82,182,221,.07);}
+.cmatrix tbody tr[data-us]{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);}
+.cmatrix tbody tr[data-us] th{padding:var(--s3) var(--s3) var(--s3) var(--s2);}
+.cmatrix tbody tr[data-us] .cm-total{padding-right:var(--s3);}
+.cmatrix tbody tr[data-us] .cm-total b{color:var(--brandInk);}
+/* FoodDelicious, the brand's own Latin display face — the same one the
+   wordmark and the big marquee are set in. "Hibi" rendered in the body sans
+   at 600 was just a slightly bolder competitor name; in the display face it
+   reads as the brand, which is the whole point of that row. */
+.cmatrix tbody tr[data-us] th b{font-family:'FoodDelicious','Schibsted Grotesk',sans-serif;
+  font-size:23px;font-weight:400;letter-spacing:.01em;line-height:1;}
+.cmatrix tbody tr[data-us] td[data-only]{background:rgba(82,182,221,.11);}
+.cmatrix tbody tr[data-us] .cm-mark{width:15px;height:15px;background:var(--sky);
+  box-shadow:none;}
+@media(hover:hover){
+  .cmatrix tbody tr{transition:background var(--t1) var(--ease);}
+  .cmatrix tbody tr:not([data-us]):hover{background:var(--paper);}
+}
+
+/* NARROW ---------------------------------------------------------------
+   Third attempt, and the previous two are why this one is shaped like it is.
+   Six stacked lists (~900px) turned a comparison into six separate readings.
+   A block per player with the dots on their own line under the name got the
+   dots readable but stood every row 101px tall and left the numeral floating
+   in space beside a 14px name — clumsy, and half the height was air.
+
+   So: the same grid, tightened. Name, eight dots, tally — one line each, on a
+   single track shared by the header row, which is what makes the columns
+   trustworthy without a word of explanation. ~52px a row instead of 101. */
+@media(max-width:900px){
+  .cmatrix,.cmatrix thead,.cmatrix tbody{display:block;}
+  .cmatrix thead tr,.cmatrix tbody tr{display:grid;
+    grid-template-columns:minmax(0,148px) repeat(8,1fr) 34px;
+    gap:0 3px;align-items:center;}
+  .cmatrix th,.cmatrix td{display:block;padding:0;text-align:center;}
+
+  .cmatrix thead tr{padding-bottom:5px;}
+  .cm-h{display:none;}
+  .cm-i{display:block;font-size:9.5px;font-weight:600;color:var(--gray-s);
+    font-variant-numeric:proportional-nums;}
+  .cmatrix thead th[data-only] .cm-i{color:var(--brandInk);}
+  .cm-only,.cmatrix thead th:not([data-only])::after{margin-top:3px;height:2px;}
+  .cmatrix thead th:first-child,.cmatrix thead .cm-total-h{display:none;}
+  /* the two hidden header cells still have to hold their grid tracks */
+  .cmatrix thead tr::before,.cmatrix thead tr::after{content:'';display:block;}
+  .cmatrix thead tr::before{grid-column:1;}
+  .cmatrix thead tr::after{grid-column:10;}
+
+  .cmatrix tbody tr{padding:var(--s2) 0;}
+  .cmatrix tbody th{text-align:left;padding:0;}
+  .cmatrix tbody th b{font-size:13px;line-height:1.25;}
+  .cmatrix tbody th em{font-size:10px;line-height:1.25;}
+  .cmatrix tbody td{display:flex;justify-content:center;align-items:center;}
+  /* no vertical band down here — with a gap between rows it breaks into a
+     stack of loose grey rectangles rather than a column. The blue 2 / 3 / 7
+     in the header and in the legend carry the same mark without the litter.
+     (Removed once already and reintroduced when this block was rewritten.) */
+  .cmatrix tbody td[data-only],.cmatrix tbody tr[data-us] td[data-only]{background:none;}
+  .cm-mark{width:9px;height:9px;}
+
+  /* one size, not the sqrt staircase: a 42px numeral inside a 52px row is the
+     thing that made the last version look clumsy. Ours is simply bigger. */
+  .cm-total{text-align:right;}
+  .cm-total b{font-size:15px;}
+  .cm-total i{font-size:9.5px;}
+  .cmatrix tbody tr[data-us] .cm-total b{font-size:22px;}
+  .cmatrix tbody th{padding-left:var(--s1);}
+  .cmatrix tbody tr[data-us] th{padding:0 0 0 var(--s1);}
+  .cmatrix tbody tr[data-us] th b{font-size:18px;letter-spacing:.01em;}
+  .cmatrix tbody tr[data-us] .cm-mark{width:11px;height:11px;}
+  .cmatrix tbody tr[data-us] .cm-total{padding-right:var(--s1);}
+  .cm-name{display:none;}
+
+  .cmatrix-key{display:flex;flex-wrap:wrap;gap:2px var(--s2);margin-top:var(--s3);
+    padding-top:var(--s2);border-top:var(--edge-2);
+    font-size:10.5px;line-height:1.5;color:var(--gray-s);}
+  .cmatrix-key span{white-space:nowrap;}
+  .cmatrix-key b{display:inline-block;min-width:11px;font-weight:600;color:var(--ink-2);}
+  .cmatrix-key span[data-only],.cmatrix-key span[data-only] b{color:var(--brandInk);}
+}
+

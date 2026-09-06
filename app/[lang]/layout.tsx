@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import '../globals.css';
+import '@/app/figures.css';
 import { LANGS, SITE, type Lang } from '@/content/site';
 import { getDict } from '@/content';
 import JsonLd from '@/components/JsonLd';
