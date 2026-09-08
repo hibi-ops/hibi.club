@@ -368,17 +368,20 @@
      under any text it wants to mark — .hl's own gesture, zero transition, and
      the only place on these plates where something cuts instead of eases.
 
-     SKY, NOT INK, AND THAT WAS A REAL MISTAKE. It was built ink-on-white on
-     the reasoning that sky is the field's own family on half these palettes.
-     On a violet plate what that produced was a solid black bar with white
-     type in it: a redaction, and the loudest thing on the card by a distance —
-     louder than the heading. .hl's actual shipped gesture is sky ground with
-     ink type, and globals.css already records why: ink on sky reads on BOTH
-     grounds, which is exactly why the dark variant was retired. It is also
-     what .plate-a does one plate over, so the two now agree. */
+     PAPER, BECAUSE THE GROUND IS ALREADY COLOUR. Two wrong answers came
+     before this one. Ink first — a solid black bar with white type sitting on
+     a violet plate, which is a redaction and was the loudest thing on the card
+     by a distance. Then sky, .hl's own ground, which is right on paper and
+     merely another colour here: the plate is already a colour field, so a
+     coloured block on it is a second colour arguing with the first.
+     The block is paper. On white stock this site marks text by dropping sky
+     behind it; on a colour plate the same idea inverts the other way, to the
+     stock itself. The type in it is ink, so it is the exact reverse of the
+     white-on-colour it interrupts, and paper separates from all nine palettes
+     without depending on hue. */
   .plate:hover .plate-k{letter-spacing:.15em;}
   .plate-lk{transition:none;}
-  .plate-facts li:hover .plate-lk{background:var(--sky);color:var(--ink);}
+  .plate-facts li:hover .plate-lk{background:var(--snow);color:var(--ink);}
   /* and a line answers with its own rule, which is this site's standing
      grammar for hover. The first fact has no rule above it and is not given
      one: inventing a line for that row would be a different gesture wearing
