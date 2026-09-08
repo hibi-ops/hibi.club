@@ -1420,20 +1420,26 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-field .k-head{display:block;margin-bottom:var(--s0);}
 .est-val{display:block;font-size:24px;font-weight:600;letter-spacing:-.02em;
   font-variant-numeric:proportional-nums lining-nums;margin-bottom:var(--s2);}
-.est-field input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:16px;
+/* THE SAME RULE THE FORM WRITES ON, WITH A MARKER ON IT. A 4px pill track and
+   a white circle with a drop shadow is the stock range input, and a drop
+   shadow is the one thing this stylesheet says a surface may never use to
+   claim depth. The track is the site's writing rule — 1.5px, ink at 22%, the
+   same weight as .field — and the handle is a hard rectangular marker sitting
+   across it. No radius, no shadow, no ring: on hover and while dragging it
+   simply becomes sky, cut in, like everything else here. */
+.est-field input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:20px;
   background:transparent;cursor:pointer;display:block;}
-.est-field input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:var(--r-full);
-  background:var(--paper-2);box-shadow:inset 0 0 0 1px rgba(21,20,26,.06);}
-.est-field input[type=range]::-moz-range-track{height:4px;border-radius:var(--r-full);background:var(--paper-2);}
+.est-field input[type=range]::-webkit-slider-runnable-track{height:1.5px;border-radius:0;
+  background:rgba(21,20,26,.22);box-shadow:none;}
+.est-field input[type=range]::-moz-range-track{height:1.5px;border-radius:0;background:rgba(21,20,26,.22);}
 .est-field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
-  width:14px;height:14px;margin-top:-5px;border-radius:50%;background:var(--snow);
-  border:1px solid rgba(21,20,26,.22);box-shadow:0 1px 2px rgba(21,20,26,.16);
-  transition:border-color var(--t1) var(--ease),box-shadow var(--t1) var(--ease);}
-.est-field input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-  background:var(--snow);border:1px solid rgba(21,20,26,.22);box-shadow:0 1px 2px rgba(21,20,26,.16);}
-@media(hover:hover){.est-field input[type=range]:hover::-webkit-slider-thumb{border-color:var(--brandD);}}
-.est-field input[type=range]:active::-webkit-slider-thumb{border-color:var(--brandD);
-  box-shadow:0 0 0 4px rgba(7,103,141,.16);}
+  width:9px;height:18px;margin-top:-8.25px;border-radius:0;background:var(--ink);
+  border:none;box-shadow:none;transition:none;}
+.est-field input[type=range]::-moz-range-thumb{width:9px;height:18px;border-radius:0;
+  background:var(--ink);border:none;box-shadow:none;}
+@media(hover:hover){.est-field input[type=range]:hover::-webkit-slider-thumb{background:var(--sky);}}
+.est-field input[type=range]:active::-webkit-slider-thumb{background:var(--sky);}
+.est-field input[type=range]:active::-moz-range-thumb{background:var(--sky);}
 .est-field input[type=range]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--brandD);outline-offset:2px;}
 
 .est-out{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);margin-top:var(--s6);
@@ -1518,44 +1524,46 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    flat fee overtaken — and they were three variations on "black rectangle".
    One treatment now, differing where the argument differs.
 
-   NOT PURE BLACK. --ink is the type colour; a bar drawn in it competes with
-   the paragraph beside it and reads as console output. Graphite with a lift
-   along its length puts the figure a step behind the text and gives the shape
-   an edge to catch light on. The radius is on the FREE end only — the end the
-   value reaches — so a bar still grows out of its baseline rather than
-   floating off it. The baseline itself drops to a hairline: it is the ground,
-   not a mark, and at full ink it was the darkest thing in the picture.
-   Sky stays the accent and keeps one meaning across all three figures: what
-   the falling rate does for you. */
-:root{--chart-hi:#33323f; --chart-lo:#1b1a23; --chart-r:5px;}
+   NOT A BAR CHART, BECAUSE THIS SITE DOES NOT OWN ONE. Filled columns went
+   through black, then graphite with a gradient and a radius, and the second
+   was worse than the first: a rounded gradient bar is the default chart of
+   every dashboard ever generated, and it had nothing to do with the pen the
+   rest of this page is drawn with — hairlines, register crosses, outline
+   figures, hard inverted blocks.
+
+   So the plot is a ruled sheet and the value is a mark on it. Each month
+   carries a hairline the full height of the plot, the way the contour field
+   and the register marks are drawn, and the reading is a heavy 4px rule laid
+   across the column at its value. Twelve marks stepping down IS the staircase;
+   there was never any information in the ink underneath them.
+
+   It also settles the absence question the rest of the site already answered.
+   An empty column above a mark is what you are not charged, and this
+   stylesheet draws money that is not there as nothing or as outline — never
+   as a tint. The pale sky wash over the pricing plot goes with it.
+
+   Sky keeps one meaning across all three figures: what the falling rate does
+   for you. */
+:root{--chart-rule:rgba(21,20,26,.10);}
 .fig-plot{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;
-  align-items:end;height:132px;border-bottom:1px solid rgba(21,20,26,.2);}
+  align-items:end;height:132px;border-bottom:1.5px solid rgba(21,20,26,.28);}
 .fig-col{position:relative;display:flex;align-items:flex-end;height:100%;}
-.fig-bar{position:relative;display:block;width:100%;min-height:2px;
-  background:linear-gradient(180deg,var(--chart-hi),var(--chart-lo));
-  border-radius:var(--chart-r) var(--chart-r) 0 0;
-  transition:height var(--t2) var(--ease),background var(--t1) var(--ease);}
-/* THE SURPLUS IS INSIDE THE BAR. The creator plot is cumulative earnings
-   against one flat fee, and its good news is the part of the bar that has
-   climbed PAST the fee — so that part is sky and the rest is graphite. It
-   reads without a key: the blue is what a flat fee would never have paid you,
-   and the first month with any blue in it is the crossover the headline
-   names. --cut is set per bar (flat / cumulative) so the boundary lands
-   exactly on the flat rule.
-   This replaces three devices — a faded bar for "not there yet", one wholly
-   sky bar for the crossover, full ink after — which needed a key between them
-   and still left twelve bars looking like twelve independent values instead
-   of one series climbing. */
-/* height + min-height rather than a bottom offset: at the crossover month the
-   surplus is a fraction of a dollar, which is a sub-pixel band, and a 5px
-   radius on a 1px box draws nothing at all — so the one month the headline
-   names would be the one month with no blue in it. The floor overshoots the
-   flat rule by at most 3px on that single bar. */
-.fig-bar-over{position:absolute;left:0;right:0;top:0;height:var(--over,0);min-height:3px;
-  background:linear-gradient(180deg,var(--sky),var(--brandInk));
-  border-radius:var(--chart-r) var(--chart-r) 0 0;
-  transition:height var(--t2) var(--ease);}
-@media(hover:hover){.fig-col:hover .fig-tip{display:block;}}
+/* the ruler: one hairline per month, full height, so a mark has something to
+   sit on and the twelve months are countable without an axis */
+.fig-col::after{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:var(--chart-rule);pointer-events:none;}
+.fig-bar{position:relative;display:block;width:100%;min-height:0;background:none;
+  border-radius:0;border-top:4px solid var(--ink);
+  transition:height var(--t2) var(--ease),border-color var(--t1) var(--ease);}
+/* the creator plot's marks turn sky the month the running total passes the
+   flat fee, so the first blue mark IS the crossover the headline names and
+   how far it has climbed past the rule is right there on the ruler. It used
+   to be a split fill inside a solid bar, which needed the bar. */
+.fig-col[data-over] .fig-bar{border-top-color:var(--sky);}
+@media(hover:hover){
+  .fig-col:hover .fig-tip{display:block;}
+  .fig-col:hover::after{background:rgba(21,20,26,.28);}
+}
 /* display:none, not opacity:0 — a hidden-but-laid-out tooltip on the twelfth
    column pushed the document 8px wider than the viewport on a phone, which is
    a horizontal scrollbar on every page that has a figure. It also cuts in
@@ -1567,8 +1575,13 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* the end columns anchor to their own edge so the tip never leaves the plot */
 .fig-col:first-child .fig-tip,.fig-col:nth-child(2) .fig-tip{left:0;transform:none;}
 .fig-col:last-child .fig-tip,.fig-col:nth-last-child(2) .fig-tip{left:auto;right:0;transform:none;}
-/* the flat fee is one rule across the plot, because that is what it is */
-.fig-flat{position:absolute;left:0;right:0;height:0;border-top:1.5px dashed rgba(21,20,26,.42);
+/* A REFERENCE LEVEL IS DASHED, A MEASURED VALUE IS SOLID, AND THAT IS THE
+   WHOLE KEY. Both plots carry a line somebody else sets — the 15% ceiling,
+   the flat fee — and they were drawn differently for no reason: one solid,
+   one dashed, at two weights. Same thing, same line now. Finer than the 4px
+   marks, so a level reads as the ground the readings are taken against
+   rather than as another reading. */
+.fig-flat{position:absolute;left:0;right:0;height:0;border-top:1px dashed rgba(21,20,26,.4);
   z-index:2;pointer-events:none;transition:bottom var(--t2) var(--ease);}
 .fig-flat em{position:absolute;right:0;bottom:4px;font-style:normal;font-size:11px;
   font-weight:600;color:var(--gray-s);background:var(--snow);padding:0 4px;}
@@ -1580,7 +1593,6 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .fig-flat-l em{right:auto;left:0;}
 .tone-paper .fig-flat em{background:var(--paper);}
 /* the ceiling sits ON the top edge and hangs its label inside the plot */
-.fig-ceil{border-top-style:solid;border-top-color:rgba(21,20,26,.28);}
 .fig-ceil em{bottom:auto;top:4px;}
 /* THE RATE YOU END UP PAYING, DRAWN WHERE IT FALLS. The headline figure sat
    beside the plot and had no position in it, so the staircase and the answer
@@ -1603,21 +1615,6 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .fig-mean em{bottom:3px;color:var(--brandInk);}
 .fig-mean[data-high] em{bottom:auto;top:3px;}
 .fig-mean[data-flush] em{display:none;}
-/* WHAT YOU DO NOT PAY. The bars alone show twelve months getting cheaper and
-   leave the size of that to be inferred; the tint is the same shape drawn as
-   its negative — ink is the fee, tint is what the falling rate keeps for you,
-   and the wedge widens across the year. It is one flood fill under the bars,
-   not a gridline: the column is tinted full height and the opaque bar covers
-   the part you are charged for, so what remains visible IS the gap.
-   Sky for both the tint and the mean rule is one meaning, not two: ink is
-   what you pay, sky is what the falling rate does for you — the space it
-   opens and the rate it lands you on.
-   Scoped to .fig-under because the creator page's plot argues the opposite
-   way round — there the bar growing PAST the flat fee is the good news, and a
-   tint above it would mean the reverse of what it means here. */
-.fig-under .fig-col::before{content:'';position:absolute;inset:0;
-  background:rgba(82,182,221,.16);pointer-events:none;}
-@media(hover:hover){.fig-under .fig-col:hover::before{background:rgba(82,182,221,.28);}}
 .fig-axis{display:flex;justify-content:space-between;gap:var(--s2);margin-top:var(--s1);
   font-size:11.5px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
 
@@ -1639,16 +1636,18 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .barset-row{display:grid;grid-template-columns:minmax(0,108px) minmax(0,1fr) auto;
   gap:var(--s2);align-items:center;}
 .barset-k{font-size:11.5px;color:var(--gray-s);letter-spacing:.01em;}
-.barset-track{height:14px;border-left:1px solid rgba(21,20,26,.2);}
-.barset-bar{position:relative;display:block;height:100%;min-width:2px;
-  background:linear-gradient(90deg,var(--chart-lo),var(--chart-hi));
-  border-radius:0 var(--chart-r) var(--chart-r) 0;
+/* the same sheet turned on its side: a hairline run for the row, a 4px rule
+   for the reading, and the row's own left edge as the origin */
+.barset-track{position:relative;height:18px;border-left:1.5px solid rgba(21,20,26,.28);
+  display:flex;align-items:center;}
+.barset-track::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;
+  background:var(--chart-rule);}
+.barset-bar{position:relative;z-index:1;display:block;height:4px;min-width:2px;
+  background:var(--ink);border-radius:0;
   transition:width var(--t2) var(--ease);}
 /* everything past what the first-visit rate would have bought */
 .barset-over{position:absolute;top:0;bottom:0;left:var(--base,100%);right:0;
-  background:linear-gradient(90deg,var(--brandInk),var(--sky));
-  border-radius:0 var(--chart-r) var(--chart-r) 0;
-  transition:left var(--t2) var(--ease);}
+  background:var(--sky);transition:left var(--t2) var(--ease);}
 .barset-n{font-size:14px;font-weight:600;font-variant-numeric:proportional-nums lining-nums;
   min-width:4ch;text-align:right;}
 /* NO RECESSION HERE. The two longer rows were set back as "not the rate you
@@ -1664,7 +1663,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-year .est-sub{margin-top:0;}
 
 @media(prefers-reduced-motion:reduce){
-  .fig-bar,.fig-bar-over,.fig-flat,.barset-over{transition:none;}
+  .fig-bar,.fig-flat,.barset-bar,.barset-over{transition:none;}
 }
 
 /* ===== form ============================================================== */
@@ -1713,13 +1712,30 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .form-ok{padding:var(--s5) var(--s4);background:var(--snow);border:var(--edge);border-radius:var(--r-lg);}
 .ok-mark{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
   border-radius:var(--r-full);background:rgba(75,199,143,.16);color:var(--okT);margin-bottom:var(--s2);}
-.seg{display:inline-flex;align-self:flex-start;background:var(--paper-2);border-radius:var(--r-sm);padding:2px;gap:2px;}
-.seg button{height:30px;padding:0 var(--s3);background:none;border:none;cursor:pointer;font-weight:600;
-  font-size:13px;color:var(--gray-s);border-radius:var(--r-xs);
-  transition:background var(--t1) var(--ease),color var(--t1) var(--ease);}
-@media(hover:hover){.seg button:hover{color:var(--ink);}}
-/* selected goes brighter, never a darker fill — a pressed-in grey reads as disabled */
-.seg button[aria-pressed="true"]{background:var(--snow);color:var(--ink);box-shadow:var(--sh);}
+/* NOT A SEGMENTED CONTROL. A recessed grey track with a white pill and a soft
+   shadow under it is the stock component every framework ships, and it was the
+   only control on this site that did not look like it came from here.
+
+   This page already has a gesture for "the thing you picked": the full-row
+   inversion — a hard block, zero transition, no fade. So the options sit on a
+   writing rule, the way the form's fields do, and the chosen one takes the
+   block. Nothing is recessed, so the old objection to a dark fill (a pressed-in
+   grey reads as disabled) does not apply: this is a marker laid ON the ruler,
+   not a well sunk into it.
+
+   Two grounds because two states have to stay apart under a cursor: hover is
+   sky with ink type, exactly .hl:hover, and the selection is ink with paper
+   type. Both cut in; neither fades. */
+.seg{display:inline-flex;align-self:flex-start;}
+/* the rule belongs to each option, not to the row: below 520 the cadence
+   control becomes a 2x2 grid, and a rule on the wrapper would run under the
+   second row only, leaving the first row's words floating. */
+.seg button{height:34px;padding:0 var(--s3);background:none;border:none;border-radius:0;
+  border-bottom:1.5px solid rgba(21,20,26,.22);
+  cursor:pointer;font-weight:600;font-size:13px;color:var(--gray-s);transition:none;}
+@media(hover:hover){.seg button:hover{background:var(--sky);color:var(--ink);}}
+.seg button[aria-pressed="true"],
+.seg button[aria-pressed="true"]:hover{background:var(--ink);color:var(--snow);}
 
 /* ===== footer ============================================================ */
 .footer{padding:var(--s7) 0 var(--s4);border-top:var(--edge);}
@@ -1988,9 +2004,9 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
      is re-derived from the new height so it still sits centred on the line.
      Nothing about the drawing changes, only what a finger can grab. */
   .est-field input[type=range]{height:44px;}
-  .est-field input[type=range]::-webkit-slider-runnable-track{height:4px;}
-  .est-field input[type=range]::-webkit-slider-thumb{width:20px;height:20px;margin-top:-8px;}
-  .est-field input[type=range]::-moz-range-thumb{width:20px;height:20px;}
+  .est-field input[type=range]::-webkit-slider-runnable-track{height:1.5px;}
+  .est-field input[type=range]::-webkit-slider-thumb{width:14px;height:26px;margin-top:-12.25px;}
+  .est-field input[type=range]::-moz-range-thumb{width:14px;height:26px;}
   /* /legal's table of contents: nine links 29px tall and 2px apart, and on a
      phone that list IS the navigation for the page. Same treatment as the
      footer column — the box grows, the 5px of padding that draws the hover

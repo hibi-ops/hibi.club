@@ -92,16 +92,17 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
             getting shorter, and left the reader to work out both what the
             shortening was worth and what it had to do with the number printed
             beside it.
-              — The gap is now drawn. What you pay is the ink; what the falling
-                rate saves you is the tint above it, and it grows left to right.
-                Same shape as before, its negative made visible.
+              — The gap is now empty paper, and it grows left to right. It was
+                briefly a pale wash, which was wrong twice over: this
+                stylesheet draws money that is not there as nothing or as
+                outline, and a chart with a tinted region in it is a dashboard.
               — The blended rate is now a line THROUGH the plot rather than
                 only a figure next to it, so you can see where it sits: the
                 first months run above the rate you end up paying and the later
                 ones below it. It is the same .fig-flat device the creator page
                 uses for the flat fee, and it slides when the sliders move. */}
         <figure className="fig">
-          <div className="fig-plot fig-under" role="img"
+          <div className="fig-plot" role="img"
             aria-label={`${c.blendedLabel}: ${pct1(rows[0].rate)} → ${pct1(last.rate)}`}>
             {/* the ceiling the bars fall away from. Without it the staircase is
                 twelve bars of similar height; with it, the growing gap between
