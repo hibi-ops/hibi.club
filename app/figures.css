@@ -250,6 +250,17 @@
    column and the column beside the form from trailing into white, and taking
    them out reopened two voids to solve a complaint about crowding. Restored. */
 .rail-plate{flex:1 1 auto;min-height:200px;margin-top:var(--s5);}
+/* same rule as the rail: the column runs to the foot of the section rather
+   than stopping in mid-air above it. The form beside it is tall and fixed, so
+   without this the left column ended two hundred pixels short. */
+.access-side{display:flex;flex-direction:column;}
+.access-plate{flex:1 1 auto;min-height:210px;margin-top:var(--s5);}
+/* a floor, not a fixed height: below 900 these carry the same type they do on
+   a wide screen. 120px cropped it and 170 left the field a 35px sliver under
+   a full block of type — the lid again. 240 keeps roughly half the plate as
+   colour once the three facts have their rules. */
+@media(max-width:900px){
+  .rail-plate,.access-plate{flex:0 0 auto;min-height:240px;margin-top:var(--s4);}}
 /* ===== the plate ==========================================================
    A tile that closes a column, WITH SOMETHING PRINTED ON IT. The colour on its
    own did the structural job — the rail and the access column no longer trail
@@ -292,8 +303,13 @@
 .plate-a{display:inline-block;color:#fff;font-size:17px;font-weight:600;
   letter-spacing:-.01em;text-decoration:none;
   border-bottom:1.5px solid rgba(255,255,255,.42);padding-bottom:2px;}
+/* the address itself still takes the site's marker on a direct hover — the
+   plate growing it is one gesture, landing on it is another. */
 @media(hover:hover){.plate-a:hover{background:var(--sky);color:var(--ink);
-  border-bottom-color:transparent;transition:none;}}
+  border-bottom-color:transparent;}}
+/* the line that unfolds under it */
+.plate-more p{margin:var(--s2) 0 0;font-size:13px;line-height:1.5;
+  color:rgba(255,255,255,.82);max-width:26ch;}
 /* three facts, each on its own rule — the spec strip at the foot of a plate,
    not a bulleted list */
 .plate-facts{list-style:none;margin:0;padding:0;}
@@ -303,101 +319,45 @@
 .plate-facts li:last-child{padding-bottom:0;}
 
 /* ===== the plate answers when you reach it ================================
-   OUT OF REGISTER, THEN IN. A plate is printed one colour at a time and the
-   thing that can go wrong is registration — the separations landing a hair
-   apart. So when the pointer arrives, the type on the plate is briefly out of
-   register: a sky separation up and right, a white one down and left, and it
-   pulls into alignment. The cross in the corner does it too, because that is
-   the mark whose whole job is to say the plate is aligned.
+   WHAT WAS HERE FIRST, AND WHY IT IS GONE: the type arrived out of register —
+   a sky separation offset one way, a white one the other, snapping into
+   alignment. The reasoning was that a plate is printed one colour at a time
+   and misregistration is the thing that goes wrong. The reasoning did not
+   matter. An RGB split on text is the glitch filter every short-form video app
+   ships, and that is what it looks like no matter what it is derived from.
 
-   steps(3), not a slide. Everything here cuts; a smooth glide back into place
-   would be the fade this page has refused everywhere else. Three discrete
-   positions, 300ms, and each line is struck a little after the one above it,
-   so the plate reads as being set line by line rather than nudged as a block.
-
-   This is not the magnetic hover that was pulled out for reading as AI: the
-   type does not follow the cursor and nothing ends up anywhere other than
-   where it already was. It is one gesture, on arrival, and then it is over. */
-@keyframes reg{
-  0%  {text-shadow:4px -3px 0 var(--sky), -3px 3px 0 rgba(255,255,255,.42);}
-  50% {text-shadow:2px -1px 0 var(--sky), -1px 1px 0 rgba(255,255,255,.42);}
-  100%{text-shadow:none;}
-}
+   The replacement is the device this page already proved on the record cards:
+   the type steps UP and the block opens. Nothing is hidden that matters — the
+   facts are legible at rest, because they are the reason someone signs the
+   form — so the gesture adds size and, where there is something more to say,
+   a second line. The field steps back at the same time so the white type
+   gains its contrast from the ground rather than from a stroke.
+   ========================================================================= */
 @media(hover:hover) and (pointer:fine){
   @media(prefers-reduced-motion:no-preference){
-    .plate:hover .plate-k,.plate:hover .plate-a,
-    .plate:hover .plate-facts li,.plate:hover .tile-reg{
-      animation:reg .3s steps(3,jump-end) both;}
-    .plate:hover .tile-reg      {animation-delay:0ms;}
-    .plate:hover .plate-k       {animation-delay:40ms;}
-    .plate:hover .plate-a       {animation-delay:90ms;}
-    .plate:hover .plate-facts li:nth-child(1){animation-delay:40ms;}
-    .plate:hover .plate-facts li:nth-child(2){animation-delay:90ms;}
-    .plate:hover .plate-facts li:nth-child(3){animation-delay:140ms;}
+    .plate-facts li,.plate-a,.plate-k{
+      transition:font-size .3s cubic-bezier(.2,.8,.25,1),
+                 color .26s ease, border-color .26s ease;}
+    .plate>.plate-bg{transition:filter .45s cubic-bezier(.2,.7,.3,1);}
+    /* the same construction the record cards use to unfold a caption: a grid
+       row from 0fr to 1fr, so it opens to its own height with nothing measured
+       in script. */
+    .plate-more{display:grid;grid-template-rows:0fr;
+      transition:grid-template-rows .42s cubic-bezier(.2,.8,.25,1);}
+    .plate-more>*{overflow:hidden;min-height:0;opacity:0;transform:translateY(5px);
+      transition:opacity .26s ease, transform .42s cubic-bezier(.2,.8,.25,1);}
+    .plate:hover .plate-more{grid-template-rows:1fr;}
+    .plate:hover .plate-more>*{opacity:1;transform:none;transition-delay:.07s;}
   }
-  /* the field comes up in weight while you are in it — the same allowance the
-     record cards' contour layer takes, and for the same reason: the thing
-     being changed is light, not position, and a cut in light flashes. */
-  .plate>.plate-bg{transition:filter .5s cubic-bezier(.2,.7,.3,1);}
-  .plate:hover>.plate-bg{filter:brightness(1.05);transition-duration:1s;}
-  /* and a line answers with its own rule, which is this site's whole grammar
-     for hover: the fact you are on inks its rule to full white. */
-  .plate-facts li{transition:none;}
-  .plate-facts li:hover{border-top-color:rgba(255,255,255,.9);color:#fff;}
-  /* the first fact has no rule above it and is not given one on hover: the
-     others brighten a line that is already there, and inventing one for this
-     row would be a different gesture wearing the same clothes. It answers with
-     its type alone. */
+  .plate:hover .plate-facts li{font-size:15px;color:#fff;}
+  .plate:hover .plate-a{font-size:22px;}
+  .plate:hover>.plate-bg{filter:brightness(.9);}
+  /* and a line answers with its own rule, which is this site's standing
+     grammar for hover. The first fact has no rule above it and is not given
+     one: inventing a line for that row would be a different gesture wearing
+     the same clothes, so it answers with its type. */
+  .plate-facts li:hover{border-top-color:rgba(255,255,255,.9);}
 }
-
-/* same rule as the rail: the column runs to the foot of the section rather
-   than stopping in mid-air above it. The form beside it is tall and fixed, so
-   without this the left column ended two hundred pixels short. */
-.access-side{display:flex;flex-direction:column;}
-.access-plate{flex:1 1 auto;min-height:210px;margin-top:var(--s5);}
-/* one media block, and .tile first: same specificity, so whichever comes last
-   wins. Split across two blocks with .tile in the later one, the smaller value
-   here was dead and both tiles fell back to the card height. */
-@media(max-width:900px){
-  .tile{height:104px;}
-  /* a floor, not a fixed height: below 900 these carry the same type they do
-     on a wide screen. 120px cropped it and 170 left the field a 35px sliver
-     under a full block of type — the lid again. 240 keeps roughly half the
-     plate as colour once the three facts have their rules. */
-  .rail-plate,.access-plate{flex:0 0 auto;min-height:240px;margin-top:var(--s4);}}
-
-/* the pattern layer over a tile — see TileLines.tsx.
-   z-index 2 puts it above both pseudo-elements: ::before is the colour, ::after
-   is the grain, and a contour drawn under the grain reads as a printing fault
-   rather than as a line on the surface. Stroke is white at low alpha and it is
-   allowed to disappear into the pale end of the field — a contour fading out
-   where the ground is high is what the drawing means, not a bug to fix.
-   Non-scaling-stroke because the viewBox is stretched to a 3:1 box; without it
-   every line would be drawn three times thicker horizontally than vertically. */
-.tl-field{position:absolute;inset:0;z-index:2;pointer-events:none;
-  border-radius:inherit;overflow:hidden;}
-.tl-field svg{display:block;width:100%;height:100%;}
-/* non-scaling-stroke is not optional here. The pattern is generated in a
-   viewBox a thousand units wide and drawn into a tile a few hundred pixels
-   wide, so the scale is about 0.3 — a width set in viewBox units came out at
-   two thirds of a device pixel and the whole set looked washed out. This makes
-   the number mean pixels. preserveAspectRatio is "slice", so the scale is
-   uniform and the line is the same weight in every direction. */
-/* THE SURFACE ANSWERS AS WELL AS THE SHAPE. Bending the lines is the whole
-   interaction, and on its own it was easy to miss on a card you are reading
-   rather than staring at. The field also comes up in weight while the pointer
-   is in the card — half a second in, a second and a bit back out, so it reads
-   as the drawing waking rather than as a hover state switching. It is the one
-   transition on this page that is a fade instead of a cut; a cut here would
-   flash, and the thing being changed is light, not position. */
-.tl-field{opacity:.82;transition:opacity .55s cubic-bezier(.2,.7,.3,1);}
-.panel:hover .tl-field{opacity:1;transition-duration:1.1s;}
-.tl-field path{fill:none;stroke:rgba(255,255,255,.44);stroke-width:1.05;
-  vector-effect:non-scaling-stroke;stroke-linecap:round;}
-/* the one tile of particles. Radii are in viewBox units and there is no
-   vector-effect for a fill, so they are sized for that 0.3 scale — see Dots. */
-.tl-dots circle{fill:rgba(255,255,255,.55);}
-@media(prefers-contrast:more){.tl-field{display:none;}}
 
 /* ===== trio =============================================================
    Three framed panels side by side, each headed by a tile.

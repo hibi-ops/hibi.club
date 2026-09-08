@@ -109,6 +109,9 @@ export default async function Merchants({ params }: P) {
                 <Plate n={7} className="rail-plate">
                   <span className="plate-k">{t.footer.contact}</span>
                   <a className="plate-a" href="mailto:hello@hibi.club">hello@hibi.club</a>
+                  {/* there is room on this plate for one more line, so reaching
+                      it opens the one sentence that says what the company is */}
+                  <div className="plate-more"><div><p>{t.footer.tagline}</p></div></div>
                 </Plate>
               </div>
               <Faq items={m.faq.items} />
