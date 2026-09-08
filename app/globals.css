@@ -1568,6 +1568,14 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 @media(hover:hover){
   .fig-col:hover .fig-tip{display:block;}
   .fig-col:hover::after{background:rgba(21,20,26,.28);}
+  /* REACHING THE INSTRUMENT LIGHTS THE SHEET. Approaching the panel brings the
+     ruling up a step across the whole plot, so the twelve months become
+     countable before you have picked one; hovering a single column then takes
+     that one to full ink. Two levels, the sheet and the column, and both are
+     the element's own line answering rather than the element moving. */
+  .panel:hover .fig-col::after{background:rgba(21,20,26,.17);}
+  .panel:hover .barset-track::after{background:rgba(21,20,26,.17);}
+  .fig-col::after,.barset-track::after{transition:background var(--t2) var(--ease);}
 }
 /* display:none, not opacity:0 — a hidden-but-laid-out tooltip on the twelfth
    column pushed the document 8px wider than the viewport on a phone, which is

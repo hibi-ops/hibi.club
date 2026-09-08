@@ -302,6 +302,54 @@
 .plate-facts li:first-child{border-top:none;padding-top:0;}
 .plate-facts li:last-child{padding-bottom:0;}
 
+/* ===== the plate answers when you reach it ================================
+   OUT OF REGISTER, THEN IN. A plate is printed one colour at a time and the
+   thing that can go wrong is registration — the separations landing a hair
+   apart. So when the pointer arrives, the type on the plate is briefly out of
+   register: a sky separation up and right, a white one down and left, and it
+   pulls into alignment. The cross in the corner does it too, because that is
+   the mark whose whole job is to say the plate is aligned.
+
+   steps(3), not a slide. Everything here cuts; a smooth glide back into place
+   would be the fade this page has refused everywhere else. Three discrete
+   positions, 300ms, and each line is struck a little after the one above it,
+   so the plate reads as being set line by line rather than nudged as a block.
+
+   This is not the magnetic hover that was pulled out for reading as AI: the
+   type does not follow the cursor and nothing ends up anywhere other than
+   where it already was. It is one gesture, on arrival, and then it is over. */
+@keyframes reg{
+  0%  {text-shadow:4px -3px 0 var(--sky), -3px 3px 0 rgba(255,255,255,.42);}
+  50% {text-shadow:2px -1px 0 var(--sky), -1px 1px 0 rgba(255,255,255,.42);}
+  100%{text-shadow:none;}
+}
+@media(hover:hover) and (pointer:fine){
+  @media(prefers-reduced-motion:no-preference){
+    .plate:hover .plate-k,.plate:hover .plate-a,
+    .plate:hover .plate-facts li,.plate:hover .tile-reg{
+      animation:reg .3s steps(3,jump-end) both;}
+    .plate:hover .tile-reg      {animation-delay:0ms;}
+    .plate:hover .plate-k       {animation-delay:40ms;}
+    .plate:hover .plate-a       {animation-delay:90ms;}
+    .plate:hover .plate-facts li:nth-child(1){animation-delay:40ms;}
+    .plate:hover .plate-facts li:nth-child(2){animation-delay:90ms;}
+    .plate:hover .plate-facts li:nth-child(3){animation-delay:140ms;}
+  }
+  /* the field comes up in weight while you are in it — the same allowance the
+     record cards' contour layer takes, and for the same reason: the thing
+     being changed is light, not position, and a cut in light flashes. */
+  .plate>.plate-bg{transition:filter .5s cubic-bezier(.2,.7,.3,1);}
+  .plate:hover>.plate-bg{filter:brightness(1.05);transition-duration:1s;}
+  /* and a line answers with its own rule, which is this site's whole grammar
+     for hover: the fact you are on inks its rule to full white. */
+  .plate-facts li{transition:none;}
+  .plate-facts li:hover{border-top-color:rgba(255,255,255,.9);color:#fff;}
+  /* the first fact has no rule above it and is not given one on hover: the
+     others brighten a line that is already there, and inventing one for this
+     row would be a different gesture wearing the same clothes. It answers with
+     its type alone. */
+}
+
 /* same rule as the rail: the column runs to the foot of the section rather
    than stopping in mid-air above it. The form beside it is tall and fixed, so
    without this the left column ended two hundred pixels short. */
