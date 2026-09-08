@@ -1,4 +1,5 @@
 'use client';
+import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import Tile from './Tile';
 import type { Dict } from '@/content/types';
@@ -101,16 +102,30 @@ export default function CampaignSetup({ c }: { c: Dict['merchants']['set'] }) {
         </div>
 
         {/* Horizontal, because the quantity being compared is a headcount and
-            a headcount reads along a line. Monochrome on purpose: the length
-            IS the argument, and a colour on the longest bar would be the mark
-            doing work the area already does. */}
+            a headcount reads along a line.
+            SPLIT WHERE THE FIRST-VISIT RATE RUNS OUT. It was monochrome on the
+            argument that the length says everything — but three grey bars of
+            three lengths do not say WHY the lower two are longer, and that is
+            the only thing this figure is for. So each bar is graphite up to
+            what the same cap buys at the first-visit rate, and sky past it:
+            the blue is the extra people the falling rate pays for. The first
+            row has no blue, because it is the baseline the other two are
+            measured against.
+            Same device and same meaning as the creator plot's surplus cap and
+            the pricing plot's tint — one accent, one thing it means, three
+            figures. */}
         <figure className="fig">
           <ul className="barset">
             {rows.map(r => (
               <li key={r.k} className="barset-row">
                 <span className="barset-k">{r.k}</span>
                 <span className="barset-track">
-                  <span className="barset-bar" style={{ width: `${(r.n / widest) * 100}%` }} />
+                  <span className="barset-bar" style={{ width: `${(r.n / widest) * 100}%` }}>
+                    {r.n > first && (
+                      <span className="barset-over" aria-hidden="true"
+                        style={{ '--base': `${(first / r.n) * 100}%` } as CSSProperties} />
+                    )}
+                  </span>
                 </span>
                 <span className="barset-n">{r.n.toLocaleString('en-US')}</span>
               </li>

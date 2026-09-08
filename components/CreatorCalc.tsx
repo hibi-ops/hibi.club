@@ -1,4 +1,5 @@
 'use client';
+import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import type { Dict } from '@/content/types';
 import { series, money, whole } from '@/lib/model';
@@ -84,19 +85,26 @@ export default function CreatorCalc({ c, href }: { c: Dict['creators']['calc']; 
         <figure className="fig">
           <div className="fig-plot" role="img"
             aria-label={`${c.hibiLabel}: ${whole(total)} · ${c.flatSeriesLabel}: ${whole(flat)}`}>
-            <span className="fig-flat" style={{ bottom: `${(flat / peak) * 100}%` }}>
+            <span className="fig-flat fig-flat-l" style={{ bottom: `${(flat / peak) * 100}%` }}>
               <em>{c.flatSeriesLabel} · {whole(flat)}</em>
             </span>
-            {/* Three states, one mark. Below the flat fee the bars are set back
-                — climbing, but not there yet. The crossover month alone takes
-                the sky ground, because it is the month being named in the
-                headline. Everything after it is full ink. Ten sky bars would
-                have been a colour field, and the site's rule is that volume
-                comes from area, not from saturation. */}
+            {/* ONE BAR, TWO PARTS. The graphite is the earnings up to what a
+                flat fee would have paid; the sky on top is everything past it.
+                The boundary sits on the flat rule, so the picture answers the
+                question without a key — the first month with blue in it is the
+                crossover month the headline names, and the blue grows from
+                there. Nothing to look up. --over is the share of the bar that
+                sits above the fee, so the boundary lands on the flat rule.
+                It replaced three coded states (faded / sky / ink) that needed
+                a key and still read as twelve separate values rather than one
+                total climbing. */}
             {rows.map((r, i) => (
-              <span key={r.m} className="fig-col"
-                data-state={cume[i] < flat ? 'under' : i === crossIdx ? 'cross' : 'over'}>
+              <span key={r.m} className="fig-col">
                 <span className="fig-bar" style={{ height: `${(cume[i] / peak) * 100}%` }}>
+                  {cume[i] > flat && (
+                    <span className="fig-bar-over" aria-hidden="true"
+                      style={{ '--over': `${(1 - flat / cume[i]) * 100}%` } as CSSProperties} />
+                  )}
                   <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {whole(cume[i])}</span>
                 </span>
               </span>

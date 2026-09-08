@@ -1513,20 +1513,49 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-rate{font-variant-numeric:proportional-nums lining-nums;}
 
 .fig{margin:0;}
+/* ===== the chart set =====================================================
+   Three figures across three pages — the rate falling, the cap in people, the
+   flat fee overtaken — and they were three variations on "black rectangle".
+   One treatment now, differing where the argument differs.
+
+   NOT PURE BLACK. --ink is the type colour; a bar drawn in it competes with
+   the paragraph beside it and reads as console output. Graphite with a lift
+   along its length puts the figure a step behind the text and gives the shape
+   an edge to catch light on. The radius is on the FREE end only — the end the
+   value reaches — so a bar still grows out of its baseline rather than
+   floating off it. The baseline itself drops to a hairline: it is the ground,
+   not a mark, and at full ink it was the darkest thing in the picture.
+   Sky stays the accent and keeps one meaning across all three figures: what
+   the falling rate does for you. */
+:root{--chart-hi:#33323f; --chart-lo:#1b1a23; --chart-r:5px;}
 .fig-plot{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;
-  align-items:end;height:132px;border-bottom:1px solid var(--ink);}
+  align-items:end;height:132px;border-bottom:1px solid rgba(21,20,26,.2);}
 .fig-col{position:relative;display:flex;align-items:flex-end;height:100%;}
-.fig-bar{position:relative;display:block;width:100%;min-height:2px;background:var(--ink);
+.fig-bar{position:relative;display:block;width:100%;min-height:2px;
+  background:linear-gradient(180deg,var(--chart-hi),var(--chart-lo));
+  border-radius:var(--chart-r) var(--chart-r) 0 0;
   transition:height var(--t2) var(--ease),background var(--t1) var(--ease);}
-/* the crossover column takes the mark; the months before it are set back and
-   the months after run at full ink. One coloured bar, not ten. */
-.fig-col[data-state="under"] .fig-bar{background:rgba(21,20,26,.34);}
-.fig-col[data-state="cross"] .fig-bar{background:var(--sky);}
-/* the last column is the answer, so it is the one that keeps its full weight
-   while the rest sit back a step */
-.fig-col:not([data-last]) .fig-bar{opacity:.82;}
-@media(hover:hover){.fig-col:hover .fig-bar{opacity:1;}
-  .fig-col:hover .fig-tip{display:block;}}
+/* THE SURPLUS IS INSIDE THE BAR. The creator plot is cumulative earnings
+   against one flat fee, and its good news is the part of the bar that has
+   climbed PAST the fee — so that part is sky and the rest is graphite. It
+   reads without a key: the blue is what a flat fee would never have paid you,
+   and the first month with any blue in it is the crossover the headline
+   names. --cut is set per bar (flat / cumulative) so the boundary lands
+   exactly on the flat rule.
+   This replaces three devices — a faded bar for "not there yet", one wholly
+   sky bar for the crossover, full ink after — which needed a key between them
+   and still left twelve bars looking like twelve independent values instead
+   of one series climbing. */
+/* height + min-height rather than a bottom offset: at the crossover month the
+   surplus is a fraction of a dollar, which is a sub-pixel band, and a 5px
+   radius on a 1px box draws nothing at all — so the one month the headline
+   names would be the one month with no blue in it. The floor overshoots the
+   flat rule by at most 3px on that single bar. */
+.fig-bar-over{position:absolute;left:0;right:0;top:0;height:var(--over,0);min-height:3px;
+  background:linear-gradient(180deg,var(--sky),var(--brandInk));
+  border-radius:var(--chart-r) var(--chart-r) 0 0;
+  transition:height var(--t2) var(--ease);}
+@media(hover:hover){.fig-col:hover .fig-tip{display:block;}}
 /* display:none, not opacity:0 — a hidden-but-laid-out tooltip on the twelfth
    column pushed the document 8px wider than the viewport on a phone, which is
    a horizontal scrollbar on every page that has a figure. It also cuts in
@@ -1543,6 +1572,12 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
   z-index:2;pointer-events:none;transition:bottom var(--t2) var(--ease);}
 .fig-flat em{position:absolute;right:0;bottom:4px;font-style:normal;font-size:11px;
   font-weight:600;color:var(--gray-s);background:var(--snow);padding:0 4px;}
+/* the label goes to whichever end of the rule is over empty plot, and the two
+   figures run opposite ways: pricing's staircase falls left to right, so its
+   labels keep the right; the creator's total climbs, so its flat-fee label
+   would sit on top of the three tallest bars and punch a white hole in them.
+   It takes the left instead. */
+.fig-flat-l em{right:auto;left:0;}
 .tone-paper .fig-flat em{background:var(--paper);}
 /* the ceiling sits ON the top edge and hangs its label inside the plot */
 .fig-ceil{border-top-style:solid;border-top-color:rgba(21,20,26,.28);}
@@ -1604,14 +1639,23 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .barset-row{display:grid;grid-template-columns:minmax(0,108px) minmax(0,1fr) auto;
   gap:var(--s2);align-items:center;}
 .barset-k{font-size:11.5px;color:var(--gray-s);letter-spacing:.01em;}
-.barset-track{height:12px;border-left:1px solid var(--ink);}
-.barset-bar{display:block;height:100%;background:var(--ink);min-width:2px;
+.barset-track{height:14px;border-left:1px solid rgba(21,20,26,.2);}
+.barset-bar{position:relative;display:block;height:100%;min-width:2px;
+  background:linear-gradient(90deg,var(--chart-lo),var(--chart-hi));
+  border-radius:0 var(--chart-r) var(--chart-r) 0;
   transition:width var(--t2) var(--ease);}
+/* everything past what the first-visit rate would have bought */
+.barset-over{position:absolute;top:0;bottom:0;left:var(--base,100%);right:0;
+  background:linear-gradient(90deg,var(--brandInk),var(--sky));
+  border-radius:0 var(--chart-r) var(--chart-r) 0;
+  transition:left var(--t2) var(--ease);}
 .barset-n{font-size:14px;font-weight:600;font-variant-numeric:proportional-nums lining-nums;
   min-width:4ch;text-align:right;}
-/* the first row is the rate you are quoted, so it keeps full weight and the
-   two cheaper rows step back — the same recession as .fig-col */
-.barset-row:not(:first-child) .barset-bar{background:rgba(21,20,26,.72);}
+/* NO RECESSION HERE. The two longer rows were set back as "not the rate you
+   were quoted" — which fades exactly the news this section is selling: the
+   same cap buys 88 first visits, or 333 visits by a regular. The rule four
+   lines up already says the length is the whole argument; the weights were
+   arguing with it. Three bars, one weight, and the lengths do the work. */
 .fig-axis-1{display:block;}
 @media(max-width:768px){
   .barset-row{grid-template-columns:minmax(0,92px) minmax(0,1fr) auto;gap:var(--s1);}
@@ -1620,7 +1664,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .est-year .est-sub{margin-top:0;}
 
 @media(prefers-reduced-motion:reduce){
-  .fig-bar,.fig-flat{transition:none;}
+  .fig-bar,.fig-bar-over,.fig-flat,.barset-over{transition:none;}
 }
 
 /* ===== form ============================================================== */

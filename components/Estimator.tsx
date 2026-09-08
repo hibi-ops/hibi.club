@@ -125,7 +125,7 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
               <em>{pct1(blended)}</em>
             </span>
             {rows.map(r => (
-              <span key={r.m} className="fig-col" data-last={r.m === rows.length ? '' : undefined}>
+              <span key={r.m} className="fig-col">
                 <span className="fig-bar" style={{ height: `${(r.rate / RATE.first) * 100}%` }}>
                   <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {pct1(r.rate)}</span>
                 </span>
