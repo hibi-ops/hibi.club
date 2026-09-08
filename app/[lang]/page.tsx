@@ -160,13 +160,23 @@ export default async function Home({ params }: P) {
                 <p className="lead">{h.now.close}</p>
                 {/* the rail's left column runs out well above the chronology
                     beside it; the tile is what stops it trailing into white */}
-                {/* the questions end here; the plate says where the next one goes. */}
+                {/* THE PLATE PRINTS ITS OWN COLUMN'S CONTENTS. This rail is
+                    "why now" beside a three-beat chronology, so the plate
+                    carries those three beats — the section stated in three
+                    words — and reaching a beat opens the line it stands for.
+                    It held a contact address before, which is a fine thing to
+                    say beside a page of questions and nothing at all to do
+                    with this argument. */}
                 <Plate n={2} className="rail-plate">
-                  <span className="plate-k">{t.footer.contact}</span>
-                  <a className="plate-a" href="mailto:hello@hibi.club">hello@hibi.club</a>
-                  {/* there is room on this plate for one more line, so reaching
-                      it opens the one sentence that says what the company is */}
-                  <div className="plate-more"><div><p>{t.footer.tagline}</p></div></div>
+                  <span className="plate-k">{h.now.label}</span>
+                  <ul className="plate-facts">
+                    {h.now.items.map(i => (
+                      <li key={i.label}>
+                        <span className="plate-lk">{i.label}</span>
+                        <span className="plate-more"><span><em>{i.title}</em></span></span>
+                      </li>
+                    ))}
+                  </ul>
                 </Plate>
               </div>
               <Chrono items={h.now.items} />

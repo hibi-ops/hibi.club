@@ -307,9 +307,12 @@
    plate growing it is one gesture, landing on it is another. */
 @media(hover:hover){.plate-a:hover{background:var(--sky);color:var(--ink);
   border-bottom-color:transparent;}}
-/* the line that unfolds under it */
-.plate-more p{margin:var(--s2) 0 0;font-size:13px;line-height:1.5;
-  color:rgba(255,255,255,.82);max-width:26ch;}
+/* a row that names one of the beats in the column beside it, and the line it
+   stands for, folded under it */
+.plate-lk{display:block;font-size:13px;font-weight:600;letter-spacing:-.005em;
+  color:#fff;width:fit-content;padding:0 .12em;margin-left:-.12em;}
+.plate-more em{display:block;font-style:normal;margin-top:5px;
+  font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.8);max-width:30ch;}
 /* three facts, each on its own rule — the spec strip at the foot of a plate,
    not a bulleted list */
 .plate-facts{list-style:none;margin:0;padding:0;}
@@ -337,21 +340,38 @@
   @media(prefers-reduced-motion:no-preference){
     .plate-facts li,.plate-a,.plate-k{
       transition:font-size .3s cubic-bezier(.2,.8,.25,1),
+                 letter-spacing .3s cubic-bezier(.2,.8,.25,1),
                  color .26s ease, border-color .26s ease;}
     .plate>.plate-bg{transition:filter .45s cubic-bezier(.2,.7,.3,1);}
     /* the same construction the record cards use to unfold a caption: a grid
        row from 0fr to 1fr, so it opens to its own height with nothing measured
        in script. */
-    .plate-more{display:grid;grid-template-rows:0fr;
+    .plate-more{display:grid;grid-template-rows:0fr;overflow:hidden;
       transition:grid-template-rows .42s cubic-bezier(.2,.8,.25,1);}
     .plate-more>*{overflow:hidden;min-height:0;opacity:0;transform:translateY(5px);
       transition:opacity .26s ease, transform .42s cubic-bezier(.2,.8,.25,1);}
-    .plate:hover .plate-more{grid-template-rows:1fr;}
-    .plate:hover .plate-more>*{opacity:1;transform:none;transition-delay:.07s;}
+    /* the row you are on is the one that opens, not the whole plate: three
+       beats unfolding at once would be a paragraph, and the point is that you
+       chose one. */
+    .plate-facts li:hover .plate-more{grid-template-rows:1fr;}
+    .plate-facts li:hover .plate-more>*{opacity:1;transform:none;transition-delay:.05s;}
   }
   .plate:hover .plate-facts li{font-size:15px;color:#fff;}
   .plate:hover .plate-a{font-size:22px;}
   .plate:hover>.plate-bg{filter:brightness(.9);}
+  /* THREE GESTURES, NOT ONE, AND EACH ON A DIFFERENT PROPERTY OF THE TYPE.
+     Size was the first and on its own it was the whole vocabulary.
+     2 — TRACKING. The caption opens up while you are in the plate. It is the
+     one move a caption at this size can make that reads as attention rather
+     than as growth, and it is the letterform answering rather than the box.
+     3 — THE INVERSION. A beat you land on takes the hard ink block this site
+     puts under any text it wants to mark — .hl's own gesture, zero transition,
+     and the only place on these plates where something cuts instead of eases.
+     Ink and not sky here: sky is already the field's own family on half these
+     palettes, and the mark has to read on all nine. */
+  .plate:hover .plate-k{letter-spacing:.15em;}
+  .plate-lk{transition:none;}
+  .plate-facts li:hover .plate-lk{background:var(--ink);color:#fff;}
   /* and a line answers with its own rule, which is this site's standing
      grammar for hover. The first fact has no rule above it and is not given
      one: inventing a line for that row would be a different gesture wearing
