@@ -207,8 +207,9 @@ export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchan
             <p className="lead">{t.form.lead}</p>
             {/* it followed the visitor's role rather than repeating the same
                 three lines on all seven pages — see AccessPlate. */}
-            <AccessPlate merchant={t.merchants.heroCard.rows}
-              creator={t.creators.heroCard.rows} initialRole={role} />
+            <AccessPlate rows={t.about.heroCard.rows}
+              merchantFoot={t.merchants.heroCard.foot}
+              creatorFoot={t.creators.heroCard.foot} initialRole={role} />
           </div>
           <div className="c7">
             <AccessForm t={t.form} lang={lang} initialRole={role} />

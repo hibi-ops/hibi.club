@@ -5,24 +5,26 @@ import type { HeroCard } from '@/content/types';
 
 type Role = 'merchant' | 'creator';
 
-/* THE PLATE BESIDE THE FORM ANSWERS THE FORM.
-   It used to print the same three lines on all seven pages, which is the
-   definition of wallpaper: identical everywhere, and addressed to nobody. A
-   store owner and a creator are signing up to two different deals, and the
-   toggle two inches to the right already knows which one you are — so the
-   plate follows it.
+/* THE PLATE BESIDE THE FORM IS ABOUT JOINING, NOT ABOUT PRICING.
+   Second correction on this one card. It first printed the same three lines on
+   all seven pages, which is wallpaper. It then printed the role's rate rows —
+   the return rate, the rate after that, the cap — which follows the toggle but
+   answers a question nobody is asking at the moment they fill in their name.
+   A rate table beside a sign-up form is the pricing page wandering in.
 
-   Three lines per role, taken from that role's own spec: the ones about
-   joining rather than about rates. The row shows what it is and what it is;
-   reaching a row opens the qualifier under it. Nothing is written for this
-   plate — every string here is already on the page it belongs to.
+   What belongs here is what you are actually joining: where it is, when the
+   first cohort opens, and that a person reads what you send. Those three are
+   already written, as the about page's own "the facts", and they do not change
+   with which side you are on — the answer to "what am I signing up to" should
+   not depend on which page you happened to be reading when you decided.
 
-   The role arrives on `hibi:role`, not as a prop. Same decoupling as the
-   walk-in counter and the contour field: the control does not know what is
-   listening. */
+   What DOES change with the side you are on is what it costs you to be here,
+   so that is the line at the foot, in each role's own words, and the palette
+   turns over with it. The role arrives on `hibi:role`, not as a prop — the
+   same decoupling the walk-in counter and the contour field use. */
 export default function AccessPlate(
-  { merchant, creator, initialRole = 'merchant' }:
-  { merchant: HeroCard['rows']; creator: HeroCard['rows']; initialRole?: Role },
+  { rows, merchantFoot, creatorFoot, initialRole = 'merchant' }:
+  { rows: HeroCard['rows']; merchantFoot: string; creatorFoot: string; initialRole?: Role },
 ) {
   const [role, setRole] = useState<Role>(initialRole);
   useEffect(() => {
@@ -34,7 +36,6 @@ export default function AccessPlate(
     return () => window.removeEventListener('hibi:role', on);
   }, []);
 
-  const rows = (role === 'merchant' ? merchant : creator).slice(-3);
   return (
     <div className="plate access-plate">
       <Tile n={role === 'merchant' ? 9 : 3} mark className="plate-bg" />
@@ -48,6 +49,7 @@ export default function AccessPlate(
             </li>
           ))}
         </ul>
+        <p className="plate-foot">{role === 'merchant' ? merchantFoot : creatorFoot}</p>
       </div>
     </div>
   );

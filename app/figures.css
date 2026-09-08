@@ -254,10 +254,11 @@
    than stopping in mid-air above it. The form beside it is tall and fixed, so
    without this the left column ended two hundred pixels short. */
 .access-side{display:flex;flex-direction:column;}
-/* taller than the rail's floor because its rows carry a value and a qualifier
-   rather than a single word: at 210 the field was down to 67px under a solid
-   block of type, which is the lid again. */
-.access-plate{flex:1 1 auto;min-height:250px;margin-top:var(--s5);}
+/* taller than the rail's floor: its rows carry a key, a value and a folded
+   qualifier, and a foot line under them. At 250 the field was 22px — a stripe
+   under a solid block of type, which is the lid this construction exists not
+   to be. */
+.access-plate{flex:1 1 auto;min-height:340px;margin-top:var(--s5);}
 /* a floor, not a fixed height: below 900 these carry the same type they do on
    a wide screen. 120px cropped it and 170 left the field a 35px sliver under
    a full block of type — the lid again. 240 keeps roughly half the plate as
@@ -266,7 +267,7 @@
   .rail-plate{flex:0 0 auto;min-height:240px;margin-top:var(--s4);}
   /* on a touch screen there is no hover, so every qualifier is shown rather
      than folded — three rows of three lines. At 240 that left 27px of field. */
-  .access-plate{flex:0 0 auto;min-height:310px;margin-top:var(--s4);}}
+  .access-plate{flex:0 0 auto;min-height:380px;margin-top:var(--s4);}}
 /* ===== the plate ==========================================================
    A tile that closes a column, WITH SOMETHING PRINTED ON IT. The colour on its
    own did the structural job — the rail and the access column no longer trail
@@ -325,6 +326,12 @@
   color:#fff;width:fit-content;padding:0 .12em;margin-left:-.12em;}
 .plate-lv{font-size:15px;font-weight:600;letter-spacing:-.01em;color:#fff;
   font-variant-numeric:proportional-nums lining-nums;}
+/* the one line that changes with the side you are on: what it costs to be
+   here, in that role's own words. Ruled off from the facts above it, which do
+   not change. */
+.plate-foot{margin:var(--s3) 0 0;padding-top:var(--s2);
+  border-top:1px solid rgba(255,255,255,.24);
+  font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.8);max-width:34ch;}
 .plate-more em{display:block;font-style:normal;margin-top:5px;
   font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.8);max-width:30ch;}
 /* three facts, each on its own rule — the spec strip at the foot of a plate,
