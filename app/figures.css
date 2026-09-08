@@ -364,14 +364,21 @@
      2 — TRACKING. The caption opens up while you are in the plate. It is the
      one move a caption at this size can make that reads as attention rather
      than as growth, and it is the letterform answering rather than the box.
-     3 — THE INVERSION. A beat you land on takes the hard ink block this site
-     puts under any text it wants to mark — .hl's own gesture, zero transition,
-     and the only place on these plates where something cuts instead of eases.
-     Ink and not sky here: sky is already the field's own family on half these
-     palettes, and the mark has to read on all nine. */
+     3 — THE INVERSION. A beat you land on takes the hard block this site puts
+     under any text it wants to mark — .hl's own gesture, zero transition, and
+     the only place on these plates where something cuts instead of eases.
+
+     SKY, NOT INK, AND THAT WAS A REAL MISTAKE. It was built ink-on-white on
+     the reasoning that sky is the field's own family on half these palettes.
+     On a violet plate what that produced was a solid black bar with white
+     type in it: a redaction, and the loudest thing on the card by a distance —
+     louder than the heading. .hl's actual shipped gesture is sky ground with
+     ink type, and globals.css already records why: ink on sky reads on BOTH
+     grounds, which is exactly why the dark variant was retired. It is also
+     what .plate-a does one plate over, so the two now agree. */
   .plate:hover .plate-k{letter-spacing:.15em;}
   .plate-lk{transition:none;}
-  .plate-facts li:hover .plate-lk{background:var(--ink);color:#fff;}
+  .plate-facts li:hover .plate-lk{background:var(--sky);color:var(--ink);}
   /* and a line answers with its own rule, which is this site's standing
      grammar for hover. The first fact has no rule above it and is not given
      one: inventing a line for that row would be a different gesture wearing
