@@ -2,7 +2,7 @@ import Link from 'next/link';
 import AccessForm from './AccessForm';
 import Icon from './Icon';
 import Tile, { type Pattern } from './Tile';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { Col, Step, QA, Dict, HeroCard } from '@/content/types';
 import type { Lang } from '@/content/site';
 
@@ -175,6 +175,26 @@ export function ThumbBar({ href, label }: { href: string; label: string }) {
   );
 }
 
+/* THE PLATE, WITH SOMETHING PRINTED ON IT.
+   These two columns end in a sheet of ink that closes them so they do not
+   trail into white. That job is real, but a plate with nothing on it reads as
+   a picture that failed to load — and the fix is not another drawing (the
+   contour fields that used to sit here were taken off as noise; the record
+   cards are the only patterned tiles left). It is the thing a printed plate
+   actually carries: a register cross, and a line of type at the foot.
+   The copy is not new. Both plates reprint strings this site already has, in
+   the place where they are worth having again — no line here was written for
+   the sake of filling the box. */
+export function Plate({ n, className = '', children }:
+  { n: number; className?: string; children: ReactNode }) {
+  return (
+    <div className={`plate ${className}`}>
+      <Tile n={n} mark className="plate-bg" />
+      <div className="plate-body">{children}</div>
+    </div>
+  );
+}
+
 export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchant' | 'creator' }) {
   return (
     <section className="section tone-paper access" id="access">
@@ -184,7 +204,14 @@ export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchan
             <span className="label">{t.nav.cta}</span>
             <h2 className="h1">{t.form.title}</h2>
             <p className="lead">{t.form.lead}</p>
-            <Tile n={9} mark className="access-tile" />
+            {/* the same three facts the home page opens with, restated at the
+                one place a reader has to decide: no money up front, it comes
+                out of the sale, and here is when the first cohort opens. */}
+            <Plate n={9} className="access-plate">
+              <ul className="plate-facts">
+                {t.home.facts.map(f => <li key={f}>{f}</li>)}
+              </ul>
+            </Plate>
           </div>
           <div className="c7">
             <AccessForm t={t.form} lang={lang} initialRole={role} />

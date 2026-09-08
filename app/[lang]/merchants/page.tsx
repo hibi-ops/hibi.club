@@ -4,11 +4,10 @@ import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import CampaignSetup from '@/components/CampaignSetup';
 import Panel from '@/components/Panel';
-import Tile from '@/components/Tile';
 import Footer from '@/components/Footer';
 import LedgerLive from '@/components/LedgerLive';
 import JsonLd from '@/components/JsonLd';
-import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard } from '@/components/blocks';
+import { Head, Steps, PriceTiers, Faq, Access, TextLink, ThumbBar, SpecCard, Plate } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
 import { pageMetadata, faqJsonLd } from '@/lib/seo';
 
@@ -106,11 +105,11 @@ export default async function Merchants({ params }: P) {
               <div className="rail-head">
                 <span className="label lbl">{m.faq.label}</span>
                 <h2 className="h2"><span className="hl">{m.faq.title}</span></h2>
-                {/* the column stopped under the heading and trailed two hundred
-                    pixels into white beside a tall accordion — the void
-                    .rail-tile exists for. Home already closes its rail this
-                    way; this page did not. */}
-                <Tile n={7} mark className="rail-tile" />
+                {/* the questions end here; the plate says where the next one goes. */}
+                <Plate n={7} className="rail-plate">
+                  <span className="plate-k">{t.footer.contact}</span>
+                  <a className="plate-a" href="mailto:hello@hibi.club">hello@hibi.club</a>
+                </Plate>
               </div>
               <Faq items={m.faq.items} />
             </div>

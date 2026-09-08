@@ -7,8 +7,7 @@ import WalkIn from '@/components/WalkIn';
 import Panel from '@/components/Panel';
 import ChainMatrix from '@/components/ChainMatrix';
 import Footer from '@/components/Footer';
-import { Head, PriceTiers, Access, TextLink, ThumbBar, Split, Chrono, Cols, Trio, Ticker, BigMarquee } from '@/components/blocks';
-import Tile from '@/components/Tile';
+import { Head, PriceTiers, Access, TextLink, ThumbBar, Split, Chrono, Cols, Trio, Ticker, BigMarquee, Plate } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
 import { pageMetadata } from '@/lib/seo';
 
@@ -161,7 +160,11 @@ export default async function Home({ params }: P) {
                 <p className="lead">{h.now.close}</p>
                 {/* the rail's left column runs out well above the chronology
                     beside it; the tile is what stops it trailing into white */}
-                <Tile n={2} mark className="rail-tile" />
+                {/* the questions end here; the plate says where the next one goes. */}
+                <Plate n={2} className="rail-plate">
+                  <span className="plate-k">{t.footer.contact}</span>
+                  <a className="plate-a" href="mailto:hello@hibi.club">hello@hibi.club</a>
+                </Plate>
               </div>
               <Chrono items={h.now.items} />
             </div>
