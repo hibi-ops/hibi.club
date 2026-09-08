@@ -86,15 +86,43 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
 
         {/* twelve months, height = that month's blended rate against 15%.
             No axes, no gridlines: a baseline rule and the two months that
-            need naming. The staircase is the argument. */}
+            need naming. The staircase is the argument.
+
+            TWO THINGS THE STAIRCASE ALONE DID NOT SAY. It showed twelve bars
+            getting shorter, and left the reader to work out both what the
+            shortening was worth and what it had to do with the number printed
+            beside it.
+              — The gap is now drawn. What you pay is the ink; what the falling
+                rate saves you is the tint above it, and it grows left to right.
+                Same shape as before, its negative made visible.
+              — The blended rate is now a line THROUGH the plot rather than
+                only a figure next to it, so you can see where it sits: the
+                first months run above the rate you end up paying and the later
+                ones below it. It is the same .fig-flat device the creator page
+                uses for the flat fee, and it slides when the sliders move. */}
         <figure className="fig">
-          <div className="fig-plot" role="img"
+          <div className="fig-plot fig-under" role="img"
             aria-label={`${c.blendedLabel}: ${pct1(rows[0].rate)} → ${pct1(last.rate)}`}>
             {/* the ceiling the bars fall away from. Without it the staircase is
                 twelve bars of similar height; with it, the growing gap between
                 the rule and the bar is the thing being sold. */}
             <span className="fig-flat fig-ceil" style={{ bottom: '100%' }}>
               <em>{c.ceilLabel}</em>
+            </span>
+            {/* the label hangs above its rule, so near the ceiling it climbs
+                out of the plot and floats over the panel. It needs 21px of
+                headroom, which it has below 84% of the ceiling; above that it
+                flips and hangs under its own rule instead, where the
+                right-hand bars are short enough to leave it room.
+                At "never comes back" the blend IS 15%, the two rules land on
+                top of each other — which is the honest answer, and the rule
+                still draws it — so only the number goes, because the ceiling's
+                own label and the headline beside it both already say 15%. */}
+            <span className="fig-flat fig-mean"
+              data-high={blended / RATE.first > 0.84 ? '' : undefined}
+              data-flush={blended / RATE.first > 0.98 ? '' : undefined}
+              style={{ bottom: `${(blended / RATE.first) * 100}%` }}>
+              <em>{pct1(blended)}</em>
             </span>
             {rows.map(r => (
               <span key={r.m} className="fig-col" data-last={r.m === rows.length ? '' : undefined}>

@@ -1534,7 +1534,7 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .fig-tip{display:none;position:absolute;left:50%;bottom:calc(100% + 6px);
   transform:translateX(-50%);pointer-events:none;white-space:nowrap;z-index:3;
   font-size:11px;font-weight:600;letter-spacing:.01em;
-  background:var(--ink);color:var(--snow);padding:3px 6px;border-radius:var(--r-xs);}
+  background:var(--ink);color:var(--snow);padding:3px 8px;border-radius:var(--r-full);}
 /* the end columns anchor to their own edge so the tip never leaves the plot */
 .fig-col:first-child .fig-tip,.fig-col:nth-child(2) .fig-tip{left:0;transform:none;}
 .fig-col:last-child .fig-tip,.fig-col:nth-last-child(2) .fig-tip{left:auto;right:0;transform:none;}
@@ -1547,6 +1547,42 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 /* the ceiling sits ON the top edge and hangs its label inside the plot */
 .fig-ceil{border-top-style:solid;border-top-color:rgba(21,20,26,.28);}
 .fig-ceil em{bottom:auto;top:4px;}
+/* THE RATE YOU END UP PAYING, DRAWN WHERE IT FALLS. The headline figure sat
+   beside the plot and had no position in it, so the staircase and the answer
+   were two separate claims. As a rule across the plot it becomes one: the
+   early months stand above the line, the later ones below it, and the line is
+   the number. Solid against the ceiling's dashed grey — this is a fact about
+   the reader's own inputs, not a reference mark. Its label keeps the
+   right edge, with the ceiling's: the staircase falls left to right, so the
+   right-hand end of every rule is over tint rather than over a bar. Tried on
+   the left first and the chip punched a hole in the two tallest bars.
+   It slides with the sliders on .fig-flat's own transition.
+
+   SKY, AND NOT BY PREFERENCE. Drawn in ink first, which is the same value as
+   the bars — #15141a on #15141a — so for the six months it crosses it was
+   invisible, and showing which months sit above it is the line's entire job.
+   It has to read on near-black and on a near-white tint, and sky is the only
+   colour here that does both. It is also already what sky means inside a
+   figure: the creator plot marks its crossover column with it. */
+.fig-mean{border-top:2px solid var(--sky);}
+.fig-mean em{bottom:3px;color:var(--brandInk);}
+.fig-mean[data-high] em{bottom:auto;top:3px;}
+.fig-mean[data-flush] em{display:none;}
+/* WHAT YOU DO NOT PAY. The bars alone show twelve months getting cheaper and
+   leave the size of that to be inferred; the tint is the same shape drawn as
+   its negative — ink is the fee, tint is what the falling rate keeps for you,
+   and the wedge widens across the year. It is one flood fill under the bars,
+   not a gridline: the column is tinted full height and the opaque bar covers
+   the part you are charged for, so what remains visible IS the gap.
+   Sky for both the tint and the mean rule is one meaning, not two: ink is
+   what you pay, sky is what the falling rate does for you — the space it
+   opens and the rate it lands you on.
+   Scoped to .fig-under because the creator page's plot argues the opposite
+   way round — there the bar growing PAST the flat fee is the good news, and a
+   tint above it would mean the reverse of what it means here. */
+.fig-under .fig-col::before{content:'';position:absolute;inset:0;
+  background:rgba(82,182,221,.16);pointer-events:none;}
+@media(hover:hover){.fig-under .fig-col:hover::before{background:rgba(82,182,221,.28);}}
 .fig-axis{display:flex;justify-content:space-between;gap:var(--s2);margin-top:var(--s1);
   font-size:11.5px;color:var(--gray-s);font-variant-numeric:proportional-nums;}
 
