@@ -43,6 +43,31 @@ export function Cols({ items, n }: { items: Col[]; n?: number }) {
    of palette fixes a box that is too small for the instrument. The colour on
    this page went where it has room instead — the readout in 01 and the rail
    tile under the questions. */
+/* THE COMMITMENTS ARE THE PAGE, SO THEY GET THE PAGE'S VOICE.
+   Four of them sat in a 2x2 of 15px cards, which is where you put things you
+   have to list — and these are the one part of an about page anyone quotes
+   back at you. One per row now: the commitment at heading size, the reasoning
+   beside it at reading size, ruled between like every other table here. The
+   lead row opens on an ink rule and the rest on hairlines, the same grammar
+   as .step and .rate.
+
+   The titles carry .hl, so each inverts under the cursor. That gesture is
+   protected and its note asks for it to be used MORE; a page of promises is
+   exactly where you want the reader striking them one at a time. */
+export function Manifesto({ items }: { items: Col[] }) {
+  return (
+    <ol className="manif">
+      {items.map(c => (
+        <li key={c.title}>
+          <span className="manif-n" aria-hidden="true">{c.label}</span>
+          <h3 className="manif-t"><span className="hl">{c.title}</span></h3>
+          <p className="manif-b">{c.body}</p>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export function Steps({ items }: { items: Step[] }) {
   /* a custom property, not an inline grid-template: an inline declaration
      outranks the mobile media query and four columns would overflow 390px */
@@ -226,9 +251,9 @@ export function TextLink({ href, children }: { href: string; children: React.Rea
   );
 }
 
-export function SpecCard({ c }: { c: HeroCard }) {
+export function SpecCard({ c, drift }: { c: HeroCard; drift?: boolean }) {
   return (
-    <aside className="spec-card sheen">
+    <aside className={`spec-card sheen${drift ? ' drift' : ''}`}>
       <span className="k">{c.label}</span>
       <div className="spec-rows">
         {c.rows.map(r => (

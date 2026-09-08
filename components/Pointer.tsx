@@ -20,11 +20,23 @@ export default function Pointer() {
       const e = last;
       if (!e) return;
 
+      const nx = e.clientX / innerWidth - 0.5;
+      const ny = e.clientY / innerHeight - 0.5;
+
       const mark = document.querySelector<HTMLElement>('.hibi-mark');
-      if (mark) {
-        const nx = e.clientX / innerWidth - 0.5;
-        const ny = e.clientY / innerHeight - 0.5;
-        mark.style.translate = `${nx * -14}px ${ny * -9}px`;
+      if (mark) mark.style.translate = `${nx * -14}px ${ny * -9}px`;
+
+      /* The facts card floats a little against the pointer. Same instrument as
+         the signature above, second job, and deliberately a smaller throw: the
+         mark is texture at 320px and can move 14px without anyone reading it as
+         movement, while this one carries type you are trying to read. 8 and 5
+         is enough for the card to sit off the page and not enough to chase.
+         This is NOT the magnetic hover that was removed for reading as a toy —
+         that was a control leaning toward the cursor when you aimed at it.
+         Nothing here is clickable and it never leans in; it drifts away, which
+         is parallax, and it does it whether or not you are anywhere near. */
+      for (const el of document.querySelectorAll<HTMLElement>('.drift')) {
+        el.style.translate = `${nx * -8}px ${ny * -5}px`;
       }
 
       for (const el of document.querySelectorAll<HTMLElement>('.sheen')) {

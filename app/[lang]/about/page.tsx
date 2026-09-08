@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
 import Footer from '@/components/Footer';
-import { Head, Cols, Access, ThumbBar, SpecCard } from '@/components/blocks';
+import { Head, Cols, Access, ThumbBar, SpecCard, Manifesto, TextLink } from '@/components/blocks';
 import { getDict, SITE, type Lang } from '@/content';
 import { pageMetadata } from '@/lib/seo';
 
@@ -31,8 +31,17 @@ export default async function About({ params }: P) {
               <div className="hero-sub">
                 <div>
                   <p className="lead rise">{a.lead}</p>
+                  {/* every other hero on the site carries a cta-row and this
+                      one did not, which left 196px of white under a 99px
+                      paragraph beside a 295px card. The two things a reader
+                      comes to an about page for are already on this page, so
+                      the row points at them rather than inventing a third. */}
+                  <div className="cta-row rise sec-body tight">
+                    <TextLink href="#hiring">{a.hiring.label}</TextLink>
+                    <TextLink href="#investors">{a.investors.label}</TextLink>
+                  </div>
                 </div>
-                <SpecCard c={a.heroCard} />
+                <SpecCard c={a.heroCard} drift />
               </div>
             </div>
           </div>
@@ -52,11 +61,10 @@ export default async function About({ params }: P) {
         <section className="section tone-paper">
           <div className="wrap">
             <Head label={a.principles.label} title={a.principles.title} />
-            {/* Four items in a three-up feat grid left an orphan on row two,
-                and the run-in clause was swallowing the 01-04 numbering these
-                commitments are written to carry. Cols at two columns: 2x2, the
-                numbers visible, each cell ruled. */}
-            <div className="sec-body"><Cols items={a.principles.cols} n={2} /></div>
+            {/* Three-up left an orphan on row two; 2x2 fixed that and left the
+                page's most quotable content set as four 15px cards. These are
+                promises — one per row, at the size of a promise. */}
+            <div className="sec-body"><Manifesto items={a.principles.cols} /></div>
           </div>
         </section>
 
@@ -75,7 +83,11 @@ export default async function About({ params }: P) {
 
         <section className="section" id="investors">
           <div className="wrap">
-            <div className="grid" style={{ alignItems: 'end' }}>
+            {/* alignItems:'end' pushed a 47px heading to the foot of a 146px
+                column while its own vertical section label stayed pinned at
+                the top — the label and the heading it belongs to read as two
+                unrelated things a hundred pixels apart. */}
+            <div className="grid">
               <div className="c7"><Head label={a.investors.label} title={a.investors.title} /></div>
               <div className="c5 stack-l">
                 <p className="lead">{a.investors.body}</p>
