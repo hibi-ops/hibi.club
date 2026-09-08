@@ -1552,9 +1552,14 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
    sit on and the twelve months are countable without an axis */
 .fig-col::after{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
   background:var(--chart-rule);pointer-events:none;}
+/* the same left-to-right cascade when a slider moves it: the marks re-settle
+   in sequence rather than all at once, so dragging reads as the instrument
+   re-drawing the sheet. 7ms a column — 77ms end to end, under the duration of
+   the move itself, so it is a ripple and not a lag. */
 .fig-bar{position:relative;display:block;width:100%;min-height:0;background:none;
   border-radius:0;border-top:4px solid var(--ink);
-  transition:height var(--t2) var(--ease),border-color var(--t1) var(--ease);}
+  transition:height var(--t2) var(--ease),border-color var(--t1) var(--ease);
+  transition-delay:calc(var(--i,0) * 7ms);}
 /* the creator plot's marks turn sky the month the running total passes the
    flat fee, so the first blue mark IS the crossover the headline names and
    how far it has climbed past the rule is right there on the ruler. It used
@@ -1910,6 +1915,29 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
     .split-bar .sg{transform-origin:left center;
       animation:grow linear both;animation-timeline:view();animation-range:entry 20% cover 34%;}
     @keyframes grow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+
+    /* AND SO DO THE READINGS, for the same reason and by the same rule: a mark
+       on this ruled sheet IS a measurement, so it is drawn rather than
+       revealed. --i is the column's index, and the range slides with it, so the
+       twelve marks are struck left to right — a plotter working across the
+       sheet, not twelve things fading up together.
+       It starts at entry 26%, after .sec-body's own wipe has finished bringing
+       the panel in at cover 32%. Two left-to-right sweeps on top of each other
+       read as one smeared one. */
+    /* AND SO ARE THE READINGS, for the same reason and by the same rule: a
+       mark on this ruled sheet IS a measurement, so it is struck rather than
+       revealed. --i is the column's index and the range slides with it, so the
+       twelve are drawn left to right — a plotter working across the sheet, not
+       twelve things arriving at once.
+       It opens at entry 26%, after .sec-body has finished bringing the panel in
+       at cover 32%; two left-to-right sweeps over each other read as one
+       smeared sweep.
+       .barset-over is a child of .barset-bar and already inside the parent's
+       scale, so animating it too would square the transform and the sky half
+       would arrive late. */
+    .fig-bar,.barset-bar{transform-origin:left center;
+      animation:grow linear both;animation-timeline:view();
+      animation-range:entry calc(26% + var(--i,0) * 1%) cover calc(38% + var(--i,0) * 1%);}
 
   }
 }

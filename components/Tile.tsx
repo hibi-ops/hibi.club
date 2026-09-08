@@ -30,9 +30,15 @@ const FLOW = ['gx-1', 'gx-2', 'gx-3'] as const;
 
 export type Pattern = Weave;
 
+/* `mark` puts a register cross on the plate — for the tiles that carry no
+   drawing. It is a child and not a pseudo-element on purpose: ::before is the
+   colour and ::after is the grain, both taken, and overriding either would put
+   the mark where the field used to be. Same collision class as the .field
+   accident recorded in globals.css. */
 export default function Tile({
-  n, pat, ar, fill, flow, className = '',
-}: { n: number; pat?: Pattern; ar?: number; fill?: boolean; flow?: string; className?: string }) {
+  n, pat, ar, fill, flow, mark, className = '',
+}: { n: number; pat?: Pattern; ar?: number; fill?: boolean; flow?: string;
+     mark?: boolean; className?: string }) {
   const i = ((n - 1) % 9 + 9) % 9;
   return (
     <span
@@ -40,6 +46,7 @@ export default function Tile({
       aria-hidden="true"
     >
       {pat ? <WeaveLive field={pat} ar={ar} /> : null}
+      {mark ? <i className="tile-reg">+</i> : null}
     </span>
   );
 }

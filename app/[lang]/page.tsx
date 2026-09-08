@@ -161,7 +161,7 @@ export default async function Home({ params }: P) {
                 <p className="lead">{h.now.close}</p>
                 {/* the rail's left column runs out well above the chronology
                     beside it; the tile is what stops it trailing into white */}
-                <Tile n={2} className="rail-tile" />
+                <Tile n={2} mark className="rail-tile" />
               </div>
               <Chrono items={h.now.items} />
             </div>

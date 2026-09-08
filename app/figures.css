@@ -251,6 +251,17 @@
    them out reopened two voids to solve a complaint about crowding. Restored. */
 .rail-tile{flex:1 1 auto;height:auto;min-height:176px;
   border-radius:var(--r-panel);margin-top:var(--s5);}
+/* THE PLATE IS REGISTERED TOO. The rail and access tiles carry no drawing —
+   the record cards are the only patterned tiles left, and the contour fields
+   that used to sit on these were taken off as noise (see WeaveLive.tsx) — so
+   they are a flat sheet of ink and read, up close, as an unfinished box. One
+   register cross, the same glyph and weight as the ones where the section
+   rules cross, in the plate's own white. It says the sheet is a printed plate
+   rather than a blank. It is not a picture and is not trying to be one. */
+.tile-reg{position:absolute;top:10px;left:12px;z-index:3;
+  font-style:normal;font-size:13px;font-weight:400;line-height:1;
+  color:rgba(255,255,255,.42);pointer-events:none;}
+
 /* same rule as the rail: the column runs to the foot of the section rather
    than stopping in mid-air above it. The form beside it is tall and fixed, so
    without this the left column ended two hundred pixels short. */

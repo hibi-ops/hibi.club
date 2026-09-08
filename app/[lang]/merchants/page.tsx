@@ -110,7 +110,7 @@ export default async function Merchants({ params }: P) {
                     pixels into white beside a tall accordion — the void
                     .rail-tile exists for. Home already closes its rail this
                     way; this page did not. */}
-                <Tile n={7} className="rail-tile" />
+                <Tile n={7} mark className="rail-tile" />
               </div>
               <Faq items={m.faq.items} />
             </div>

@@ -116,8 +116,8 @@ export default function CampaignSetup({ c }: { c: Dict['merchants']['set'] }) {
             figures. */}
         <figure className="fig">
           <ul className="barset">
-            {rows.map(r => (
-              <li key={r.k} className="barset-row">
+            {rows.map((r, i) => (
+              <li key={r.k} className="barset-row" style={{ '--i': i } as CSSProperties}>
                 <span className="barset-k">{r.k}</span>
                 <span className="barset-track">
                   <span className="barset-bar" style={{ width: `${(r.n / widest) * 100}%` }}>

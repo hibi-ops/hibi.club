@@ -1,4 +1,5 @@
 'use client';
+import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import type { Dict } from '@/content/types';
 import { series, money, whole } from '@/lib/model';
@@ -93,7 +94,8 @@ export default function CreatorCalc({ c, href }: { c: Dict['creators']['calc']; 
                 ruler. No key to read, and nothing coded that the picture does
                 not already show. */}
             {rows.map((r, i) => (
-              <span key={r.m} className="fig-col" data-over={cume[i] >= flat ? '' : undefined}>
+              <span key={r.m} className="fig-col" data-over={cume[i] >= flat ? '' : undefined}
+                style={{ '--i': i } as CSSProperties}>
                 <span className="fig-bar" style={{ height: `${(cume[i] / peak) * 100}%` }}>
                   <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {whole(cume[i])}</span>
                 </span>

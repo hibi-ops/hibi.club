@@ -184,7 +184,7 @@ export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchan
             <span className="label">{t.nav.cta}</span>
             <h2 className="h1">{t.form.title}</h2>
             <p className="lead">{t.form.lead}</p>
-            <Tile n={9} className="access-tile" />
+            <Tile n={9} mark className="access-tile" />
           </div>
           <div className="c7">
             <AccessForm t={t.form} lang={lang} initialRole={role} />

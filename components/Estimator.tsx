@@ -1,4 +1,5 @@
 'use client';
+import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import type { Dict } from '@/content/types';
 import { series, sum, money, whole, pct1, RATE } from '@/lib/model';
@@ -126,7 +127,7 @@ export default function Estimator({ c, formHref }: { c: Dict['pricing']['calc'];
               <em>{pct1(blended)}</em>
             </span>
             {rows.map(r => (
-              <span key={r.m} className="fig-col">
+              <span key={r.m} className="fig-col" style={{ '--i': r.m - 1 } as CSSProperties}>
                 <span className="fig-bar" style={{ height: `${(r.rate / RATE.first) * 100}%` }}>
                   <span className="fig-tip">{c.monthAxis.replace('{n}', String(r.m))} · {pct1(r.rate)}</span>
                 </span>
