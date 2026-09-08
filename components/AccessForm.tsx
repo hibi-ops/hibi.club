@@ -24,6 +24,15 @@ export default function AccessForm({ t, initialRole = 'merchant', lang }: { t: F
   }, []);
   const hasEndpoint = Boolean(SITE.formEndpoint);
 
+  /* The plate beside this form reads the role off an event rather than a prop,
+     the same decoupling the walk-in counter and the contour field already use:
+     the control does not know what is listening and the display does not take
+     props from it. Fired on mount too, so a page that opens on "creator"
+     starts correct rather than correcting itself. */
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('hibi:role', { detail: { role } }));
+  }, [role]);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import AccessForm from './AccessForm';
 import Icon from './Icon';
 import Tile, { type Pattern } from './Tile';
+import AccessPlate from './AccessPlate';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Col, Step, QA, Dict, HeroCard } from '@/content/types';
 import type { Lang } from '@/content/site';
@@ -204,14 +205,10 @@ export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchan
             <span className="label">{t.nav.cta}</span>
             <h2 className="h1">{t.form.title}</h2>
             <p className="lead">{t.form.lead}</p>
-            {/* the same three facts the home page opens with, restated at the
-                one place a reader has to decide: no money up front, it comes
-                out of the sale, and here is when the first cohort opens. */}
-            <Plate n={9} className="access-plate">
-              <ul className="plate-facts">
-                {t.home.facts.map(f => <li key={f}>{f}</li>)}
-              </ul>
-            </Plate>
+            {/* it followed the visitor's role rather than repeating the same
+                three lines on all seven pages — see AccessPlate. */}
+            <AccessPlate merchant={t.merchants.heroCard.rows}
+              creator={t.creators.heroCard.rows} initialRole={role} />
           </div>
           <div className="c7">
             <AccessForm t={t.form} lang={lang} initialRole={role} />
