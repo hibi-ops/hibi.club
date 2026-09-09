@@ -1984,6 +1984,18 @@ html[lang="zh-Hans"] .manif-t{font-weight:600;letter-spacing:-.01em;}
     .lbl:not(.hero *)     {animation-range:entry 6%  cover 20%;}
     .hd:not(.hero *)      {animation-range:entry 10% cover 26%;}
     .sec-body:not(.hero *){animation-range:entry 14% cover 32%;}
+    /* ONE SWEEP ON A PHONE, NOT THREE BEATS. The cascade is right at desktop
+       reading speed; a thumb scrolls a 390px screen three times faster and a
+       section's body was still arriving as the next heading came in, so the
+       page read as perpetually catching up. The three ranges close up and
+       start earlier, so a section is in by the time it is a third of the way
+       up the screen — the same gesture, played tight enough to feel tidy
+       rather than late. */
+    @media(max-width:640px){
+      .lbl:not(.hero *)     {animation-range:entry 3% cover 11%;}
+      .hd:not(.hero *)      {animation-range:entry 5% cover 14%;}
+      .sec-body:not(.hero *){animation-range:entry 7% cover 18%;}
+    }
 
     /* the split bar draws itself as it comes into view — the one place where
        motion carries meaning, because the bar IS a measurement */
@@ -2074,6 +2086,63 @@ html[lang="zh-Hans"] .manif-t{font-weight:600;letter-spacing:-.01em;}
    The plate now begins and ends on a hard edge, which is what everything else
    here does.
    ========================================================================= */
+
+/* ===== phone rhythm ======================================================
+   Measured at 390: the home page ran 11,013px — thirteen screens — and the
+   vertical space was where it went. Every section boundary was 72px (36 and
+   36), every body sat 32 under its heading, and the blocks that are side by
+   side on a wide screen stacked into columns of type, each with the padding it
+   needs to be a column. None of it was wrong on its own; together it was a
+   page you scroll through rather than read.
+   Everything here is spacing and placement. No type shrinks below what it is
+   elsewhere at this width, and no block loses content.
+   ========================================================================= */
+@media(max-width:640px){
+  .section{padding:28px 0;}
+  .sec-body{margin-top:var(--s4);}
+  .sec-body+.sec-body{margin-top:var(--s3);}
+  .lbl{margin-bottom:var(--s1);}
+
+  /* the column cells: they are stacked, so the right-hand padding that made a
+     gutter between columns is now just air, and the cell padding comes in a
+     step. The rules between them stay. */
+  .cols>*{padding:var(--s2) 0 var(--s3);}
+  .cols .label{margin-bottom:2px;}
+
+  /* THE PAIR STAYS A PAIR. $3,000 against $0 is the whole point of section 01
+     and stacking them put a screen and a half between the two numbers. The two
+     wrappers dissolve into the grid (display:contents) so the labels sit on
+     one row, the figures on the next — side by side, where the contrast is —
+     and the two paragraphs follow full-width underneath, where 14px type has
+     the measure it needs. 56px figures fit two-up in 342px with 90 to spare. */
+  /* dense, or it does not pair: default auto-placement only moves the cursor
+     forward, so the second wrapper's label landed in row 4 under the first
+     paragraph instead of beside the first label. Dense backfills rows 1 and 2
+     in column 2, which is the whole arrangement. */
+  /* minmax(0,1fr), not 1fr: a bare 1fr floors at min-content, and in Chinese
+     keep-all makes the label one unbreakable run — the second column was
+     forced to 252px and the pair overflowed the screen by 126. Zero floor,
+     and overflow-wrap does the breaking it was always there to do. */
+  .numpair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:row dense;
+    gap:var(--s1) var(--s3);}
+  .numpair>div{display:contents;}
+  .numpair>div:first-child>*{grid-column:1;}
+  .numpair>div:last-child>*{grid-column:2;}
+  /* the paragraph rules must outrank the column rules above (0,2,1), or the
+     figures pair and the paragraphs stay narrow */
+  .numpair>div:first-child>p,.numpair>div:last-child>p{grid-column:1/-1;
+    margin-top:var(--s2);max-width:none;font-size:14px;}
+  .numpair>div:last-child>p{margin-top:var(--s1);}
+  .numpair .num{margin-top:0;}
+
+  .chrono li{padding:var(--s2) 0;}
+  .chrono p{font-size:14px;}
+
+  /* the form is what a reader came to this section for, so it comes first
+     and the plate closes the section instead of standing between the heading
+     and the fields */
+  .access .grid>.c5{order:2;}
+}
 
 /* ===== touch sizes =======================================================
    LAST IN THE FILE ON PURPOSE. A media query adds no specificity, so these

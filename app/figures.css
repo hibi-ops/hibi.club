@@ -452,6 +452,31 @@
 .trio .tl-p{font-size:13.5px;line-height:1.6;color:var(--gray-s);}
 @media(max-width:900px){.trio{grid-template-columns:1fr;}
   .trio .tile{height:104px;}}
+/* A ROW YOU SWIPE, NOT A COLUMN YOU SCROLL. Three record cards stacked at
+   365px each was 1,095px of the phone page — three full screens for a set
+   that is one glance on a wide screen. In a snap row they are one gesture:
+   the first card is up, the second's edge shows past it (the affordance is the
+   peek, not a dot strip), and each swipe lands a card on the left edge.
+   The row bleeds to the screen edge on both sides — the negative margin undoes
+   .wrap's 24px and the padding puts it back inside the scroller — so the peek
+   is real and the first card still lines up with the heading above it.
+   78% of the track is a 267px card, which at 15/16 is 285 tall: 1,095 -> 285. */
+@media(max-width:640px){
+  .trio{display:grid;grid-template-columns:none;grid-auto-flow:column;
+    grid-auto-columns:78%;gap:var(--s2);
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+    margin:0 calc(var(--s4) * -1);padding:0 var(--s4) var(--s1);
+    /* snap aligns to the scrollport edge, not the padding edge, so without
+       this the first card snapped to x=0 and sat under the screen edge instead
+       of on the heading's left */
+    scroll-padding-left:var(--s4);
+    scrollbar-width:none;}
+  .trio::-webkit-scrollbar{display:none;}
+  .trio>.panel{scroll-snap-align:start;}
+  /* the last card must be able to land on the left edge too, or the snap
+     leaves it half-shown with nowhere to go */
+  .trio::after{content:'';width:calc(22% - var(--s4));}
+}
 
 /* ===== trio-wash =========================================================
    THE CARD IS THE FIELD. Not a white box with a coloured lid — the colour is
