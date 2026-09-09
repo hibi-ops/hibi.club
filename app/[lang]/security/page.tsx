@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Nav from '@/components/Nav';
 import Wash from '@/components/Wash';
+import OutlierWatch from '@/components/OutlierWatch';
 import Footer from '@/components/Footer';
 import { Head, Cols, Steps, Checks, Access, TextLink, ThumbBar } from '@/components/blocks';
 import { getDict, href, type Lang } from '@/content';
@@ -54,7 +55,7 @@ export default async function Security({ params }: P) {
           <Wash variant="outlier" seed={10} />
           <div className="wrap">
             <Head label={s.redemption.label} title={s.redemption.title} />
-            <div className="sec-body"><Steps items={s.redemption.steps} /></div>
+            <OutlierWatch><Steps items={s.redemption.steps} /></OutlierWatch>
             <p className="muted sec-body tight">{s.redemption.note}</p>
           </div>
         </section>

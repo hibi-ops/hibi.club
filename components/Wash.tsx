@@ -301,6 +301,15 @@ export default function Wash({
         if (variant === "outlier" && t > nextSpike) {
           raise(0.5 + Math.random() * 0.44, 0.5 + Math.random() * 0.42, 0.55);
           nextSpike = t + 6 + Math.random() * 3;
+          /* the ground says it out loud. The copy beside this field claims that
+             a record unlike the store's own history is held instead of settled,
+             and until now the field raised that record every few seconds with
+             nothing on the page acknowledging it. Same decoupling as
+             hibi:redeem and hibi:relief: this post does not know who listens.
+             Only fires while the section is on screen — the rAF above returns
+             early when it is not — so nothing blinks at a reader who is
+             somewhere else on the page. */
+          window.dispatchEvent(new CustomEvent("hibi:outlier"));
         }
         renderer.render(scene, cam);
       };

@@ -1365,6 +1365,13 @@ html[lang="zh-Hans"] .manif-t{font-weight:600;letter-spacing:-.01em;}
 .step-n{display:block;font-size:13px;font-weight:600;color:var(--ink-2);
   font-variant-numeric:proportional-nums lining-nums;letter-spacing:0;margin-bottom:var(--s2);}
 .tone-ink .step-n{color:rgba(255,255,255,.34);}
+/* the ordinal is a marker block only in the one place something marks it —
+   see OutlierWatch. Scoped, because the merchant counter's steps carry the
+   same ordinals and nothing there fires. */
+.outlier-watch .step-n{width:fit-content;padding:0 .3em;margin-left:-.3em;
+  transition:none;}
+.outlier-watch.is-held .step:last-child .step-n{background:var(--sky);color:var(--ink);}
+.outlier-watch.is-held .step:last-child{border-top-color:var(--ink);}
 .step .h3{margin-bottom:var(--s1);}
 .step p{color:var(--ink-2);font-size:14px;line-height:1.55;}
 .record{margin-top:var(--s4);display:grid;grid-template-columns:auto 1fr;gap:var(--s3);align-items:center;
