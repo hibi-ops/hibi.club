@@ -176,9 +176,16 @@ export function Feats({ items }: { items: Col[] }) {
    yet is an OPEN item, and a green tick beside it reads as though not being
    audited were an accomplishment. An unticked box says the true thing: on the
    list, not done. */
-export function Checks({ items, pending }: { items: string[]; pending?: boolean }) {
+/* `rows` sets the list one item per line, ruled, at a size a statement can
+   carry. It exists for the one place on the site where the list IS the
+   section — security's "what we have not done yet" — where the compact
+   two-column cluster left a 274px band of ink between two 620px sections,
+   which is the pasted-box failure the ink rule warns about rather than a
+   chapter. Everywhere else the compact form is right: those lists sit beside
+   something else that is doing the arguing. */
+export function Checks({ items, pending, rows }: { items: string[]; pending?: boolean; rows?: boolean }) {
   return (
-    <ul className="checks" data-pending={pending ? '' : undefined}>
+    <ul className={`checks${rows ? ' checks-rows' : ''}`} data-pending={pending ? '' : undefined}>
       {items.map(x => (
         <li key={x}>
           {pending

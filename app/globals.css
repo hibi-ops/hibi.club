@@ -543,6 +543,23 @@ html[lang="zh-Hans"] .feat .ft::after{content:'：';}
 .checks-box{width:13px;height:13px;margin-top:3px;flex:none;border-radius:2px;
   box-shadow:inset 0 0 0 1.5px rgba(21,20,26,.32);}
 .tone-ink .checks-box{box-shadow:inset 0 0 0 1.5px rgba(250,250,248,.42);}
+/* ONE ADMISSION PER LINE, RULED. The compact form packs these into two short
+   columns, and on the page where the list is the whole section that left 274px
+   of ink between a 617 and a 666 — max contrast at callout size, which reads as
+   a box pasted onto the page rather than a chapter. The ink is right here (a
+   statement of position belongs on the dark ground; the rule is in CLAUDE.md);
+   what it needed was the height to be one.
+   Still the plainest block on the page, which is also deliberate: rows and a
+   rule, no new device, and the type only goes up by two and a half points. */
+.checks-rows{grid-template-columns:1fr;gap:0;margin-top:var(--s3);}
+.checks-rows li{grid-template-columns:auto 1fr;gap:var(--s2);align-items:baseline;
+  font-size:16.5px;line-height:1.5;padding:var(--s3) 0;border-top:var(--edge-2);}
+.checks-rows li:first-child{border-top:1px solid var(--ink);}
+.tone-ink .checks-rows li:first-child{border-top-color:rgba(250,250,248,.32);}
+.tone-ink .checks-rows li{border-top-color:rgba(250,250,248,.14);}
+.checks-rows .checks-box{width:15px;height:15px;margin-top:0;
+  transform:translateY(2px);}
+@media(max-width:640px){.checks-rows li{font-size:15px;padding:var(--s2) 0;}}
 
 /* ===== thumb-zone action bar =============================================
    Only on an actual touch handset. Keying this to width alone put a phone

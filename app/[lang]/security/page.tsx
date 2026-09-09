@@ -85,7 +85,7 @@ export default async function Security({ params }: P) {
                 <p className="lead">{s.stage.body}</p>
               </div>
               <div>
-                <Checks items={s.stage.items} pending />
+                <Checks items={s.stage.items} pending rows />
                 <div className="cta-row sec-body">
                   <a href={`mailto:${SITE.email}`} className="btn btn-second">
                     {s.stage.cta} <span className="arr" aria-hidden="true">→</span>
