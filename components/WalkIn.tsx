@@ -126,7 +126,10 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
     setPhase('walking');
     /* A first visit waits on the box; a regular does not. The return path is
        ~40% shorter, which is the point being made. */
-    const walk = 420;
+    /* was 420, which is shorter than the token's own trip: the phase flipped to
+       "opening" while the chip was still halfway down the rail, so the counter
+       lit up before anything arrived at it. The walk now outlasts the travel. */
+    const walk = 820;
     const open = isFirst ? 620 : 0;
     if (isFirst) timers.current.push(setTimeout(() => setPhase('opening'), walk));
     timers.current.push(setTimeout(() => {
@@ -179,7 +182,9 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
       <div className="wi-stage">
         <div className="wi-path" aria-hidden="true" />
         {[0, 1, 2].map(n => (
-          <i key={n} className={`wi-node wi-node-${n}`} data-on={at >= n ? '' : undefined} aria-hidden="true" />
+          <i key={n} className={`wi-node wi-node-${n}`}
+            data-on={at >= n ? '' : undefined}
+            data-here={at === n ? '' : undefined} aria-hidden="true" />
         ))}
         {/* one object, three forms: the chip that becomes a receipt that
             becomes a ledger line. It is the only thing that moves. */}
@@ -189,8 +194,9 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
 
         <div className="wi-cols">
           {/* 1 · the post ------------------------------------------------ */}
-          <div className="wi-col" onPointerEnter={() => setPeek(0)} onPointerLeave={() => setPeek(null)}>
-            <h3 className="wi-t">{steps[0].title}</h3>
+          <div className="wi-col" data-here={at === 0 ? '' : undefined}
+            onPointerEnter={() => setPeek(0)} onPointerLeave={() => setPeek(null)}>
+            <h3 className="wi-t"><span className="wi-n">01</span>{steps[0].title}</h3>
             <div className="wi-post" ref={post} onPointerMove={tilt} onPointerLeave={untilt}>
               <span className="wi-handle">{d.handle}</span>
               <span className="wi-code" data-spent={settled ? '' : undefined}>{d.code}</span>
@@ -208,8 +214,9 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
           </div>
 
           {/* 2 · the counter --------------------------------------------- */}
-          <div className="wi-col" onPointerEnter={() => setPeek(1)} onPointerLeave={() => setPeek(null)}>
-            <h3 className="wi-t">{steps[1].title}</h3>
+          <div className="wi-col" data-here={at === 1 ? '' : undefined}
+            onPointerEnter={() => setPeek(1)} onPointerLeave={() => setPeek(null)}>
+            <h3 className="wi-t"><span className="wi-n">02</span>{steps[1].title}</h3>
 
             <div className="wi-ticket">
               <span className="wi-amt" data-void={settled && prize?.jackpot ? '' : undefined}>
@@ -263,8 +270,9 @@ export default function WalkIn({ steps, d }: { steps: Step[]; d: Dict['home']['h
           </div>
 
           {/* 3 · settlement ---------------------------------------------- */}
-          <div className="wi-col" ref={out} onPointerEnter={() => setPeek(2)} onPointerLeave={() => setPeek(null)}>
-            <h3 className="wi-t">{steps[2].title}</h3>
+          <div className="wi-col" ref={out} data-here={at === 2 ? '' : undefined}
+            onPointerEnter={() => setPeek(2)} onPointerLeave={() => setPeek(null)}>
+            <h3 className="wi-t"><span className="wi-n">03</span>{steps[2].title}</h3>
 
             <div className="wi-ledger">
               {lines.length === 0 && <span className="wi-empty">{d.empty}</span>}
