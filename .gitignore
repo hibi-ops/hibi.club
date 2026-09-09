@@ -37,3 +37,7 @@ yarn-error.log*
 # that would live in git history forever. Kept on disk, out of the repo.
 _archive/
 .env.local
+
+# Finder duplicates ("Foo 2.tsx"). They are byte copies that drift out of sync
+# and were committed twice by a broad `git add`.
+* 2.*
