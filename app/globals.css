@@ -1297,6 +1297,11 @@ html[lang="zh-Hans"] .hd,html[lang="zh-Hans"] .hero-title,html[lang="zh-Hans"] .
 .chrono p{color:var(--gray-s);font-size:14.5px;line-height:1.6;}
 .tone-ink .chrono p{color:var(--mist);}
 
+/* the access heading spans both columns; the lead keeps a reading measure
+   rather than the 1104px the full width would give it */
+.access-head .lead{max-width:52ch;margin-top:var(--s3);}
+html[lang="zh-Hans"] .access-head .lead{max-width:34em;}
+
 /* ===== the manifesto =====================================================
    Four promises, one per row: the promise at heading size, the reasoning
    beside it, ruled between. Not a 2x2 of cards — a card grid is for things

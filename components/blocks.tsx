@@ -224,13 +224,24 @@ export function Plate({ n, className = '', children }:
 export function Access({ t, lang, role }: { t: Dict; lang: Lang; role?: 'merchant' | 'creator' }) {
   return (
     <section className="section tone-paper access" id="access">
+      {/* THE HEADING SPANS, SO THE TWO COLUMNS CAN END TOGETHER. It used to sit
+          inside the left column above the plate, which made that column the
+          heading block plus a plate — 535px against a 394px form, so the form
+          stopped 141px short of the section foot and the section finished on
+          one side only. No floor on the plate could fix it: even at its natural
+          height the left column came to 456, still taller than the form.
+          Above the grid, the row is just plate against form. They start
+          together, they end together, and the plate takes the form's full
+          height instead of a floor invented to keep it from collapsing. */}
       <div className="wrap">
-        <div className="grid">
-          <div className="c5 stack access-side">
-            <span className="label">{t.nav.cta}</span>
-            <h2 className="h1">{t.form.title}</h2>
-            <p className="lead">{t.form.lead}</p>
-            {/* it followed the visitor's role rather than repeating the same
+        <div className="access-head">
+          <span className="label">{t.nav.cta}</span>
+          <h2 className="h1">{t.form.title}</h2>
+          <p className="lead">{t.form.lead}</p>
+        </div>
+        <div className="grid sec-body">
+          <div className="c5 access-side">
+            {/* it follows the visitor's role rather than repeating the same
                 three lines on all seven pages — see AccessPlate. */}
             <AccessPlate rows={t.about.heroCard.rows}
               merchantFoot={t.merchants.heroCard.foot}
